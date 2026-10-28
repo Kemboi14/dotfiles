@@ -6,6 +6,7 @@
     "margin-left": 8,
     "margin-right": 8,
     "modules-left": [
+        "custom/arch",
         "custom/ws1",
         "custom/ws2",
         "custom/ws3",
@@ -190,5 +191,11 @@
         "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
         "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
         "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/arch": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "fuzzel",
+        "on-click-right": "~/.local/bin/powermenu"
     }
 }
