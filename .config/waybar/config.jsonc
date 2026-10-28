@@ -23,7 +23,7 @@
         "memory",
         "temperature",
         "idle_inhibitor",
-        "mpris",
+        "group/player",
         "pulseaudio",
         "backlight",
         "network",
@@ -60,9 +60,12 @@
         }
     },
     "mpris": {
-        "format": "󰎆 {title} — {artist}",
-        "format-paused": "󰏤 {title}",
-        "max-length": 35
+        "format": "{title}  {position}/{length}",
+        "format-paused": "{title}  {position}/{length}",
+        "title-len": 22,
+        "interval": 1,
+        "tooltip-format": "{artist} — {title}",
+        "on-click": "playerctl play-pause"
     },
     "pulseaudio": {
         "format": "{icon} {volume}%",
@@ -197,5 +200,45 @@
         "tooltip": false,
         "on-click": "fuzzel",
         "on-click-right": "~/.local/bin/powermenu"
+    },
+    "group/player": {
+        "orientation": "horizontal",
+        "modules": [
+            "image#player-art",
+            "mpris",
+            "custom/cava",
+            "custom/player-prev",
+            "custom/player-play",
+            "custom/player-next"
+        ]
+    },
+    "image#player-art": {
+        "exec": "/home/nick/.local/bin/waybar-player art",
+        "size": 22,
+        "interval": 2,
+        "on-click": "playerctl play-pause"
+    },
+    "custom/cava": {
+        "exec": "/home/nick/.local/bin/waybar-player cava",
+        "format": "{}",
+        "tooltip": false
+    },
+    "custom/player-prev": {
+        "exec": "/home/nick/.local/bin/waybar-player icon prev",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "playerctl previous"
+    },
+    "custom/player-play": {
+        "exec": "/home/nick/.local/bin/waybar-player icon play",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "playerctl play-pause"
+    },
+    "custom/player-next": {
+        "exec": "/home/nick/.local/bin/waybar-player icon next",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "playerctl next"
     }
 }

@@ -55,3 +55,30 @@ tooltip label { color: @onSurface; padding: 4px; }
     padding: 0 12px 0 8px;
 }
 #custom-arch:hover { color: @tertiary; }
+
+/* --- Player (waybar-player) --- */
+#player {
+    background: alpha(@surfaceContainerHigh, 0.55);
+    border-radius: 10px;
+    margin: 4px 2px;
+    padding: 0 6px 0 4px;
+}
+#player:hover { background: alpha(@primary, 0.18); }
+#player #mpris {
+    background: transparent;
+    margin: 0;
+    padding: 0 6px;
+    color: @onSurface;
+}
+#image.player-art { margin: 3px 2px; }
+#custom-cava {
+    color: @primary;
+    padding: 0 4px;
+    font-size: 11px;
+}
+#custom-player-prev, #custom-player-play, #custom-player-next {
+    padding: 0 5px;
+    color: @onSurfaceVariant;
+}
+#custom-player-play { color: @primary; }
+#custom-player-prev:hover, #custom-player-play:hover, #custom-player-next:hover { color: @tertiary; }

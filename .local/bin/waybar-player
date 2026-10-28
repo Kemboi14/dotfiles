@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# Waybar media player helpers.
+#   waybar-player art            print a cached album-art path (empty hides the image module)
+#   waybar-player icon prev|play|next   stream a control icon (empty hides it)
+#   waybar-player cava           stream a bar visualizer (empty when silent)
+set -uo pipefail
+
+cache="${XDG_CACHE_HOME:-$HOME/.cache}/waybar-player"
+
+art() {
+  local url src key dst tmp
+  url=$(playerctl metadata mpris:artUrl 2>/dev/null) || exit 0
+  [[ -n $url ]] || exit 0
+  mkdir -p "$cache"
+  case $url in
+    file://*)
+      src=${url#file://}
+      src=$(printf '%b' "${src//%/\\x}")
+      [[ -r $src ]] || exit 0
+      key=$(printf '%s:%s' "$url" "$(stat -c %Y -- "$src")" | sha1sum | cut -c1-16)
+      dst="$cache/$key.img"
+      [[ -s $dst ]] || cp -f -- "$src" "$dst"
+      ;;
+    http://*|https://*)
+      key=$(printf '%s' "$url" | sha1sum | cut -c1-16)
+      dst="$cache/$key.img"
+      if [[ ! -s $dst ]]; then
+        tmp=$(mktemp -p "$cache" .dl.XXXXXX)
+        if curl -fsSL --max-time 5 -o "$tmp" -- "$url"; then mv -f "$tmp" "$dst"; else rm -f "$tmp"; exit 0; fi
+      fi
+      ;;
+    *) exit 0 ;;
+  esac
+  # Keep the cache small: newest 40 images.
+  find "$cache" -maxdepth 1 -name '*.img' -printf '%T@ %p\n' | sort -rn | tail -n +41 | cut -d' ' -f2- | xargs -r rm -f --
+  echo "$dst"
+}
+
+icon() {
+  local which=$1 st
+  while true; do
+    playerctl -F metadata --format '{{status}}' 2>/dev/null | while IFS= read -r st; do
+      case $st in
+        Playing|Paused) ;;
+        *) echo ""; continue ;;
+      esac
+      case $which in
+        prev) echo "󰒮" ;;
+        next) echo "󰒭" ;;
+        play) if [[ $st == Playing ]]; then echo "󰏤"; else echo "󰐊"; fi ;;
+      esac
+    done
+    echo ""
+    sleep 2
+  done
+}
+
+cava_stream() {
+  local conf="${XDG_CONFIG_HOME:-$HOME/.config}/cava/waybar.conf"
+  if [[ ! -f $conf ]]; then
+    mkdir -p "$(dirname -- "$conf")"
+    printf '%s\n' '[general]' 'bars = 8' 'framerate = 30' '' \
+      '[input]' 'method = pipewire' '' \
+      '[output]' 'method = raw' 'raw_target = /dev/stdout' 'data_format = ascii' 'ascii_max_range = 7' > "$conf"
+  fi
+  exec cava -p "$conf" | sed -u -e 's/;//g' \
+    -e 's/0/▁/g; s/1/▂/g; s/2/▃/g; s/3/▄/g; s/4/▅/g; s/5/▆/g; s/6/▇/g; s/7/█/g' \
+    -e 's/^▁*$//'
+}
+
+case ${1:-} in
+  art)  art ;;
+  icon) icon "${2:?usage: waybar-player icon prev|play|next}" ;;
+  cava) cava_stream ;;
+  *)    echo "usage: waybar-player art | icon prev|play|next | cava" >&2; exit 2 ;;
+esac
