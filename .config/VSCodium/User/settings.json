@@ -1,6 +1,6 @@
 {
     "claudeCode.hideOnboarding": true,
-    "claudeCode.preferredLocation": "panel",
+    "claudeCode.preferredLocation": "sidebar",
     "claudeCode.allowDangerouslySkipPermissions": true,
     "github-authentication.preferDeviceCodeFlow": true,
     "workbench.colorTheme": "Wal Bordered",
@@ -42,7 +42,7 @@
     "terminal.integrated.gpuAcceleration": "on",
     "walTheme.autoUpdate": true,
     "workbench.editor.showTabs": "single",
-    "workbench.sideBar.location": "right",
+    "workbench.sideBar.location": "left",
     "workbench.editor.labelFormat": "short",
     "editor.overviewRulerBorder": false,
     "editor.hideCursorInOverviewRuler": true,
@@ -50,5 +50,6 @@
     "editor.scrollbar.horizontal": "hidden",
     "editor.hover.delay": 600,
     "explorer.compactFolders": false,
-    "terminal.integrated.defaultProfile.linux": "fish"
+    "terminal.integrated.defaultProfile.linux": "fish",
+    "workbench.secondarySideBar.defaultVisibility": "visible"
 }
