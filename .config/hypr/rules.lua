@@ -14,7 +14,6 @@ hl.window_rule({ match = { class = "(?i)^mpv$" }, float = true, center = true, s
 hl.window_rule({ match = { class = "(?i)^(polkit-gnome-authentication-agent-1|nm-connection-editor|blueman-manager|org.gnome.seahorse.application)$" }, float = true, center = true })
 hl.window_rule({ match = { title = "(?i)^file operation progress$" }, float = true, center = true })
 
--- Steam: main window tiles, side windows float
 
 
 -- Never dim, lock or sleep while something is fullscreen

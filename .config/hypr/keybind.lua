@@ -16,7 +16,6 @@ local KEY = {
 	CHEATSHEET_TOGGLE = ("%s + H"):format(mainMod),
 	CHEATSHEET_REFRESH = ("%s + SHIFT + H"):format(mainMod),
 	HYPR_KEYS_PANEL = ("%s + K"):format(mainMod),
-	STEAM = ("%s + S"):format(mainMod),
 	MUSIC = ("%s + M"):format(mainMod),
 	VIDEO = ("%s + V"):format(mainMod),
 
@@ -68,7 +67,6 @@ hl.bind(KEY.BROWSER, hl.dsp.exec_cmd(BROWSER), { description = "Browser" })
 hl.bind(KEY.LAUNCHER, hl.dsp.exec_cmd([[fuzzel]]), { description = "Toggle launcher" })
 hl.bind(KEY.LOCK, hl.dsp.exec_cmd([[loginctl lock-session]]), { description =  "Lock screen " })
 hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[codium ~/.config/hypr]]), { description = "Toggle settings" })
-hl.bind(KEY.STEAM, hl.dsp.exec_cmd("steam"), { description = "Steam" })
 hl.bind(KEY.MUSIC, hl.dsp.exec_cmd("thunderbird"), { description = "Thunderbird" })
 hl.bind(KEY.VIDEO, hl.dsp.exec_cmd("mpv --player-operation-mode=pseudo-gui --force-window=immediate"), { description = "Video player" })
 
