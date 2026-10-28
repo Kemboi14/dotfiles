@@ -17,15 +17,5 @@ hl.config({
     },
 })
 
-local gestures = {
-    "3, horizontal, workspace",
-    "3, pinchin,float,tile",
-    "3, pinchout,float, float",
-}
-
-for _, gesture in ipairs(gestures) do
-    hl.exec_cmd(("hyprctl keyword gesture %q"):format(gesture))
-end
-
 -- Three-finger swipe left/right to change workspace
 hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
