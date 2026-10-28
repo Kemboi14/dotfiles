@@ -1,0 +1,10 @@
+[Unit]
+Description=Notify when the battery is fully charged
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/battery-full-notify
+Restart=on-failure
+
+[Install]
+WantedBy=graphical-session.target

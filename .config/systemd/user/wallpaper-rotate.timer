@@ -1,0 +1,10 @@
+[Unit]
+Description=Rotate the Caelestia wallpaper every 30 minutes
+PartOf=graphical-session.target
+
+[Timer]
+OnActiveSec=30min
+OnUnitActiveSec=30min
+
+[Install]
+WantedBy=graphical-session.target

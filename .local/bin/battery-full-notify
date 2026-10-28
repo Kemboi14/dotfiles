@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+bat=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -1)
+[ -z "$bat" ] && exit 0
+notified=0
+while true; do
+    cap=$(cat "$bat/capacity"); st=$(cat "$bat/status")
+    if [ "$st" = "Discharging" ]; then
+        notified=0
+    elif [ "$st" = "Full" ] || [ "$st" = "Not charging" ] || [ "$cap" -ge 100 ]; then
+        if [ "$notified" -eq 0 ]; then
+            notify-send -i battery-full "All charged up! 🔋💖" "100% and feeling fabulous ✨ You can unplug me now, cutie 🥰"
+            notified=1
+        fi
+    fi
+    sleep 60
+done

@@ -1,0 +1,12 @@
+{
+  "theme": {
+    "postHook": "/home/nick/.local/bin/caelestia-pywalfox; sudo -n astra-airlock --sync",
+    "enableDiscord": false,
+    "enableBtop": false,
+    "enableHtop": false,
+    "enableNvtop": false
+  },
+  "wallpaper": {
+    "postHook": "sudo -n astra-airlock --sync"
+  }
+}

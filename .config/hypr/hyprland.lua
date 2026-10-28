@@ -1,0 +1,53 @@
+local config_dir = (os.getenv("HOME") or "") .. "/.config/hypr"
+package.path = table.concat({
+    config_dir .. "/?.lua",
+    config_dir .. "/?/init.lua",
+    package.path,
+}, ";")
+
+-- Clear cached modules so they re-execute on reload (ensures binds/rules re-register)
+for _, mod in ipairs({"monitors", "inputs", "keybind", "media", "windowrules", "animations", "themes.theme"}) do
+    package.loaded[mod] = nil
+end
+
+require("monitors")
+require("startup")
+require("inputs")
+require("keybind")
+require("media")
+require("windowrules")
+require("animations")
+require("themes.theme")
+
+hl.config({
+    dwindle = {
+        preserve_split = true,
+    },
+    master = {
+        new_status = "master",
+    },
+    misc = {
+        vrr = 0,
+        disable_hyprland_logo = true,
+        disable_splash_rendering = true,
+        force_default_wallpaper = 0,
+        anr_missed_pings = 5,
+        allow_session_lock_restore = true,
+    },
+    xwayland = {
+        force_zero_scaling = true,
+    },
+    general = {
+        snap = {
+            enabled = true,
+        },
+    },
+})
+
+
+
+-- Colours from Caelestia scheme
+require("caelestia_theme").apply_theme()
+
+-- HyprMod managed settings
+require("hyprland-gui")

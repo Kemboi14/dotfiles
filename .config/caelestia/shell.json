@@ -1,0 +1,157 @@
+{
+    "appearance": {
+        "font": {
+            "body": {
+                "family": "Space Grotesk",
+                "large": {
+                    "family": "Space Grotesk"
+                },
+                "medium": {
+                    "family": "Space Grotesk"
+                },
+                "small": {
+                    "family": "Space Grotesk"
+                }
+            },
+            "clock": "Space Grotesk",
+            "headline": {
+                "family": "Space Grotesk",
+                "large": {
+                    "family": "Space Grotesk"
+                },
+                "medium": {
+                    "family": "Space Grotesk"
+                },
+                "small": {
+                    "family": "Space Grotesk"
+                }
+            },
+            "label": {
+                "family": "Space Grotesk",
+                "large": {
+                    "family": "Space Grotesk"
+                },
+                "medium": {
+                    "family": "Space Grotesk"
+                },
+                "small": {
+                    "family": "Space Grotesk"
+                }
+            },
+            "title": {
+                "family": "Space Grotesk",
+                "large": {
+                    "family": "Space Grotesk"
+                },
+                "medium": {
+                    "family": "Space Grotesk"
+                },
+                "small": {
+                    "family": "Space Grotesk"
+                }
+            },
+            "workspaces": "Space Grotesk"
+        },
+        "transparency": {
+            "enabled": true
+        }
+    },
+    "bar": {
+        "tray": {
+            "recolour": false
+        },
+        "workspaces": {
+            "activeLabel": "",
+            "displayType": "Text",
+            "label": "",
+            "occupiedBg": false,
+            "occupiedLabel": ""
+        }
+    },
+    "general": {
+        "apps": {
+            "terminal": [
+                "kitty"
+            ]
+        },
+        "battery": {
+            "criticalLevel": 0,
+            "warnLevels": [
+                {
+                    "critical": false,
+                    "icon": "battery_low",
+                    "level": 20,
+                    "message": "I'm at 20% and getting a lil' hungry... could you plug me in? Pretty please? 🥺",
+                    "title": "Snack time? 🍪"
+                },
+                {
+                    "critical": false,
+                    "icon": "sentiment_dissatisfied",
+                    "level": 10,
+                    "message": "10% left. I'm basically a sleepy potato now 🥔💤 Charger, I need you!",
+                    "title": "Running on vibes ✨"
+                },
+                {
+                    "critical": true,
+                    "icon": "heart_broken",
+                    "level": 5,
+                    "message": "5%... tell the charger I loved it. Plug me in NOW or I'm napping forever 😭",
+                    "title": "Goodbye, cruel world 💔"
+                },
+                {
+                    "critical": true,
+                    "icon": "skull",
+                    "level": 2,
+                    "message": "2%... my vision is fading... it was an honor serving you 🕯️ *dramatic collapse*",
+                    "title": "This is the end, my friend 🫡"
+                }
+            ]
+        },
+        "language": ""
+    },
+    "launcher": {
+        "favouriteApps": [
+        ]
+    },
+    "paths": {
+        "mediaGif": "/home/nick/.config/caelestia/assets/media.gif"
+    },
+    "sidebar": {
+        "enabled": true
+    },
+    "utilities": {
+        "cards": {
+            "recorder": false
+        },
+        "quickToggles": [
+            {
+                "enabled": true,
+                "id": "wifi"
+            },
+            {
+                "enabled": true,
+                "id": "bluetooth"
+            },
+            {
+                "enabled": true,
+                "id": "mic"
+            },
+            {
+                "enabled": true,
+                "id": "settings"
+            },
+            {
+                "enabled": false,
+                "id": "gameMode"
+            },
+            {
+                "enabled": true,
+                "id": "dnd"
+            },
+            {
+                "enabled": true,
+                "id": "vpn"
+            }
+        ]
+    }
+}
