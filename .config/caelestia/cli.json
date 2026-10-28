@@ -1,6 +1,6 @@
 {
   "theme": {
-    "postHook": "/home/nick/.local/bin/caelestia-pywalfox; sudo -n astra-airlock --sync",
+    "postHook": "/home/nick/.local/bin/raw-theme; sudo -n astra-airlock --sync",
     "enableDiscord": false,
     "enableBtop": false,
     "enableHtop": false,

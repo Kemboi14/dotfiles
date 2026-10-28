@@ -12,7 +12,12 @@ local exec_once = {
     "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/libexec/polkit-gnome-authentication-agent-1",
     "gnome-keyring-daemon --start --components=secrets",
     "systemctl --user start --ignore-dependencies xdg-desktop-portal-hyprland.service xdg-desktop-portal.service",
-    "caelestia shell -d",
+    "waybar",
+    "wl-paste --watch cliphist store",
+    "swayosd-server",
+    "mako",
+    "hypridle",
+    "/home/nick/.local/bin/raw-theme",
     "wl-clip-persist --clipboard regular",
 }
 

@@ -65,9 +65,9 @@ hl.bind(KEY.TERMINAL, hl.dsp.exec_cmd(TERMINAL), { description = "Terminal" })
 hl.bind(KEY.EXPLORER, hl.dsp.exec_cmd(EXPLORER), { description = "File manager" })
 hl.bind(KEY.EDITOR, hl.dsp.exec_cmd(EDITOR), { description = "Code editor" })
 hl.bind(KEY.BROWSER, hl.dsp.exec_cmd(BROWSER), { description = "Browser" })
-hl.bind(KEY.LAUNCHER, hl.dsp.global("caelestia:launcher"), { description = "Toggle launcher" })
-hl.bind(KEY.LOCK, hl.dsp.global("caelestia:lock"), { description =  "Lock screen " })
-hl.bind(KEY.SETTINGS, hl.dsp.global("caelestia:dashboard"), { description = "Toggle settings" })
+hl.bind(KEY.LAUNCHER, hl.dsp.exec_cmd([[fuzzel]]), { description = "Toggle launcher" })
+hl.bind(KEY.LOCK, hl.dsp.exec_cmd([[loginctl lock-session]]), { description =  "Lock screen " })
+hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[codium ~/.config/hypr]]), { description = "Toggle settings" })
 hl.bind(KEY.STEAM, hl.dsp.exec_cmd("steam"), { description = "Steam" })
 hl.bind(KEY.MUSIC, hl.dsp.exec_cmd("thunderbird"), { description = "Thunderbird" })
 hl.bind(KEY.VIDEO, hl.dsp.exec_cmd("mpv --player-operation-mode=pseudo-gui --force-window=immediate"), { description = "Video player" })
@@ -99,9 +99,9 @@ hl.bind(KEY.MOVE_SWAP_UP, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hy
 hl.bind(KEY.MOVE_SWAP_DOWN, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hyprctl activewindow -j | jq -r .floating) && hyprctl dispatch moveactive 0 30 || hyprctl dispatch movewindow d'") end, { description = "Move or swap window down" })
 
 -- 4. Screenshots
-hl.bind(("%s + SHIFT + S"):format(mainMod), hl.dsp.global("caelestia:screenshotClip"), { description = "Screenshot: select, copy" })
-hl.bind(("%s + SHIFT + E"):format(mainMod), hl.dsp.global("caelestia:screenshot"), { description = "Screenshot: select, open tool" })
-hl.bind(("%s + SHIFT + F"):format(mainMod), hl.dsp.global("caelestia:screenshotFreezeClip"), { description = "Screenshot: freeze, select, copy" })
+hl.bind(("%s + SHIFT + S"):format(mainMod), hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]), { description = "Screenshot: select, copy" })
+hl.bind(("%s + SHIFT + E"):format(mainMod), hl.dsp.exec_cmd([[mkdir -p ~/Pictures/Screenshots; grim -g "$(slurp)" ~/Pictures/Screenshots/Screenshot-$(date +%Y%m%d-%H%M%S).png]]), { description = "Screenshot: select, open tool" })
+hl.bind(("%s + SHIFT + F"):format(mainMod), hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]), { description = "Screenshot: freeze, select, copy" })
 hl.bind(("%s + SHIFT + A"):format(mainMod), hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots; grim - | tee ~/Pictures/Screenshots/Screenshot-$(date +%Y%m%d-%H%M%S).png | wl-copy"), { description = "Screenshot: whole screen, save and copy" })
 
 -- 5. Workspace Switching
@@ -137,9 +137,14 @@ hl.bind(KEY.RESIZE_MODE, hl.dsp.window.resize(), { description = "Resize mode" }
 hl.bind(("%s + I"):format(mainMod), hl.dsp.exec_cmd("slack"), { description = "Slack" })
 
 -- hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd("firefox"), { description = "Firefox" })
-hl.bind(("%s + N"):format(mainMod), hl.dsp.global("caelestia:sidebar"), { description = "Notifications" })
-hl.bind(("%s + SHIFT + N"):format(mainMod), hl.dsp.global("caelestia:clearNotifs"), { description = "Clear all notifications" })
+hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl restore]]), { description = "Notifications" })
+hl.bind(("%s + SHIFT + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl dismiss --all]]), { description = "Clear all notifications" })
 
 hl.bind(("%s + J"):format(mainMod), hl.dsp.exec_cmd("obsidian"), { description = "Obsidian" })
 hl.bind(("%s + U"):format(mainMod), hl.dsp.exec_cmd("gtk-launch io.github.tobagin.karere"), { description = "Karere" })
+hl.bind(("%s + SHIFT + W"):format(mainMod), hl.dsp.exec_cmd("~/.local/bin/wallpicker"), { description = "Wallpaper picker" })
+
+hl.bind(("%s + SHIFT + V"):format(mainMod), hl.dsp.exec_cmd([[cliphist list | fuzzel --dmenu --prompt "󰅌  " --width 60 | cliphist decode | wl-copy]]), { description = "Clipboard history" })
+hl.bind(("%s + period"):format(mainMod), hl.dsp.exec_cmd([[rofimoji --selector fuzzel --action copy]]), { description = "Emoji picker" })
+
 return true

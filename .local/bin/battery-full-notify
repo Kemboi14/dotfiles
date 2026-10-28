@@ -1,16 +1,37 @@
 #!/usr/bin/env bash
 bat=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -1)
 [ -z "$bat" ] && exit 0
-notified=0
+declare -A fired
+full_notified=0
+
+warn() {
+    case $1 in
+        20) notify-send -u normal   -i battery-low     "Snack time? 🍪" "I'm at 20% and getting a lil' hungry... plug me in? Pretty please? 🥺" ;;
+        10) notify-send -u normal   -i battery-caution "Running on vibes ✨" "10% left. I'm basically a sleepy potato now 🥔💤 Charger, I need you!" ;;
+        5)  notify-send -u critical -i battery-empty   "Goodbye, cruel world 💔" "5%... tell the charger I loved it. Plug me in NOW 😭" ;;
+        2)  notify-send -u critical -i battery-empty   "This is the end, my friend 🫡" "2%... my vision is fading... it was an honor serving you 🕯️" ;;
+    esac
+}
+
 while true; do
     cap=$(cat "$bat/capacity"); st=$(cat "$bat/status")
     if [ "$st" = "Discharging" ]; then
-        notified=0
-    elif [ "$st" = "Full" ] || [ "$st" = "Not charging" ] || [ "$cap" -ge 100 ]; then
-        if [ "$notified" -eq 0 ]; then
-            notify-send -i battery-full "All charged up! 🔋💖" "100% and feeling fabulous ✨ You can unplug me now, cutie 🥰"
-            notified=1
+        full_notified=0
+        for lvl in 2 5 10 20; do
+            if [ "$cap" -le "$lvl" ] && [ -z "${fired[$lvl]}" ]; then
+                warn "$lvl"
+                for l in 2 5 10 20; do [ "$l" -ge "$lvl" ] && fired[$l]=1; done
+                break
+            fi
+        done
+    else
+        fired=()
+        if [ "$st" = "Full" ] || [ "$st" = "Not charging" ] || [ "$cap" -ge 100 ]; then
+            if [ "$full_notified" -eq 0 ]; then
+                notify-send -i battery-full "All charged up! 🔋💖" "100% and feeling fabulous ✨ You can unplug me now, cutie 🥰"
+                full_notified=1
+            fi
         fi
     fi
-    sleep 60
+    sleep 30
 done
