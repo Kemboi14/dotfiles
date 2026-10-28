@@ -99,10 +99,12 @@ hl.bind(KEY.MOVE_SWAP_UP, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hy
 hl.bind(KEY.MOVE_SWAP_DOWN, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hyprctl activewindow -j | jq -r .floating) && hyprctl dispatch moveactive 0 30 || hyprctl dispatch movewindow d'") end, { description = "Move or swap window down" })
 
 -- 4. Screenshots
-hl.bind(("%s + SHIFT + S"):format(mainMod), hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]), { description = "Screenshot: select, copy" })
-hl.bind(("%s + SHIFT + E"):format(mainMod), hl.dsp.exec_cmd([[mkdir -p ~/Pictures/Screenshots; grim -g "$(slurp)" ~/Pictures/Screenshots/Screenshot-$(date +%Y%m%d-%H%M%S).png]]), { description = "Screenshot: select, open tool" })
-hl.bind(("%s + SHIFT + F"):format(mainMod), hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]), { description = "Screenshot: freeze, select, copy" })
-hl.bind(("%s + SHIFT + A"):format(mainMod), hl.dsp.exec_cmd("mkdir -p ~/Pictures/Screenshots; grim - | tee ~/Pictures/Screenshots/Screenshot-$(date +%Y%m%d-%H%M%S).png | wl-copy"), { description = "Screenshot: whole screen, save and copy" })
+hl.bind(("%s + SHIFT + S"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot region"), { description = "Screenshot: region, save and copy" })
+hl.bind(("%s + SHIFT + E"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot annotate"), { description = "Screenshot: region, annotate" })
+hl.bind(("%s + SHIFT + A"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot screen"), { description = "Screenshot: monitor, save and copy" })
+hl.bind("Print", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot region"), { description = "Screenshot: region" })
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot screen"), { description = "Screenshot: monitor" })
+hl.bind("CTRL + Print", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot window"), { description = "Screenshot: active window" })
 
 -- 5. Workspace Switching
 for i = 1, 9 do

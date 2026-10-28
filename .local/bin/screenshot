@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Hyprland screenshots: region | window | screen | annotate
+# Saves to ~/Pictures/Screenshots, copies to the clipboard, notifies with a thumbnail.
+set -euo pipefail
+
+mode="${1:-region}"
+case $mode in
+  region|window|screen|annotate) ;;
+  *) echo "usage: screenshot region|window|screen|annotate" >&2; exit 2 ;;
+esac
+
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+file="$dir/$(date +%Y-%m-%d_%H-%M-%S)_${mode}.png"
+scheme="${XDG_STATE_HOME:-$HOME/.local/state}/caelestia/scheme.json"
+
+# Selection overlay in the current scheme colour.
+slurp_args=(-d -w 2)
+if [[ -r $scheme ]]; then
+  primary=$(jq -r '.colours.primary // empty' "$scheme")
+  primary="${primary#\#}"
+  if [[ $primary =~ ^[0-9A-Fa-f]{6}$ ]]; then
+    slurp_args+=(-c "#${primary}ff" -b "#00000066" -s "#${primary}22")
+  fi
+fi
+
+case $mode in
+  region|annotate)
+    # slurp exits non-zero on Escape: treat as a clean cancel.
+    target=$(slurp "${slurp_args[@]}") || exit 0
+    ;;
+  window)
+    target=$(hyprctl -j activewindow | jq -r 'if .at then "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])" else empty end')
+    ;;
+  screen)
+    target=$(hyprctl -j monitors | jq -r '.[] | select(.focused) | .name')
+    ;;
+esac
+[[ -n $target ]] || exit 0
+
+if [[ $mode == screen ]]; then
+  grim -o "$target" "$file"
+else
+  grim -g "$target" "$file"
+fi
+
+if [[ $mode == annotate ]]; then
+  satty --filename "$file" --output-filename "$file" --copy-command wl-copy --early-exit
+else
+  wl-copy --type image/png < "$file"
+fi
+
+notify-send -a Screenshot -i "$file" "Screenshot saved" "$(basename "$file") · copied to clipboard"
