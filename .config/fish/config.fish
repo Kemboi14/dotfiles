@@ -9,3 +9,7 @@ end
 starship init fish | source
 enable_transience
 set -g fish_greeting
+
+if status is-interactive
+    direnv hook fish | source
+end

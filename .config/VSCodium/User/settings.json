@@ -25,7 +25,7 @@
     "editor.padding.top": 12,
     "breadcrumbs.enabled": false,
     "window.titleBarStyle": "native",
-    "window.menuBarVisibility": "toggle",
+    "window.menuBarVisibility": "compact",
     "window.commandCenter": false,
     "workbench.layoutControl.enabled": false,
     "workbench.activityBar.location": "top",
@@ -40,5 +40,15 @@
     "workbench.tree.indent": 16,
     "workbench.tree.renderIndentGuides": "always",
     "terminal.integrated.gpuAcceleration": "on",
-    "walTheme.autoUpdate": true
+    "walTheme.autoUpdate": true,
+    "workbench.editor.showTabs": "single",
+    "workbench.sideBar.location": "right",
+    "workbench.editor.labelFormat": "short",
+    "editor.overviewRulerBorder": false,
+    "editor.hideCursorInOverviewRuler": true,
+    "editor.scrollbar.verticalScrollbarSize": 6,
+    "editor.scrollbar.horizontal": "hidden",
+    "editor.hover.delay": 600,
+    "explorer.compactFolders": false,
+    "terminal.integrated.defaultProfile.linux": "fish"
 }
