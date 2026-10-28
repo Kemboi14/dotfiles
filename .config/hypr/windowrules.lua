@@ -15,7 +15,6 @@ hl.window_rule({ match = { class = "^org\\.pulseaudio\\.pavucontrol$" },        
 hl.window_rule({ match = { title = "^File Operation Progress$" },                         float = true, size = "600 50", })
 hl.window_rule({ match = { class = "^xfce-polkit$" },                                     float = true, size = "600 50", })
 hl.window_rule({ match = { class = "^[Ss]team$", title = "^.*$" }, float = true })
-hl.window_rule({ match = { class = "^steamwebhelper$", title = "^Friends List$" }, float = true })
 
 -- Idle inhibit rules
 hl.window_rule({ match = { class = "^(.*celluloid.*|.*mpv.*|.*vlc.*)$" },                                                                                            idle_inhibit = "fullscreen" })
@@ -50,7 +49,6 @@ hl.window_rule({ match = { class = "^polkit-gnome-authentication-agent-1$" },   
 hl.window_rule({ match = { class = "^org\\.freedesktop\\.impl\\.portal\\.desktop\\.gtk$" },    opacity = 1.0 })
 hl.window_rule({ match = { class = "^org\\.freedesktop\\.impl\\.portal\\.desktop\\.hyprland$" }, opacity = 1.0 })
 hl.window_rule({ match = { class = "^[Ss]team$" },                                             opacity = 1.0 })
-hl.window_rule({ match = { class = "^steamwebhelper$" },                                       opacity = 1.0 })
 hl.window_rule({ match = { class = "^[Ss]potify$" },                                           opacity = 1.0 })
 hl.window_rule({ match = { initial_title = "^Spotify Free$" },                                 opacity = 1.0 })
 hl.window_rule({ match = { initial_title = "^Spotify Premium$" },                              opacity = 1.0 })

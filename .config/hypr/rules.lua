@@ -15,7 +15,6 @@ hl.window_rule({ match = { class = "(?i)^(polkit-gnome-authentication-agent-1|nm
 hl.window_rule({ match = { title = "(?i)^file operation progress$" }, float = true, center = true })
 
 -- Steam: main window tiles, side windows float
-hl.window_rule({ match = { class = "(?i)^steam$", title = "^(?!Steam$).*" }, float = true })
 
 
 -- Never dim, lock or sleep while something is fullscreen
