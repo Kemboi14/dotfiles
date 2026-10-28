@@ -27,3 +27,24 @@ window#waybar { background: transparent; }
 #custom-ws1.occupied, #custom-ws2.occupied, #custom-ws3.occupied, #custom-ws4.occupied, #custom-ws5.occupied { color: @onSurface; }
 #custom-ws1.active, #custom-ws2.active, #custom-ws3.active, #custom-ws4.active, #custom-ws5.active { color: @onPrimary; background: @primary; }
 #custom-ws1:hover, #custom-ws2:hover, #custom-ws3:hover, #custom-ws4:hover, #custom-ws5:hover { background: alpha(@primary, 0.25); }
+
+/* --- Pills --- */
+#cpu, #memory, #temperature, #idle_inhibitor, #mpris, #pulseaudio,
+#backlight, #network, #battery, #tray, #custom-power, #custom-weather {
+    background: alpha(@surfaceContainerHigh, 0.55);
+    border-radius: 10px;
+    margin: 4px 2px;
+    padding: 0 10px;
+}
+#cpu:hover, #memory:hover, #temperature:hover, #mpris:hover, #pulseaudio:hover,
+#backlight:hover, #network:hover, #battery:hover, #custom-power:hover, #custom-weather:hover {
+    background: alpha(@primary, 0.25);
+}
+
+/* --- Glass tooltips --- */
+tooltip {
+    background: alpha(@surface, 0.92);
+    border: 1px solid alpha(@primary, 0.6);
+    border-radius: 12px;
+}
+tooltip label { color: @onSurface; padding: 4px; }
