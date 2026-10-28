@@ -1,5 +1,5 @@
 @import "colors.css";
-* { font-family: "FiraCode Nerd Font", sans-serif; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
+* { font-family: "JetBrainsMono Nerd Font"; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
 window#waybar { background: transparent; }
 .modules-left, .modules-center, .modules-right {
     background: alpha(@surface, 0.55); border: 1px solid alpha(@outline, 0.35);

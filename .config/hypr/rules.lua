@@ -17,11 +17,6 @@ hl.window_rule({ match = { title = "(?i)^file operation progress$" }, float = tr
 -- Steam: main window tiles, side windows float
 hl.window_rule({ match = { class = "(?i)^steam$", title = "^(?!Steam$).*" }, float = true })
 
--- Apps on their own workspaces
-hl.window_rule({ match = { class = "(?i)^(brave-origin|brave-origin-browser|brave-browser)$" }, workspace = "2" })
-hl.window_rule({ match = { class = "(?i)^(vscodium|codium)$" }, workspace = "3" })
-hl.window_rule({ match = { class = "(?i)^(slack|karere.*|obsidian)$" }, workspace = "4 silent" })
-hl.window_rule({ match = { class = "(?i)^steam$" }, workspace = "5 silent" })
 
 -- Never dim, lock or sleep while something is fullscreen
 hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })

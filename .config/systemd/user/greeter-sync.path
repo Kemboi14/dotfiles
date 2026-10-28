@@ -1,9 +1,10 @@
 [Unit]
-Description=Watch wallpaper and colour scheme for greeter sync
+Description=Watch wallpaper, colour scheme and avatar for greeter sync
 
 [Path]
 PathChanged=%h/.local/state/caelestia/scheme.json
 PathChanged=%h/.local/state/caelestia/wallpaper/path.txt
+PathChanged=%h/.face
 
 [Install]
 WantedBy=default.target
