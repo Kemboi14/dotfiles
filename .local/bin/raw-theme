@@ -95,16 +95,16 @@ subprocess.Popen(["swayosd-server"], start_new_session=True,
 # fuzzel (launcher and menus): frosted glass
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
-font=JetBrainsMono Nerd Font:size=12
+font=JetBrainsMono Nerd Font:size=10
 icon-theme=Papirus-Dark
 terminal=kitty
 layer=overlay
-width=42
-lines=10
-horizontal-pad=22
-vertical-pad=16
+width=34
+lines=8
+horizontal-pad=14
+vertical-pad=10
 inner-pad=10
-line-height=26
+line-height=20
 
 [colors]
 background={c["surface"]}b3

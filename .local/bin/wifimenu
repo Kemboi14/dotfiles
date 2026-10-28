@@ -5,7 +5,7 @@ list=$(while IFS=: read -r inuse ssid signal sec; do
     lock=""; [ -n "$sec" ] && [ "$sec" != "--" ] && lock="󰌾"
     echo "$icon $ssid  $signal%  $lock"
 done < <(nmcli -t -f IN-USE,SSID,SIGNAL,SECURITY dev wifi list --rescan auto))
-choice=$(printf "%s\n" "$list" | fuzzel --dmenu --prompt "󰖩  " --lines 10 --width 45)
+choice=$(printf "%s\n" "$list" | fuzzel --dmenu --prompt "󰖩  ")
 [ -z "$choice" ] && exit 0
 ssid=$(echo "$choice" | sed -E "s/^[^ ]+ //; s/  [0-9]+%.*$//")
 if nmcli -t -f NAME con show | grep -Fxq "$ssid"; then
