@@ -63,3 +63,34 @@ json.dump({"wallpaper": wp_file.read_text().strip() if wp_file.exists() else "",
 subprocess.run(["pkill", "-x", "swayosd-server"], capture_output=True)
 subprocess.Popen(["swayosd-server"], start_new_session=True,
                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+# fuzzel (launcher and menus): frosted glass
+f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
+(f / "fuzzel.ini").write_text(f"""[main]
+font=Inter:size=12
+icon-theme=Papirus-Dark
+terminal=kitty
+layer=overlay
+width=42
+lines=10
+horizontal-pad=22
+vertical-pad=16
+inner-pad=10
+line-height=26
+
+[colors]
+background={c["surface"]}b3
+text={c["onSurface"]}ff
+prompt={c["primary"]}ff
+placeholder={c["onSurfaceVariant"]}aa
+input={c["onSurface"]}ff
+match={c["tertiary"]}ff
+selection={c["primary"]}55
+selection-text={c["onSurface"]}ff
+selection-match={c["tertiary"]}ff
+border={c["primary"]}ff
+
+[border]
+width=2
+radius=18
+""")

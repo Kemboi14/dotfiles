@@ -4,7 +4,8 @@
     "enableDiscord": false,
     "enableBtop": false,
     "enableHtop": false,
-    "enableNvtop": false
+    "enableNvtop": false,
+    "enableFuzzel": false
   },
   "wallpaper": {
     "postHook": "sudo -n astra-airlock --sync"
