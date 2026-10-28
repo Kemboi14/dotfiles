@@ -1,6 +1,0 @@
-[Unit]
-Description=Copy ~/.face to the astra-airlock greeter
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/sudo -n /usr/bin/astra-airlock --set-pfp /home/nick/.face

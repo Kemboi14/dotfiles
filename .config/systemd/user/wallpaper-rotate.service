@@ -1,7 +1,0 @@
-[Unit]
-Description=Switch to a random Caelestia wallpaper
-PartOf=graphical-session.target
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/caelestia wallpaper -r

@@ -1,8 +1,0 @@
-[Unit]
-Description=Watch ~/.face for greeter avatar sync
-
-[Path]
-PathChanged=%h/.face
-
-[Install]
-WantedBy=default.target
