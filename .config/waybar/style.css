@@ -1,0 +1,24 @@
+@import "colors.css";
+* { font-family: "FiraCode Nerd Font", sans-serif; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
+window#waybar { background: transparent; }
+.modules-left, .modules-center, .modules-right {
+    background: alpha(@surface, 0.88); border: 1px solid alpha(@outline, 0.35);
+    border-radius: 14px; padding: 2px 8px;
+}
+#workspaces button { color: @onSurfaceVariant; background: transparent; padding: 0 8px; border-radius: 10px; }
+#workspaces button.active { color: @onPrimary; background: @primary; }
+#workspaces button:hover  { background: alpha(@primary, 0.25); }
+#window { color: @onSurfaceVariant; padding: 0 8px; }
+#clock  { color: @primary; font-weight: bold; padding: 0 6px; }
+#mpris, #pulseaudio, #backlight, #network, #battery, #tray, #custom-power { padding: 0 8px; color: @onSurface; }
+#mpris { color: @tertiary; }
+#battery.warning  { color: @tertiary; }
+#battery.critical { color: @error; }
+#custom-power     { color: @error; }
+
+#cpu, #memory, #temperature, #idle_inhibitor, #custom-weather { padding: 0 8px; color: @onSurface; }
+#cpu    { color: @secondary; }
+#memory { color: @tertiary; }
+#temperature.critical { color: @error; }
+#idle_inhibitor.activated { color: @onPrimary; background: @primary; border-radius: 10px; }
+#custom-weather { color: @onSurfaceVariant; }

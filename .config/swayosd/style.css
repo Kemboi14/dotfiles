@@ -1,0 +1,11 @@
+@import url("file:///home/nick/.config/waybar/colors.css");
+
+window#osd {
+    background: alpha(@surface, 0.92);
+    border: 2px solid @primary;
+    border-radius: 18px;
+    padding: 12px 18px;
+}
+window#osd image, window#osd label { color: @onSurface; }
+window#osd progressbar trough { background: alpha(@outline, 0.3); border-radius: 8px; min-height: 8px; }
+window#osd progressbar progress { background: @primary; border-radius: 8px; min-height: 8px; }

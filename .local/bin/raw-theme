@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+"""Theme raw Hyprland tools from the Caelestia scheme, and set the wallpaper."""
+import json, os, subprocess
+from pathlib import Path
+
+home = Path.home()
+state = home / ".local/state/caelestia"
+raw = os.environ.get("SCHEME_COLOURS")
+c = json.loads(raw) if raw else json.load(open(state / "scheme.json"))["colours"]
+def h(k): return "#" + c[k]
+keys = ["primary", "onPrimary", "secondary", "tertiary", "surface", "surfaceContainer",
+        "surfaceContainerHigh", "onSurface", "onSurfaceVariant", "outline", "error"]
+
+# Waybar colors
+w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
+(w / "colors.css").write_text("".join(f"@define-color {k} {h(k)};\n" for k in keys))
+
+# mako (notifications)
+m = home / ".config/mako"; m.mkdir(parents=True, exist_ok=True)
+(m / "config").write_text(f"""font=Inter 11
+background-color={h("surfaceContainer")}
+text-color={h("onSurface")}
+border-color={h("primary")}
+progress-color=over {h("primary")}
+border-size=2
+border-radius=14
+padding=14
+margin=14
+width=380
+max-icon-size=48
+default-timeout=6000
+
+[urgency=critical]
+border-color={h("error")}
+default-timeout=0
+""")
+
+# hyprlock colors
+(home / ".config/hypr/hyprlock-colors.conf").write_text(
+    "".join(f"${k} = rgb({c[k]})\n" for k in keys))
+
+# Reload running tools
+subprocess.run(["makoctl", "reload"], capture_output=True)
+subprocess.run(["pkill", "-SIGUSR2", "-x", "waybar"], capture_output=True)
+
+# Wallpaper (only if the Caelestia shell is not running)
+if subprocess.run(["pgrep", "-f", "qs -c caelestia"], capture_output=True).returncode != 0:
+    wp = (state / "wallpaper/path.txt").read_text().strip()
+    subprocess.run(["pkill", "-x", "swaybg"], capture_output=True)
+    subprocess.Popen(["swaybg", "-m", "fill", "-i", wp], start_new_session=True,
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
