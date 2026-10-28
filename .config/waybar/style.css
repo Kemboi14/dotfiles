@@ -82,3 +82,5 @@ tooltip label { color: @onSurface; padding: 4px; }
 }
 #custom-player-play { color: @primary; }
 #custom-player-prev:hover, #custom-player-play:hover, #custom-player-next:hover { color: @tertiary; }
+
+#window { font-size: 16px; padding: 0 10px; }
