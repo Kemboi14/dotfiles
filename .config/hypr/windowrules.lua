@@ -78,7 +78,6 @@ hl.window_rule({ match = { class = "^io\\.gitlab\\.adhami3310\\.Impression$" }, 
 hl.window_rule({ match = { class = "^.*jetbrains.*$", title = "^win[0-9]+$" }, no_initial_focus = true })
 
 -- Noctalia layer blur
-hl.layer_rule({ match = { namespace = "^caelestia-drawers$" }, blur = true, ignore_alpha = 0.5 })
 
 -- Ignore maximize requests from apps; tiling decides window size
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })

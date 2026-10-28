@@ -18,7 +18,7 @@ w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
 # mako (notifications)
 m = home / ".config/mako"; m.mkdir(parents=True, exist_ok=True)
 (m / "config").write_text(f"""font=Inter 11
-background-color={h("surfaceContainer")}
+background-color={h("surfaceContainer")}cc
 text-color={h("onSurface")}
 border-color={h("primary")}
 progress-color=over {h("primary")}
@@ -49,3 +49,17 @@ if subprocess.run(["pgrep", "-f", "qs -c caelestia"], capture_output=True).retur
     subprocess.run(["pkill", "-x", "swaybg"], capture_output=True)
     subprocess.Popen(["swaybg", "-m", "fill", "-i", wp], start_new_session=True,
                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+# pywal colors.json for VSCodium (Wal theme) and Pywalfox
+wal = home / ".cache/wal"; wal.mkdir(parents=True, exist_ok=True)
+pal = {f"color{i}": "#" + c.get(f"term{i}", "808080") for i in range(16)}
+pal["color0"] = h("surface"); pal["color15"] = h("onSurface")
+wp_file = state / "wallpaper/path.txt"
+json.dump({"wallpaper": wp_file.read_text().strip() if wp_file.exists() else "", "alpha": "100",
+           "special": {"background": h("surface"), "foreground": h("onSurface"), "cursor": h("primary")},
+           "colors": pal}, open(wal / "colors.json", "w"), indent=2)
+
+# Restart swayosd so the pop-up uses the new colors
+subprocess.run(["pkill", "-x", "swayosd-server"], capture_output=True)
+subprocess.Popen(["swayosd-server"], start_new_session=True,
+                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
