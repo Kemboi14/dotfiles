@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Theme raw Hyprland tools from the Caelestia scheme, and set the wallpaper."""
-import json, os, subprocess
+import json, os, signal, subprocess, time
 from pathlib import Path
 
 home = Path.home()
@@ -17,7 +17,7 @@ w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
 
 # mako (notifications)
 m = home / ".config/mako"; m.mkdir(parents=True, exist_ok=True)
-(m / "config").write_text(f"""font=Inter 11
+(m / "config").write_text(f"""font=JetBrainsMono Nerd Font 11
 background-color={h("surfaceContainer")}cc
 text-color={h("onSurface")}
 border-color={h("primary")}
@@ -44,12 +44,20 @@ default-timeout=0
 subprocess.run(["makoctl", "reload"], capture_output=True)
 subprocess.run(["pkill", "-SIGUSR2", "-x", "waybar"], capture_output=True)
 
-# Wallpaper (only if the Caelestia shell is not running)
-if subprocess.run(["pgrep", "-f", "qs -c caelestia"], capture_output=True).returncode != 0:
-    wp = (state / "wallpaper/path.txt").read_text().strip()
-    subprocess.run(["pkill", "-x", "swaybg"], capture_output=True)
-    subprocess.Popen(["swaybg", "-m", "fill", "-i", wp], start_new_session=True,
-                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+# Wallpaper: start the new swaybg first, retire the old ones only once it is up,
+# so a failed start never leaves the desktop bare.
+wp = (state / "wallpaper/path.txt").read_text().strip()
+if os.environ.get("WAYLAND_DISPLAY") and Path(wp).is_file():
+    old = subprocess.run(["pgrep", "-x", "swaybg"], capture_output=True, text=True).stdout.split()
+    new = subprocess.Popen(["swaybg", "-m", "fill", "-i", wp], start_new_session=True,
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    time.sleep(0.5)
+    if new.poll() is None:
+        for pid in old:
+            try:
+                os.kill(int(pid), signal.SIGTERM)
+            except ProcessLookupError:
+                pass
 
 # pywal colors.json for VSCodium (Wal theme) and Pywalfox
 wal = home / ".cache/wal"; wal.mkdir(parents=True, exist_ok=True)
@@ -68,7 +76,7 @@ subprocess.Popen(["swayosd-server"], start_new_session=True,
 # fuzzel (launcher and menus): frosted glass
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
-font=Inter:size=12
+font=JetBrainsMono Nerd Font:size=12
 icon-theme=Papirus-Dark
 terminal=kitty
 layer=overlay
