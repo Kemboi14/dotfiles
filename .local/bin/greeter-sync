@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+# Sync the current wallpaper and Material You scheme into the greetd/ReGreet theme.
+set -euo pipefail
+
+state="${XDG_STATE_HOME:-$HOME/.local/state}/caelestia"
+scheme="$state/scheme.json"
+wp_file="$state/wallpaper/path.txt"
+dest=/var/lib/greeter-theme
+
+die() { echo "greeter-sync: $*" >&2; exit 1; }
+
+[[ -r $scheme ]]  || die "scheme not readable: $scheme"
+[[ -r $wp_file ]] || die "wallpaper state not readable: $wp_file"
+wp=$(<"$wp_file")
+[[ -r $wp ]]      || die "wallpaper not readable: $wp"
+[[ -w $dest ]]    || die "destination not writable: $dest"
+
+# Temp files live inside $dest so the final mv is an atomic rename on one filesystem.
+tmp_wp=$(mktemp -p "$dest" .wallpaper.XXXXXX)
+tmp_css=$(mktemp -p "$dest" .regreet.XXXXXX)
+cleanup() { rm -f "$tmp_wp" "$tmp_css"; }
+trap cleanup EXIT
+
+cp -f -- "$wp" "$tmp_wp"
+
+{
+  while read -r key value; do
+    printf '@define-color %s #%s;\n' "$key" "${value#\#}"
+  done < <(jq -r '.colours | to_entries[] | [.key, .value] | @tsv' "$scheme")
+  cat <<'CSS'
+
+* {
+  font-family: "JetBrainsMono Nerd Font", "Inter", "Noto Sans", sans-serif;
+}
+
+window {
+  background-color: @surface;
+  color: @onSurface;
+}
+
+frame {
+  background-color: alpha(@surface, 0.72);
+  border: 1px solid alpha(@outline, 0.35);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 12px 40px alpha(black, 0.45);
+}
+
+label {
+  color: @onSurface;
+}
+
+label.dim-label {
+  color: @onSurfaceVariant;
+}
+
+entry {
+  background: alpha(@surfaceContainer, 0.85);
+  color: @onSurface;
+  border: 1px solid alpha(@outline, 0.4);
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 0 16px;
+  box-shadow: none;
+  caret-color: @primary;
+}
+
+entry:focus-within {
+  border-color: @primary;
+  outline: none;
+}
+
+button {
+  background: alpha(@surfaceContainer, 0.85);
+  color: @onSurface;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 18px;
+  box-shadow: none;
+}
+
+button:hover {
+  background: alpha(@primary, 0.22);
+}
+
+button:active {
+  background: alpha(@primary, 0.35);
+}
+
+button.suggested-action {
+  background: @primary;
+  color: @onPrimary;
+}
+
+button.suggested-action:hover {
+  background: mix(@primary, @onPrimary, 0.12);
+}
+
+button.destructive-action {
+  background: @error;
+  color: @onError;
+}
+
+popover contents {
+  background: @surfaceContainer;
+  color: @onSurface;
+  border-radius: 16px;
+  border: 1px solid alpha(@outline, 0.3);
+}
+
+popover modelbutton:hover {
+  background: alpha(@primary, 0.2);
+  border-radius: 10px;
+}
+CSS
+} > "$tmp_css"
+
+chmod 644 "$tmp_wp" "$tmp_css"
+mv -f "$tmp_wp" "$dest/wallpaper"
+mv -f "$tmp_css" "$dest/regreet.css"
+echo "greeter-sync: synced $(basename "$wp") and scheme"
