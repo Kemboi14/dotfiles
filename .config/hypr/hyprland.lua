@@ -52,4 +52,5 @@ require("caelestia_theme").apply_theme()
 -- HyprMod managed settings
 require("hyprland-gui")
 
+require("rules")
 require("glass")
