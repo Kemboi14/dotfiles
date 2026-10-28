@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+"""Print one workspace button for Waybar: active, occupied or empty."""
+import json, subprocess, sys
+ws = int(sys.argv[1])
+q = lambda c: json.loads(subprocess.run(["hyprctl", "-j", c], capture_output=True, text=True).stdout or "null")
+active = (q("activeworkspace") or {}).get("id")
+occupied = {w["id"] for w in (q("workspaces") or []) if w.get("windows", 0) > 0}
+cls = "active" if ws == active else "occupied" if ws in occupied else "empty"
+print(json.dumps({"text": str(ws), "class": cls}))

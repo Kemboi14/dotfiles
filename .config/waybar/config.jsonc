@@ -6,7 +6,11 @@
     "margin-left": 8,
     "margin-right": 8,
     "modules-left": [
-        "hyprland/workspaces",
+        "custom/ws1",
+        "custom/ws2",
+        "custom/ws3",
+        "custom/ws4",
+        "custom/ws5",
         "hyprland/window"
     ],
     "modules-center": [
@@ -30,7 +34,9 @@
         "format": "{name}",
         "persistent-workspaces": {
             "*": 5
-        }
+        },
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
     },
     "hyprland/window": {
         "max-length": 40,
@@ -118,5 +124,60 @@
         "interval": 1800,
         "format": "{}",
         "tooltip": false
+    },
+    "custom/ws1": {
+        "exec": "~/.local/bin/ws-status 1",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"1\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws2": {
+        "exec": "~/.local/bin/ws-status 2",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"2\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws3": {
+        "exec": "~/.local/bin/ws-status 3",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"3\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws4": {
+        "exec": "~/.local/bin/ws-status 4",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"4\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws5": {
+        "exec": "~/.local/bin/ws-status 5",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
     }
 }

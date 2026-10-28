@@ -13,6 +13,7 @@ local exec_once = {
     "gnome-keyring-daemon --start --components=secrets",
     "systemctl --user start --ignore-dependencies xdg-desktop-portal-hyprland.service xdg-desktop-portal.service",
     "waybar",
+    "/home/nick/.local/bin/ws-listener",
     "wl-paste --watch cliphist store",
     "swayosd-server",
     "mako",
