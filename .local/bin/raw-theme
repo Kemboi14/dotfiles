@@ -29,6 +29,7 @@ margin=14
 width=380
 max-icon-size=48
 default-timeout=6000
+include=/home/nick/.config/mako/extras
 
 [urgency=critical]
 border-color={h("error")}

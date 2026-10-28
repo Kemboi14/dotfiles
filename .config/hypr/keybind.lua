@@ -147,4 +147,6 @@ hl.bind(("%s + SHIFT + W"):format(mainMod), hl.dsp.exec_cmd("~/.local/bin/wallpi
 hl.bind(("%s + SHIFT + V"):format(mainMod), hl.dsp.exec_cmd([[cliphist list | fuzzel --dmenu --prompt "󰅌  " --width 60 | cliphist decode | wl-copy]]), { description = "Clipboard history" })
 hl.bind(("%s + period"):format(mainMod), hl.dsp.exec_cmd([[rofimoji --selector fuzzel --action copy]]), { description = "Emoji picker" })
 
+hl.bind(("%s + SHIFT + D"):format(mainMod), hl.dsp.exec_cmd([[makoctl mode -t do-not-disturb && notify-send -t 1500 "🔕 Do not disturb toggled"]]), { description = "Do not disturb" })
+
 return true
