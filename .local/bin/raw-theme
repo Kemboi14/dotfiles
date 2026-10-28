@@ -44,20 +44,39 @@ default-timeout=0
 subprocess.run(["makoctl", "reload"], capture_output=True)
 subprocess.run(["pkill", "-SIGUSR2", "-x", "waybar"], capture_output=True)
 
-# Wallpaper: start the new swaybg first, retire the old ones only once it is up,
-# so a failed start never leaves the desktop bare.
+# Wallpaper: animated transition via awww (or swww); falls back to swaybg if neither is installed.
+# The old wallpaper is only retired once the new one is confirmed up.
+import shutil as _shutil
 wp = (state / "wallpaper/path.txt").read_text().strip()
 if os.environ.get("WAYLAND_DISPLAY") and Path(wp).is_file():
-    old = subprocess.run(["pgrep", "-x", "swaybg"], capture_output=True, text=True).stdout.split()
-    new = subprocess.Popen(["swaybg", "-m", "fill", "-i", wp], start_new_session=True,
-                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    time.sleep(0.5)
-    if new.poll() is None:
-        for pid in old:
-            try:
-                os.kill(int(pid), signal.SIGTERM)
-            except ProcessLookupError:
-                pass
+    ww = next((t for t in ("awww", "swww") if _shutil.which(t)), None)
+    if ww:
+        if subprocess.run([ww, "query"], capture_output=True).returncode != 0:
+            subprocess.Popen([f"{ww}-daemon"], start_new_session=True,
+                             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            for _ in range(30):
+                time.sleep(0.1)
+                if subprocess.run([ww, "query"], capture_output=True).returncode == 0:
+                    break
+        r = subprocess.run([ww, "img", wp,
+                            "--transition-type", "left",
+                            "--transition-duration", "1.2",
+                            "--transition-fps", "60",
+                            "--transition-bezier", ".43,1.19,1,.4"],
+                           capture_output=True)
+        if r.returncode == 0:
+            subprocess.run(["pkill", "-x", "swaybg"], capture_output=True)
+    else:
+        old = subprocess.run(["pgrep", "-x", "swaybg"], capture_output=True, text=True).stdout.split()
+        new = subprocess.Popen(["swaybg", "-m", "fill", "-i", wp], start_new_session=True,
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        time.sleep(0.5)
+        if new.poll() is None:
+            for pid in old:
+                try:
+                    os.kill(int(pid), signal.SIGTERM)
+                except ProcessLookupError:
+                    pass
 
 # pywal colors.json for VSCodium (Wal theme) and Pywalfox
 wal = home / ".cache/wal"; wal.mkdir(parents=True, exist_ok=True)
