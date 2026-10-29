@@ -28,7 +28,7 @@
     "window.menuBarVisibility": "compact",
     "window.commandCenter": true,
     "workbench.layoutControl.enabled": false,
-    "workbench.activityBar.location": "hidden",
+    "workbench.activityBar.location": "top",
     "workbench.startupEditor": "none",
     "workbench.tips.enabled": false,
     "editor.lineNumbers": "relative",
