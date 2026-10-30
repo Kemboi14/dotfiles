@@ -1,7 +1,7 @@
 local scrPath = (os.getenv("HOME") or "") .. "/.config/hypr/Scripts"
 local mainMod = "SUPER"
 local TERMINAL = "kitty"
-local EDITOR = "codium"
+local EDITOR = "kitty -e nvim"
 local EXPLORER = "thunar"
 local BROWSER = "brave-origin"
 
@@ -66,7 +66,7 @@ hl.bind(KEY.EDITOR, hl.dsp.exec_cmd(EDITOR), { description = "Code editor" })
 hl.bind(KEY.BROWSER, hl.dsp.exec_cmd(BROWSER), { description = "Browser" })
 hl.bind(KEY.LAUNCHER, hl.dsp.exec_cmd([[fuzzel]]), { description = "Toggle launcher" })
 hl.bind(KEY.LOCK, hl.dsp.exec_cmd([[loginctl lock-session]]), { description =  "Lock screen " })
-hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[codium ~/.config/hypr]]), { description = "Toggle settings" })
+hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[kitty --directory ~/.config/hypr -e nvim .]]), { description = "Toggle settings" })
 hl.bind(KEY.MUSIC, hl.dsp.exec_cmd("thunderbird"), { description = "Thunderbird" })
 hl.bind(KEY.VIDEO, hl.dsp.exec_cmd("mpv --player-operation-mode=pseudo-gui --force-window=immediate"), { description = "Video player" })
 
