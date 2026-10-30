@@ -7,3 +7,10 @@ vim.keymap.set("n", "<C-p>", function() Snacks.picker.files() end, { desc = "Fin
 vim.keymap.set({ "n", "i" }, "<C-b>", function() Snacks.explorer() end, { desc = "Toggle explorer (Ctrl+B)" })
 vim.keymap.set({ "n", "t" }, "<C-`>", function() Snacks.terminal() end, { desc = "Toggle terminal (Ctrl+`)" })
 vim.keymap.set("n", "<C-A-b>", "<cmd>ClaudeCode<cr>", { desc = "Toggle Claude (Ctrl+Alt+B)" })
+
+vim.keymap.set("n", "<leader>ai", function()
+  local shots = vim.fn.globpath(vim.fn.expand("~/Pictures/Screenshots"), "*.png", false, true)
+  table.sort(shots)
+  if #shots == 0 then return vim.notify("No screenshots found", vim.log.levels.WARN) end
+  vim.cmd("ClaudeCodeAdd " .. vim.fn.fnameescape(shots[#shots]))
+end, { desc = "Send latest screenshot to Claude" })
