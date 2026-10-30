@@ -122,3 +122,6 @@ border={c["primary"]}ff
 width=2
 radius=18
 """)
+
+# Plain pywal colour list for tools that read ~/.cache/wal/colors (VSCodium Wal Theme)
+(wal / "colors").write_text("".join(pal[f"color{i}"] + "\n" for i in range(16)))
