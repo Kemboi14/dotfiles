@@ -1,7 +1,7 @@
 local scrPath = (os.getenv("HOME") or "") .. "/.config/hypr/Scripts"
 local mainMod = "SUPER"
 local TERMINAL = "kitty"
-local EDITOR = "kitty -e nvim"
+local EDITOR = "kitty --directory ~/dev -e nvim"
 local EXPLORER = "thunar"
 local BROWSER = "brave-origin"
 
