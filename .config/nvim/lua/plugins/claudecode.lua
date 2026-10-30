@@ -3,7 +3,6 @@ return {
   dependencies = { "folke/snacks.nvim" },
   opts = {
     terminal_cmd = vim.fn.expand("~/.local/bin/claude"),
-    terminal_cmd = vim.fn.expand("~/.local/bin/claude"),
     terminal = { split_side = "right", split_width_percentage = 0.35 },
   },
   keys = {
