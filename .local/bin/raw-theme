@@ -139,3 +139,6 @@ try:
     subprocess.run([str(home / ".local/bin/scheme-icons")], capture_output=True, timeout=30)
 except Exception:
     pass
+
+# GTK text scale
+subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "text-scaling-factor", "1.15"], capture_output=True)
