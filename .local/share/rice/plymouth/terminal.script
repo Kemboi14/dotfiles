@@ -1,0 +1,80 @@
+# terminal: generated from the Caelestia scheme by the nerdy rice
+Window.SetBackgroundTopColor(0.016, 0.02, 0.02);
+Window.SetBackgroundBottomColor(0.016, 0.02, 0.02);
+
+font = "monospace 11";
+x0 = 64;
+y0 = 64;
+line_h = 22;
+max_lines = 20;
+
+header = Sprite(Image.Text("nick@archlinux:~$ boot --verbose", 0.698, 0.796, 0.812, 1, "monospace 13"));
+header.SetPosition(x0, y0, 1);
+
+for (i = 0; i < max_lines; i++) {
+    row[i] = Sprite();
+    row[i].SetPosition(x0, y0 + 36 + i * line_h, 1);
+    msg[i] = "";
+}
+count = 0;
+
+cursor = Sprite(Image.Text("_", 0.698, 0.796, 0.812, 1, font));
+cursor.SetPosition(x0, y0 + 36, 1);
+
+prog = Sprite();
+prog.SetPosition(x0, Window.GetHeight() - 80, 1);
+
+pw = Sprite();
+pw.SetPosition(x0, Window.GetHeight() - 120, 1);
+
+frame = 0;
+
+fun push(text) {
+    if (global.count < global.max_lines) {
+        global.msg[global.count] = text;
+        global.count = global.count + 1;
+    } else {
+        for (i = 0; i < global.max_lines - 1; i++) {
+            global.msg[i] = global.msg[i + 1];
+        }
+        global.msg[global.max_lines - 1] = text;
+    }
+    for (i = 0; i < global.count; i++) {
+        global.row[i].SetImage(Image.Text("  > " + global.msg[i], 0.89, 0.886, 0.886, 1, global.font));
+    }
+    global.cursor.SetY(global.y0 + 36 + global.count * global.line_h);
+}
+
+fun on_status(status) { push(status); }
+fun on_message(text) { push(text); }
+
+fun on_progress(duration, progress) {
+    n = Math.Int(progress * 32);
+    bar = "";
+    for (i = 0; i < 32; i++) {
+        if (i < n) bar = bar + "#"; else bar = bar + "-";
+    }
+    global.prog.SetImage(Image.Text("[" + bar + "] " + Math.Int(progress * 100) + "%", 0.549, 0.573, 0.576, 1, global.font));
+}
+
+fun on_password(prompt, bullets) {
+    stars = "";
+    for (i = 0; i < bullets; i++) stars = stars + "*";
+    global.pw.SetImage(Image.Text(prompt + ": " + stars, 0.698, 0.796, 0.812, 1, global.font));
+    global.pw.SetOpacity(1);
+}
+
+fun on_normal() { global.pw.SetOpacity(0); }
+
+fun refresh() {
+    global.frame = global.frame + 1;
+    phase = Math.Int(global.frame / 25);
+    if (phase - 2 * Math.Int(phase / 2) == 0) global.cursor.SetOpacity(1); else global.cursor.SetOpacity(0);
+}
+
+Plymouth.SetUpdateStatusFunction(on_status);
+Plymouth.SetDisplayMessageFunction(on_message);
+Plymouth.SetBootProgressFunction(on_progress);
+Plymouth.SetDisplayPasswordFunction(on_password);
+Plymouth.SetDisplayNormalFunction(on_normal);
+Plymouth.SetRefreshFunction(refresh);

@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=terminal
+Description=Terminal-style boot log in the Caelestia palette
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/terminal
+ScriptFile=/usr/share/plymouth/themes/terminal/terminal.script
