@@ -1,0 +1,29 @@
+@import "colors";
+
+* { all: unset; font-family: "JetBrainsMono Nerd Font"; }
+
+.dash {
+  background-color: rgba($surface, 0.88);
+  border: 2px solid rgba($primary, 0.5);
+  border-radius: 22px;
+  padding: 22px 26px;
+  color: $onSurface;
+  font-size: 13px;
+}
+.prompt     { color: $primary; font-weight: bold; font-size: 15px; }
+.clock      { color: $onSurface; font-size: 26px; font-weight: bold; }
+.date       { color: $onSurfaceVariant; }
+.dial       { background-color: rgba($surfaceContainerHigh, 0.8); border-radius: 16px; padding: 12px; }
+.ring       { color: $primary; background-color: rgba($outline, 0.25); min-width: 84px; min-height: 84px; }
+.dial-icon  { font-size: 20px; color: $primary; }
+.dial-value { font-size: 15px; font-weight: bold; }
+.dial-label { color: $onSurfaceVariant; font-size: 11px; }
+.panel      { background-color: rgba($surfaceContainerHigh, 0.8); border-radius: 16px; padding: 12px 14px; }
+.section    { color: $onSurfaceVariant; font-size: 11px; }
+.cpugraph   { color: $tertiary; background-color: rgba($outline, 0.12); }
+.core trough   { background-color: rgba($outline, 0.25); border-radius: 6px; min-width: 10px; min-height: 60px; }
+.core progress { background-color: $secondary; border-radius: 6px; min-width: 10px; }
+.core-label { color: $onSurfaceVariant; font-size: 10px; }
+.song       { color: $tertiary; }
+.cal        { color: $onSurface; padding: 6px; }
+.cal:selected { color: $onPrimary; background-color: $primary; border-radius: 8px; }

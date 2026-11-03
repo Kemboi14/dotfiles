@@ -125,3 +125,11 @@ radius=18
 
 # Plain pywal colour list for tools that read ~/.cache/wal/colors (VSCodium Wal Theme)
 (wal / "colors").write_text("".join(pal[f"color{i}"] + "\n" for i in range(16)))
+
+# eww dashboard colours
+e = home / ".config/eww"; e.mkdir(parents=True, exist_ok=True)
+(e / "colors.scss").write_text("".join(f"${k}: {h(k)};\n" for k in keys))
+try:
+    subprocess.run(["eww", "reload"], capture_output=True)
+except FileNotFoundError:
+    pass

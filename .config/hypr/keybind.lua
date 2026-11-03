@@ -138,6 +138,7 @@ hl.bind(("%s + I"):format(mainMod), hl.dsp.exec_cmd("slack"), { description = "S
 
 -- hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd("firefox"), { description = "Firefox" })
 hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl restore]]), { description = "Notifications" })
+hl.bind(("%s + G"):format(mainMod), hl.dsp.exec_cmd([[eww ping >/dev/null 2>&1 || { eww daemon; sleep 0.6; }; eww open --toggle dashboard]]), { description = "Dashboard" })
 hl.bind(("%s + SHIFT + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl dismiss --all]]), { description = "Clear all notifications" })
 
 hl.bind(("%s + J"):format(mainMod), hl.dsp.exec_cmd("obsidian"), { description = "Obsidian" })

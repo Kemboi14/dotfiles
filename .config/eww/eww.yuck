@@ -1,0 +1,52 @@
+(defpoll clock   :interval "1s"    "date +%H:%M:%S")
+(defpoll today   :interval "60s"   "~/.config/eww/scripts/sys.sh date")
+(defpoll cputemp :interval "3s"    :initial "0" "~/.config/eww/scripts/sys.sh temp")
+(defpoll watts   :interval "5s"    :initial "0" "~/.config/eww/scripts/sys.sh power")
+(defpoll up      :interval "60s"   "~/.config/eww/scripts/sys.sh uptime")
+(defpoll whoami  :interval "3600s" "echo $USER@$(cat /etc/hostname)")
+(deflisten net   :initial "{\"iface\":\"-\",\"down\":\"0 B/s\",\"up\":\"0 B/s\"}" "~/.config/eww/scripts/sys.sh net")
+(deflisten song  :initial "" "~/.config/eww/scripts/sys.sh player")
+
+(defwidget dial [value text label icon]
+  (box :class "dial" :orientation "v" :space-evenly false :spacing 6
+    (circular-progress :class "ring" :value value :thickness 8 :start-at 75
+      (label :class "dial-icon" :text icon))
+    (label :class "dial-value" :text text)
+    (label :class "dial-label" :text label)))
+
+(defwidget dashboard []
+  (box :class "dash" :orientation "v" :space-evenly false :spacing 14
+    (box :class "header" :orientation "h" :space-evenly false
+      (label :class "prompt" :halign "start" :hexpand true :text "${whoami} ~ ❯ dashboard")
+      (label :class "clock" :halign "end" :text clock))
+    (label :class "date" :halign "start" :text today)
+    (box :class "dials" :orientation "h" :spacing 12
+      (dial :value {EWW_CPU.avg} :text "${round(EWW_CPU.avg, 0)}%" :label "CPU" :icon "󰍛")
+      (dial :value {EWW_RAM.used_mem_perc} :text "${round(EWW_RAM.used_mem_perc, 0)}%" :label "RAM" :icon "󰘚")
+      (dial :value {cputemp} :text "${cputemp}°C" :label "TEMP" :icon "")
+      (dial :value {EWW_BATTERY.BAT0.capacity} :text "${EWW_BATTERY.BAT0.capacity}%" :label "BAT" :icon "󰁹"))
+    (box :class "panel" :orientation "v" :space-evenly false :spacing 6
+      (label :class "section" :halign "start" :text "cpu history · 60s")
+      (graph :class "cpugraph" :value {EWW_CPU.avg} :time-range "60s" :min 0 :max 100 :height 70 :dynamic false))
+    (box :class "panel" :orientation "v" :space-evenly false :spacing 6
+      (label :class "section" :halign "start" :text "cores")
+      (box :class "cores" :orientation "h" :spacing 8
+        (for core in {EWW_CPU.cores}
+          (box :orientation "v" :space-evenly false :spacing 4
+            (progress :class "core" :value {core.usage} :orientation "v" :flipped true :height 60)
+            (label :class "core-label" :text "${round(core.usage, 0)}")))))
+    (box :class "panel" :orientation "v" :space-evenly false :spacing 4
+      (label :halign "start" :text "󰖩 ${net.iface}   ⇣ ${net.down}   ⇡ ${net.up}")
+      (label :halign "start" :text "󱐋 ${watts} W · ${EWW_BATTERY.BAT0.status}")
+      (label :halign "start" :text "󰔟 up ${up}"))
+    (box :class "panel" :visible {song != ""}
+      (label :class "song" :halign "start" :limit-width 60 :text "󰎆 ${song}"))
+    (calendar :class "cal")))
+
+(defwindow dashboard
+  :monitor 0
+  :stacking "overlay"
+  :exclusive false
+  :namespace "eww-dashboard"
+  :geometry (geometry :anchor "center" :width "720px")
+  (dashboard))
