@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<submenu></submenu>
+	<unique-id>1789655727079990-1</unique-id>
+	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+	<description>Example for a custom action</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+<icon>vscodium</icon>
+<name>Open in VSCodium</name>
+<submenu></submenu>
+<unique-id>1762160000000001-1</unique-id>
+<command>codium %F</command>
+<description>Open the selection in VSCodium</description>
+<range></range>
+<patterns>*</patterns>
+<directories/><audio-files/><image-files/><other-files/><text-files/><video-files/>
+</action>
+<action>
+<icon>edit-copy</icon>
+<name>Copy full path</name>
+<submenu></submenu>
+<unique-id>1762160000000002-1</unique-id>
+<command>wl-copy %f</command>
+<description>Copy the absolute path to the clipboard</description>
+<range></range>
+<patterns>*</patterns>
+<directories/><audio-files/><image-files/><other-files/><text-files/><video-files/>
+</action>
+<action>
+<icon>security-high</icon>
+<name>SHA-256 checksum</name>
+<submenu></submenu>
+<unique-id>1762160000000003-1</unique-id>
+<command>kitty --hold sha256sum %F</command>
+<description>Show SHA-256 checksums in a terminal</description>
+<range></range>
+<patterns>*</patterns>
+<audio-files/><image-files/><other-files/><text-files/><video-files/>
+</action>
+<action>
+<icon>preferences-desktop-wallpaper</icon>
+<name>Set as wallpaper</name>
+<submenu></submenu>
+<unique-id>1762160000000004-1</unique-id>
+<command>caelestia wallpaper -f %f</command>
+<description>Set as wallpaper and re-theme the desktop</description>
+<range></range>
+<patterns>*.jpg;*.jpeg;*.png;*.webp</patterns>
+<image-files/>
+</action>
+</actions>
