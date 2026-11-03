@@ -32,6 +32,8 @@ hl.env("HYPRCURSOR_SIZE", cursor_size)
 hl.env("XCURSOR_THEME", cursor_theme)
 hl.env("XCURSOR_SIZE", cursor_size)
 
+hl.env("LANG", "en_US.UTF-8")
+hl.env("LC_TIME", "en_US.UTF-8")
 hl.on("hyprland.start", function()
   hl.exec_cmd("regreet --style /var/lib/greeter-theme/regreet.css; hyprctl dispatch 'hl.dsp.exit()'")
 end)

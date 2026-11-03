@@ -12,6 +12,19 @@ ring_px=8
 avatar_show=128        # size drawn on the greeter, in screen pixels
 avatar_top=210         # distance from the top of the screen to the avatar
 
+# Greeter text (override any of these in ~/.config/greeter-sync.conf)
+greet_title="${USER}@$(uname -n)"
+greet_sub="~ \$ sudo make me a session"
+show_sysinfo=1
+bg_blur=7              # wallpaper defocus (0 = sharp)
+bg_dim=28              # wallpaper darkening in percent
+avatar_glow=1          # soft primary-coloured halo behind the avatar
+title_pt=54
+sub_pt=22
+info_pt=18
+# shellcheck source=/dev/null
+[[ -r $HOME/.config/greeter-sync.conf ]] && source "$HOME/.config/greeter-sync.conf"
+
 die() { echo "greeter-sync: $*" >&2; exit 1; }
 
 command -v jq    >/dev/null || die "jq not installed"
@@ -50,7 +63,9 @@ fi
 
 {
   while read -r key value; do
-    printf '@define-color %s #%s;\n' "$key" "${value#\#}"
+    value="${value#\#}"
+    [[ $value =~ ^[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$ ]] || continue
+    printf '@define-color %s #%s;\n' "$key" "$value"
   done < <(jq -r '.colours | to_entries[] | [.key, .value] | @tsv' "$scheme")
   cat <<'CSS'
 
@@ -64,11 +79,11 @@ window {
 }
 
 frame {
-  background-color: alpha(@surface, 0.72);
-  border: 1px solid alpha(@outline, 0.35);
-  border-radius: 24px;
-  padding: 24px;
-  box-shadow: 0 12px 40px alpha(black, 0.45);
+  background-color: alpha(@surface, 0.62);
+  border: 1px solid alpha(@primary, 0.22);
+  border-radius: 28px;
+  padding: 28px 32px;
+  box-shadow: 0 20px 60px alpha(black, 0.55), inset 0 1px 0 alpha(white, 0.06);
 }
 
 label {
@@ -93,6 +108,7 @@ entry {
 entry:focus-within {
   border-color: @primary;
   outline: none;
+  box-shadow: 0 0 0 3px alpha(@primary, 0.25);
 }
 
 button {
@@ -115,6 +131,9 @@ button:active {
 button.suggested-action {
   background: @primary;
   color: @onPrimary;
+  font-weight: bold;
+  padding: 8px 26px;
+  box-shadow: 0 6px 18px alpha(@primary, 0.35);
 }
 
 button.suggested-action:hover {
@@ -140,18 +159,54 @@ popover modelbutton:hover {
 CSS
 } > "$tmp_css"
 
-# Render the greeter wallpaper at the screen's size, with the avatar drawn once, centred.
+# Render the greeter wallpaper at the screen's size: one centred avatar plus nerdy text.
 read -r scr_w scr_h < <(hyprctl monitors -j 2>/dev/null | jq -r '[.[] | select(.focused)][0] // .[0] | "\(.width) \(.height)"' 2>/dev/null || true)
 [[ $scr_w =~ ^[0-9]+$ && $scr_h =~ ^[0-9]+$ ]] || { scr_w=1920; scr_h=1080; }
+
+hexcol() { local v; v=$(jq -r --arg k "$1" '.colours[$k] // empty' "$scheme"); v="${v#\#}"; [[ $v =~ ^[0-9A-Fa-f]{6}$ ]] && echo "$v" || echo "$2"; }
+fg=$(hexcol onSurface e3e2e6)
+fg_dim=$(hexcol onSurfaceVariant c4c6d0)
+shadow='#000000a0'
+
+font_bold=$(fc-match -f '%{file}' 'JetBrainsMono Nerd Font:style=Bold' 2>/dev/null || true)
+font_reg=$(fc-match -f '%{file}' 'JetBrainsMono Nerd Font:style=Regular' 2>/dev/null || true)
+
+args=("$wp" -resize "${scr_w}x${scr_h}^" -gravity center -extent "${scr_w}x${scr_h}")
+(( bg_blur > 0 )) && args+=( -blur "0x${bg_blur}" )
+(( bg_dim > 0 ))  && args+=( -fill black -colorize "${bg_dim}%" )
 if (( have_avatar )); then
-  magick "$wp" -resize "${scr_w}x${scr_h}^" -gravity center -extent "${scr_w}x${scr_h}" \
-    \( "PNG:$tmp_av" -resize "${avatar_show}x${avatar_show}" \) \
-    -gravity north -geometry "+0+${avatar_top}" -compose over -composite \
-    -quality 92 "JPEG:$tmp_wp"
-else
-  magick "$wp" -resize "${scr_w}x${scr_h}^" -gravity center -extent "${scr_w}x${scr_h}" \
-    -quality 92 "JPEG:$tmp_wp"
+  if (( avatar_glow )); then
+    gpad=36
+    gsz=$((avatar_show + 2 * gpad))
+    gc=$((gsz / 2))
+    args+=( \( -size "${gsz}x${gsz}" xc:none -fill "#${primary}" \
+               -draw "circle $gc,$gc $gc,$((gpad - 4))" -channel A -evaluate multiply 0.9 +channel \
+               -blur "0x18" \)
+            -gravity north -geometry "+0+$((avatar_top - gpad))" -compose over -composite )
+  fi
+  args+=( \( "PNG:$tmp_av" -resize "${avatar_show}x${avatar_show}" \)
+          -gravity north -geometry "+0+${avatar_top}" -compose over -composite )
 fi
+if [[ -r $font_bold && -r $font_reg ]]; then
+  sub_y=$((60 + title_pt + 18))
+  args+=( -gravity northwest
+          -font "$font_bold" -pointsize "$title_pt"
+          -fill "$shadow" -annotate +63+63 "$greet_title"
+          -fill "#$primary" -annotate +60+60 "$greet_title"
+          -font "$font_reg" -pointsize "$sub_pt"
+          -fill "$shadow" -annotate +62+$((sub_y + 2)) "$greet_sub"
+          -fill "#$fg_dim" -annotate +60+"$sub_y" "$greet_sub" )
+  if (( show_sysinfo )); then
+    kern=$(uname -r)
+    hypr=$(Hyprland --version 2>/dev/null | awk 'NR==1 {print $2}')
+    pkgs=$(pacman -Qq 2>/dev/null | wc -l)
+    sysline="  Arch Linux      ${kern%%-*}      Hyprland ${hypr:-?}     󰏖  ${pkgs} pkgs"
+    args+=( -gravity southwest -pointsize "$info_pt"
+            -fill "$shadow" -annotate +62+46 "$sysline"
+            -fill "#$fg" -annotate +60+48 "$sysline" )
+  fi
+fi
+magick "${args[@]}" -quality 92 "JPEG:$tmp_wp"
 
 chmod 644 "$tmp_wp" "$tmp_css" "$tmp_av"
 mv -f "$tmp_wp" "$dest/wallpaper"
