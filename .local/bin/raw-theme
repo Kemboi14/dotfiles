@@ -133,3 +133,9 @@ try:
     subprocess.run(["eww", "reload"], capture_output=True)
 except FileNotFoundError:
     pass
+
+# scheme-coloured Papirus folder overlay
+try:
+    subprocess.run([str(home / ".local/bin/scheme-icons")], capture_output=True, timeout=30)
+except Exception:
+    pass

@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Generate Papirus overlay icon themes whose folder colours follow the Caelestia scheme."""
+import configparser, json, os, re, shutil
+from pathlib import Path
+
+home = Path.home()
+src_root = Path("/usr/share/icons/Papirus")
+out_base = home / ".local/share/icons"
+data = json.load(open(home / ".local/state/caelestia/scheme.json"))
+scheme = data["colours"]
+mode_now = str(data.get("mode", "dark")).capitalize()
+
+def hex2rgb(h):
+    h = h.lstrip("#")
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+def rgb2hex(c):
+    return "#" + "".join(f"{max(0, min(255, round(v))):02x}" for v in c)
+
+def lum(c):
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+def mix(a, b, t):
+    return tuple(a[i] + (b[i] - a[i]) * t for i in range(3))
+
+light = hex2rgb(scheme["primary"])
+dark = hex2rgb(scheme["primaryContainer"])
+HEX = re.compile(r"#[0-9a-fA-F]{6}\b")
+
+def folder_colours(blue_svg, red_svg):
+    a = {m.lower() for m in HEX.findall(blue_svg.read_text())}
+    b = {m.lower() for m in HEX.findall(red_svg.read_text())} if red_svg.exists() else set()
+    return sorted(a - b, key=lambda h: lum(hex2rgb(h)), reverse=True)
+
+cfg = configparser.ConfigParser(interpolation=None, strict=False)
+cfg.optionxform = str
+cfg.read(src_root / "index.theme")
+place_dirs = [d for d in cfg.sections() if d.endswith("/places") and (src_root / d).is_dir()]
+
+for mode in ("Dark", "Light"):
+    name = f"Papirus-Scheme-{mode}"
+    out = out_base / name
+    tmp = out_base / f".{name}.tmp"
+    shutil.rmtree(tmp, ignore_errors=True)
+    tmp.mkdir(parents=True)
+    count = 0
+    for d in place_dirs:
+        sdir = src_root / d
+        odir = tmp / d
+        for entry in sdir.iterdir():
+            if not entry.is_symlink():
+                continue
+            target = os.readlink(entry)
+            if not os.path.basename(target).startswith("folder-blue"):
+                continue
+            blue = (sdir / target).resolve()
+            if not blue.is_file():
+                continue
+            red = blue.with_name(blue.name.replace("folder-blue", "folder-red", 1))
+            cols = folder_colours(blue, red)
+            if not cols:
+                continue
+            n = len(cols)
+            mapping = {h: rgb2hex(mix(light, dark, i / (n - 1) if n > 1 else 0)) for i, h in enumerate(cols)}
+            svg = HEX.sub(lambda m: mapping.get(m.group(0).lower(), m.group(0)), blue.read_text())
+            odir.mkdir(parents=True, exist_ok=True)
+            (odir / entry.name).write_text(svg)
+            count += 1
+    idx = configparser.ConfigParser(interpolation=None)
+    idx.optionxform = str
+    idx["Icon Theme"] = {
+        "Name": name,
+        "Comment": "Papirus with folder colours from the Caelestia scheme",
+        "Inherits": f"Papirus-{mode},Papirus,hicolor",
+        "Directories": ",".join(place_dirs),
+    }
+    for d in place_dirs:
+        idx[d] = dict(cfg[d])
+    with open(tmp / "index.theme", "w") as fh:
+        idx.write(fh, space_around_delimiters=False)
+    shutil.rmtree(out, ignore_errors=True)
+    tmp.rename(out)
+    print(f"{name}: {count} folder icons")
+
+for ver in ("gtk-3.0", "gtk-4.0"):
+    ini = home / ".config" / ver / "settings.ini"
+    if ini.exists():
+        txt = ini.read_text()
+        new = re.sub(r"^gtk-icon-theme-name=.*$", f"gtk-icon-theme-name=Papirus-Scheme-{mode_now}", txt, flags=re.M)
+        if new != txt:
+            ini.write_text(new)
