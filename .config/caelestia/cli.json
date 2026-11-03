@@ -1,13 +1,13 @@
 {
-  "theme": {
-    "postHook": "/home/nick/.local/bin/raw-theme; sudo -n astra-airlock --sync",
-    "enableDiscord": false,
-    "enableBtop": false,
-    "enableHtop": false,
-    "enableNvtop": false,
-    "enableFuzzel": false
-  },
-  "wallpaper": {
-    "postHook": "sudo -n astra-airlock --sync"
-  }
+    "theme": {
+        "postHook": "/home/nick/.local/bin/raw-theme",
+        "enableDiscord": false,
+        "enableBtop": false,
+        "enableHtop": false,
+        "enableNvtop": false,
+        "enableFuzzel": false
+    },
+    "wallpaper": {
+        "postHook": ""
+    }
 }

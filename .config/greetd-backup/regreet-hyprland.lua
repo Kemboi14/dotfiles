@@ -1,4 +1,3 @@
--- Hyprland kiosk config for astra-airlock (greetd)
 hl.monitor({ output = "", mode = "preferred", position = "auto", scale = 1 })
 
 hl.config({
@@ -32,7 +31,6 @@ hl.env("HYPRCURSOR_THEME", cursor_theme)
 hl.env("HYPRCURSOR_SIZE", cursor_size)
 hl.env("XCURSOR_THEME", cursor_theme)
 hl.env("XCURSOR_SIZE", cursor_size)
-hl.env("XDG_CACHE_HOME", "/var/cache/astra-airlock/.cache")
 
 hl.on("hyprland.start", function()
   hl.exec_cmd("regreet --style /var/lib/greeter-theme/regreet.css; hyprctl dispatch 'hl.dsp.exit()'")
