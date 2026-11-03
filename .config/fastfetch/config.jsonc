@@ -2,13 +2,21 @@
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
     "type": "builtin",
-    "source": "linux",
-    "color": { "1": "blue", "2": "white" },
-    "padding": { "top": 1, "right": 3 }
+    "source": "arch",
+    "color": {
+      "1": "cyan",
+      "2": "blue"
+    },
+    "padding": {
+      "top": 1,
+      "right": 3
+    }
   },
   "display": {
     "separator": "  ❯  ",
-    "size": { "binaryPrefix": "si" },
+    "size": {
+      "binaryPrefix": "si"
+    },
     "color": {
       "keys": "blue",
       "separator": "magenta",
@@ -16,26 +24,91 @@
     }
   },
   "modules": [
-    { "type": "custom", "format": "\u001b[36m╭─── ✨ system ──────────────────────────\u001b[0m" },
-    { "type": "command",    "key": "👤 Host      ", "text": "echo \"$USER@$(cat /etc/hostname)\"" },
-    { "type": "host",       "key": "💻 Machine   " },
-    { "type": "kernel",     "key": "🐧 Kernel    " },
-    { "type": "os",         "key": "🏹 Distro    " },
-    { "type": "wm",         "key": "🪟 WM        " },
-    { "type": "packages",   "key": "📦 Packages  " },
-    { "type": "shell",      "key": "🐚 Shell     " },
-    { "type": "terminal",   "key": "🐱 Terminal  " },
-    { "type": "custom", "format": "\u001b[36m├─── 🔩 hardware ────────────────────────\u001b[0m" },
-    { "type": "brightness", "key": "🔆 Brightness" },
-    { "type": "display",    "key": "📺 Resolution", "format": "{width}x{height}" },
-    { "type": "uptime",     "key": "⏳ Uptime    " },
-    { "type": "cpu",        "key": "🧠 CPU       " },
-    { "type": "cpuusage",   "key": "📈 CPU Load  " },
-    { "type": "memory",     "key": "🐏 Memory    ", "format": "{used} / {total}" },
-    { "type": "battery",    "key": "🔋 Battery   ", "format": "{capacity} & {status}" },
-    { "type": "gpu",        "key": "🎮 GPU       " },
-    { "type": "custom", "format": "\u001b[36m╰───────────────────────────────────────\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[36m╭─── ✨ system ──────────────────────────\u001b[0m"
+    },
+    {
+      "type": "command",
+      "key": "👤 Host      ",
+      "text": "echo \"$USER@$(cat /etc/hostname)\""
+    },
+    {
+      "type": "host",
+      "key": "💻 Machine   "
+    },
+    {
+      "type": "kernel",
+      "key": "🐧 Kernel    "
+    },
+    {
+      "type": "os",
+      "key": "🏹 Distro    "
+    },
+    {
+      "type": "wm",
+      "key": "🪟 WM        "
+    },
+    {
+      "type": "packages",
+      "key": "📦 Packages  "
+    },
+    {
+      "type": "shell",
+      "key": "🐚 Shell     "
+    },
+    {
+      "type": "terminal",
+      "key": "🐱 Terminal  "
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[36m├─── 🔩 hardware ────────────────────────\u001b[0m"
+    },
+    {
+      "type": "brightness",
+      "key": "🔆 Brightness"
+    },
+    {
+      "type": "display",
+      "key": "📺 Resolution",
+      "format": "{width}x{height}"
+    },
+    {
+      "type": "uptime",
+      "key": "⏳ Uptime    "
+    },
+    {
+      "type": "cpu",
+      "key": "🧠 CPU       "
+    },
+    {
+      "type": "cpuusage",
+      "key": "📈 CPU Load  "
+    },
+    {
+      "type": "memory",
+      "key": "🐏 Memory    ",
+      "format": "{used} / {total}"
+    },
+    {
+      "type": "battery",
+      "key": "🔋 Battery   ",
+      "format": "{capacity} & {status}"
+    },
+    {
+      "type": "gpu",
+      "key": "🎮 GPU       "
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[36m╰───────────────────────────────────────\u001b[0m"
+    },
     "break",
-    { "type": "colors", "symbol": "circle", "paddingLeft": 2 }
+    {
+      "type": "colors",
+      "symbol": "circle",
+      "paddingLeft": 2
+    }
   ]
 }
