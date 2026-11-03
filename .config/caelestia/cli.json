@@ -1,13 +1,13 @@
 {
-    "theme": {
-        "postHook": "/home/nick/.local/bin/raw-theme",
-        "enableDiscord": false,
-        "enableBtop": false,
-        "enableHtop": false,
-        "enableNvtop": false,
-        "enableFuzzel": false
-    },
-    "wallpaper": {
-        "postHook": ""
-    }
+  "theme": {
+    "postHook": "/home/nick/.local/bin/raw-theme",
+    "enableDiscord": false,
+    "enableBtop": true,
+    "enableHtop": false,
+    "enableNvtop": false,
+    "enableFuzzel": false
+  },
+  "wallpaper": {
+    "postHook": ""
+  }
 }
