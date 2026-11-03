@@ -90,3 +90,7 @@ tooltip label { color: @onSurface; padding: 4px; }
 #bluetooth:hover { background: alpha(@primary, 0.25); }
 #bluetooth.connected { color: @primary; }
 #bluetooth.off, #bluetooth.disabled { color: alpha(@onSurfaceVariant, 0.5); }
+
+/* --- nerdy telemetry --- */
+#cpu.warning, #memory.warning { color: @tertiary; }
+#cpu.critical, #memory.critical { color: @error; }
