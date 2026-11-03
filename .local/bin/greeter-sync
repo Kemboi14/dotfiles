@@ -7,8 +7,10 @@ scheme="$state/scheme.json"
 wp_file="$state/wallpaper/path.txt"
 face="$HOME/.face"
 dest=/var/lib/greeter-theme
-avatar_px=256
+avatar_px=256          # source resolution of the circular crop
 ring_px=8
+avatar_show=128        # size drawn on the greeter, in screen pixels
+avatar_top=210         # distance from the top of the screen to the avatar
 
 die() { echo "greeter-sync: $*" >&2; exit 1; }
 
@@ -31,7 +33,6 @@ tmp_av=$(mktemp -p "$dest" .avatar.XXXXXX)
 cleanup() { rm -f "$tmp_wp" "$tmp_css" "$tmp_av"; }
 trap cleanup EXIT
 
-cp -f -- "$wp" "$tmp_wp"
 
 have_avatar=0
 if [[ -r $face ]]; then
@@ -137,20 +138,20 @@ popover modelbutton:hover {
   border-radius: 10px;
 }
 CSS
-  if (( have_avatar )); then
-    cat <<CSS
-
-/* Avatar: pre-cropped circular PNG painted at the top of the login card. */
-frame {
-  background-image: url("file://$dest/avatar.png");
-  background-repeat: no-repeat;
-  background-position: center 24px;
-  background-size: 112px 112px;
-  padding-top: 152px;
-}
-CSS
-  fi
 } > "$tmp_css"
+
+# Render the greeter wallpaper at the screen's size, with the avatar drawn once, centred.
+read -r scr_w scr_h < <(hyprctl monitors -j 2>/dev/null | jq -r '[.[] | select(.focused)][0] // .[0] | "\(.width) \(.height)"' 2>/dev/null || true)
+[[ $scr_w =~ ^[0-9]+$ && $scr_h =~ ^[0-9]+$ ]] || { scr_w=1920; scr_h=1080; }
+if (( have_avatar )); then
+  magick "$wp" -resize "${scr_w}x${scr_h}^" -gravity center -extent "${scr_w}x${scr_h}" \
+    \( "PNG:$tmp_av" -resize "${avatar_show}x${avatar_show}" \) \
+    -gravity north -geometry "+0+${avatar_top}" -compose over -composite \
+    -quality 92 "JPEG:$tmp_wp"
+else
+  magick "$wp" -resize "${scr_w}x${scr_h}^" -gravity center -extent "${scr_w}x${scr_h}" \
+    -quality 92 "JPEG:$tmp_wp"
+fi
 
 chmod 644 "$tmp_wp" "$tmp_css" "$tmp_av"
 mv -f "$tmp_wp" "$dest/wallpaper"

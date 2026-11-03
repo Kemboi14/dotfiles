@@ -1,246 +1,260 @@
 {
-  "layer": "top",
-  "position": "top",
-  "height": 34,
-  "margin-top": 6,
-  "margin-left": 8,
-  "margin-right": 8,
-  "modules-left": [
-    "custom/arch",
-    "custom/ws1",
-    "custom/ws2",
-    "custom/ws3",
-    "custom/ws4",
-    "custom/ws5",
-    "hyprland/window"
-  ],
-  "modules-center": [
-    "clock",
-    "custom/weather"
-  ],
-  "modules-right": [
-    "cpu",
-    "memory",
-    "temperature",
-    "idle_inhibitor",
-    "group/player",
-    "pulseaudio",
-    "backlight",
-    "network",
-    "battery",
-    "tray",
-    "custom/power"
-  ],
-  "hyprland/workspaces": {
-    "format": "{name}",
-    "persistent-workspaces": {
-      "*": 5
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "margin-top": 6,
+    "margin-left": 8,
+    "margin-right": 8,
+    "modules-left": [
+        "custom/arch",
+        "custom/ws1",
+        "custom/ws2",
+        "custom/ws3",
+        "custom/ws4",
+        "custom/ws5",
+        "hyprland/window"
+    ],
+    "modules-center": [
+        "clock",
+        "custom/weather"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "temperature",
+        "idle_inhibitor",
+        "group/player",
+        "pulseaudio",
+        "backlight",
+        "bluetooth",
+        "network",
+        "battery",
+        "tray",
+        "custom/power"
+    ],
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "persistent-workspaces": {
+            "*": 5
+        },
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
     },
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-  },
-  "hyprland/window": {
-    "format": " ",
-    "icon": true,
-    "icon-size": 20,
-    "separate-outputs": true
-  },
-  "clock": {
-    "format": "󰥔 {:%H:%M}",
-    "format-alt": "󰃭 {:%a %d %b}",
-    "tooltip-format": "<tt>{calendar}</tt>",
-    "calendar": {
-      "mode": "month",
-      "on-scroll": 1,
-      "format": {
-        "today": "<span weight='bold'><u>{}</u></span>"
-      }
+    "hyprland/window": {
+        "format": " ",
+        "icon": true,
+        "icon-size": 20,
+        "separate-outputs": true
     },
-    "actions": {
-      "on-scroll-up": "shift_up",
-      "on-scroll-down": "shift_down"
+    "clock": {
+        "format": "󰥔 {:%H:%M}",
+        "format-alt": "󰃭 {:%a %d %b}",
+        "tooltip-format": "<tt>{calendar}</tt>",
+        "calendar": {
+            "mode": "month",
+            "on-scroll": 1,
+            "format": {
+                "today": "<span weight='bold'><u>{}</u></span>"
+            }
+        },
+        "actions": {
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
+        }
+    },
+    "mpris": {
+        "format": "{title}  {position}/{length}",
+        "format-paused": "{title}  {position}/{length}",
+        "title-len": 22,
+        "interval": 1,
+        "tooltip-format": "{artist} — {title}",
+        "on-click": "playerctl play-pause"
+    },
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 mute",
+        "format-icons": {
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
+        },
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5
+    },
+    "backlight": {
+        "format": "󰃠 {percent}%"
+    },
+    "network": {
+        "format-wifi": "󰖩 {essid}",
+        "format-ethernet": "󰈀 wired",
+        "format-disconnected": "󰖪 offline",
+        "on-click": "~/.local/bin/wifimenu"
+    },
+    "battery": {
+        "states": {
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-icons": [
+            "󰁺",
+            "󰁼",
+            "󰁾",
+            "󰂀",
+            "󰁹"
+        ]
+    },
+    "tray": {
+        "spacing": 8
+    },
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": false,
+        "on-click": "~/.local/bin/powermenu"
+    },
+    "cpu": {
+        "format": "󰍛 {usage}%",
+        "interval": 5
+    },
+    "memory": {
+        "format": "󰘚 {used:0.1f}G",
+        "interval": 10
+    },
+    "temperature": {
+        "format": " {temperatureC}°",
+        "critical-threshold": 80,
+        "format-critical": " {temperatureC}°"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "󰅶",
+            "deactivated": "󰾪"
+        },
+        "tooltip-format-activated": "Staying awake",
+        "tooltip-format-deactivated": "Normal sleep"
+    },
+    "custom/weather": {
+        "exec": "curl -sf \"wttr.in/?format=%c%t\"",
+        "interval": 1800,
+        "format": "{}",
+        "tooltip": false
+    },
+    "custom/ws1": {
+        "exec": "~/.local/bin/ws-status 1",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"1\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws2": {
+        "exec": "~/.local/bin/ws-status 2",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"2\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws3": {
+        "exec": "~/.local/bin/ws-status 3",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"3\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws4": {
+        "exec": "~/.local/bin/ws-status 4",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"4\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws5": {
+        "exec": "~/.local/bin/ws-status 5",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/arch": {
+        "format": "",
+        "tooltip": false,
+        "on-click": "fuzzel",
+        "on-click-right": "~/.local/bin/powermenu"
+    },
+    "group/player": {
+        "orientation": "horizontal",
+        "modules": [
+            "image#player-art",
+            "mpris",
+            "custom/cava",
+            "custom/player-prev",
+            "custom/player-play",
+            "custom/player-next"
+        ]
+    },
+    "image#player-art": {
+        "exec": "/home/nick/.local/bin/waybar-player art",
+        "size": 22,
+        "interval": 2,
+        "on-click": "playerctl play-pause"
+    },
+    "custom/cava": {
+        "exec": "/home/nick/.local/bin/waybar-player cava",
+        "format": "{}",
+        "tooltip": false
+    },
+    "custom/player-prev": {
+        "exec": "/home/nick/.local/bin/waybar-player icon prev",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "playerctl previous"
+    },
+    "custom/player-play": {
+        "exec": "/home/nick/.local/bin/waybar-player icon play",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "playerctl play-pause"
+    },
+    "custom/player-next": {
+        "exec": "/home/nick/.local/bin/waybar-player icon next",
+        "format": "{}",
+        "tooltip": false,
+        "on-click": "playerctl next"
+    },
+    "bluetooth": {
+        "format": "󰂯",
+        "format-off": "󰂲",
+        "format-disabled": "󰂲",
+        "format-connected": "󰂱 {device_alias}",
+        "format-connected-battery": "󰂱 {device_alias} {device_battery_percentage}%",
+        "max-length": 24,
+        "tooltip-format": "{controller_alias}  {controller_address}\n{num_connections} connected",
+        "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}  {device_address}",
+        "on-click": "kitty --class bluetui -e bluetui",
+        "on-click-right": "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
     }
-  },
-  "mpris": {
-    "format": "{title}  {position}/{length}",
-    "format-paused": "{title}  {position}/{length}",
-    "title-len": 22,
-    "interval": 1,
-    "tooltip-format": "{artist} — {title}",
-    "on-click": "playerctl play-pause"
-  },
-  "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-muted": "󰝟 mute",
-    "format-icons": {
-      "default": [
-        "󰕿",
-        "󰖀",
-        "󰕾"
-      ]
-    },
-    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-    "scroll-step": 5
-  },
-  "backlight": {
-    "format": "󰃠 {percent}%"
-  },
-  "network": {
-    "format-wifi": "󰖩 {essid}",
-    "format-ethernet": "󰈀 wired",
-    "format-disconnected": "󰖪 offline",
-    "on-click": "~/.local/bin/wifimenu"
-  },
-  "battery": {
-    "states": {
-      "warning": 20,
-      "critical": 10
-    },
-    "format": "{icon} {capacity}%",
-    "format-charging": "󰂄 {capacity}%",
-    "format-icons": [
-      "󰁺",
-      "󰁼",
-      "󰁾",
-      "󰂀",
-      "󰁹"
-    ]
-  },
-  "tray": {
-    "spacing": 8
-  },
-  "custom/power": {
-    "format": "⏻",
-    "tooltip": false,
-    "on-click": "~/.local/bin/powermenu"
-  },
-  "cpu": {
-    "format": "󰍛 {usage}%",
-    "interval": 5
-  },
-  "memory": {
-    "format": "󰘚 {used:0.1f}G",
-    "interval": 10
-  },
-  "temperature": {
-    "format": " {temperatureC}°",
-    "critical-threshold": 80,
-    "format-critical": " {temperatureC}°"
-  },
-  "idle_inhibitor": {
-    "format": "{icon}",
-    "format-icons": {
-      "activated": "󰅶",
-      "deactivated": "󰾪"
-    },
-    "tooltip-format-activated": "Staying awake",
-    "tooltip-format-deactivated": "Normal sleep"
-  },
-  "custom/weather": {
-    "exec": "curl -sf \"wttr.in/?format=%c%t\"",
-    "interval": 1800,
-    "format": "{}",
-    "tooltip": false
-  },
-  "custom/ws1": {
-    "exec": "~/.local/bin/ws-status 1",
-    "return-type": "json",
-    "interval": "once",
-    "signal": 8,
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"1\" })'",
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-  },
-  "custom/ws2": {
-    "exec": "~/.local/bin/ws-status 2",
-    "return-type": "json",
-    "interval": "once",
-    "signal": 8,
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"2\" })'",
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-  },
-  "custom/ws3": {
-    "exec": "~/.local/bin/ws-status 3",
-    "return-type": "json",
-    "interval": "once",
-    "signal": 8,
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"3\" })'",
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-  },
-  "custom/ws4": {
-    "exec": "~/.local/bin/ws-status 4",
-    "return-type": "json",
-    "interval": "once",
-    "signal": 8,
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"4\" })'",
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-  },
-  "custom/ws5": {
-    "exec": "~/.local/bin/ws-status 5",
-    "return-type": "json",
-    "interval": "once",
-    "signal": 8,
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
-    "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-    "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-  },
-  "custom/arch": {
-    "format": "",
-    "tooltip": false,
-    "on-click": "fuzzel",
-    "on-click-right": "~/.local/bin/powermenu"
-  },
-  "group/player": {
-    "orientation": "horizontal",
-    "modules": [
-      "image#player-art",
-      "mpris",
-      "custom/cava",
-      "custom/player-prev",
-      "custom/player-play",
-      "custom/player-next"
-    ]
-  },
-  "image#player-art": {
-    "exec": "/home/nick/.local/bin/waybar-player art",
-    "size": 22,
-    "interval": 2,
-    "on-click": "playerctl play-pause"
-  },
-  "custom/cava": {
-    "exec": "/home/nick/.local/bin/waybar-player cava",
-    "format": "{}",
-    "tooltip": false
-  },
-  "custom/player-prev": {
-    "exec": "/home/nick/.local/bin/waybar-player icon prev",
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "playerctl previous"
-  },
-  "custom/player-play": {
-    "exec": "/home/nick/.local/bin/waybar-player icon play",
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "playerctl play-pause"
-  },
-  "custom/player-next": {
-    "exec": "/home/nick/.local/bin/waybar-player icon next",
-    "format": "{}",
-    "tooltip": false,
-    "on-click": "playerctl next"
-  }
 }
