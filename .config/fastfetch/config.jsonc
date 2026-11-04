@@ -2,9 +2,9 @@
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
     "type": "kitty-direct",
-    "source": "~/.config/fastfetch/logo/hyprland.icon",
-    "width": 32,
-    "height": 18,
+    "source": "/var/lib/greeter-theme/avatar.png",
+    "width": 30,
+    "height": 15,
     "padding": {
       "top": 1,
       "left": 2,
