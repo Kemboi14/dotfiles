@@ -17,7 +17,7 @@ w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
 
 # mako (notifications)
 m = home / ".config/mako"; m.mkdir(parents=True, exist_ok=True)
-(m / "config").write_text(f"""font=JetBrainsMono Nerd Font 11
+(m / "config").write_text(f"""font=CaskaydiaMono Nerd Font 11
 background-color={h("surfaceContainer")}cc
 text-color={h("onSurface")}
 border-color={h("primary")}
@@ -95,7 +95,7 @@ subprocess.Popen(["swayosd-server"], start_new_session=True,
 # fuzzel (launcher and menus): frosted glass
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
-font=JetBrainsMono Nerd Font:size=10
+font=CaskaydiaMono Nerd Font:size=10
 icon-theme=Papirus-Dark
 terminal=kitty
 layer=overlay
@@ -134,9 +134,4 @@ try:
 except FileNotFoundError:
     pass
 
-# scheme-coloured Papirus folder overlay
-try:
-    subprocess.run([str(home / ".local/bin/scheme-icons")], capture_output=True, timeout=30)
-except Exception:
-    pass
 

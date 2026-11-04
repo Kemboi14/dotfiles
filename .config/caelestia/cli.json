@@ -5,9 +5,7 @@
     "enableBtop": true,
     "enableHtop": false,
     "enableNvtop": false,
-    "enableFuzzel": false,
-    "iconThemeDark": "Papirus-Scheme-Dark",
-    "iconThemeLight": "Papirus-Scheme-Light"
+    "enableFuzzel": false
   },
   "wallpaper": {
     "postHook": ""
