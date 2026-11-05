@@ -7,7 +7,6 @@
     "margin-right": 8,
     "modules-left": [
         "group/apps",
-        "custom/pomodoro",
         "group/ws"
     ],
     "modules-center": [
@@ -264,15 +263,6 @@
     "custom/app-browser": { "format": "󰖟", "tooltip": false, "on-click": "brave-origin" },
     "custom/app-files": { "format": "󰉋", "tooltip": false, "on-click": "thunar" },
     "custom/app-chat": { "format": "󰒱", "tooltip": false, "on-click": "slack" },
-    "custom/pomodoro": {
-        "exec": "~/.local/bin/pomodoro status",
-        "return-type": "json",
-        "interval": 1,
-        "signal": 19,
-        "on-click": "~/.local/bin/pomodoro toggle",
-        "on-click-right": "~/.local/bin/pomodoro reset",
-        "on-click-middle": "~/.local/bin/pomodoro skip"
-    },
     "group/ws": {
         "orientation": "horizontal",
         "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]
