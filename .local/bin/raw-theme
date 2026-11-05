@@ -136,3 +136,9 @@ except FileNotFoundError:
     pass
 
 
+
+# Firefox colours via Pywalfox
+try:
+    subprocess.run(["pywalfox", "update"], capture_output=True, timeout=10)
+except Exception:
+    pass
