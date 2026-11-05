@@ -74,9 +74,9 @@
         "format": "󰃠 {percent}%"
     },
     "network": {
-        "interval": 2,
-        "format-wifi": "󰖩 {essid}  ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
-        "format-ethernet": "󰈀 wired  ⇣{bandwidthDownBytes} ⇡{bandwidthUpBytes}",
+        "interval": 5,
+        "format-wifi": "\uf1eb {essid}",
+        "format-ethernet": "\uf6ff wired",
         "format-disconnected": "󰖪 offline",
         "tooltip-format-wifi": "{essid} · {signalStrength}% · {frequency} GHz\n{ifname}  {ipaddr}/{cidr}\n⇣ {bandwidthDownBits}   ⇡ {bandwidthUpBits}",
         "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⇣ {bandwidthDownBits}   ⇡ {bandwidthUpBits}",
