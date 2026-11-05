@@ -122,7 +122,6 @@ quickshell
 ripgrep
 rofimoji
 rtkit
-rustup
 satty
 slack-desktop
 slurp
@@ -142,8 +141,6 @@ ttf-caladea
 ttf-carlito
 ttf-cascadia-code-nerd
 ttf-dejavu
-ttf-firacode-nerd
-ttf-jetbrains-mono-nerd
 tumbler
 unrar
 unzip
