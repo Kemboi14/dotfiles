@@ -3,7 +3,7 @@ local mainMod = "SUPER"
 local TERMINAL = "kitty"
 local EDITOR = "codium"
 local EXPLORER = "thunar"
-local BROWSER = "brave-origin"
+local BROWSER = "firefox"
 
 local KEY = {
 	TERMINAL = ("%s + RETURN"):format(mainMod),
