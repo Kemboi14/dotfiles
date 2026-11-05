@@ -134,7 +134,7 @@ hl.bind(KEY.RESIZE_MODE, hl.dsp.window.resize(), { description = "Resize mode" }
 
 
 
-hl.bind(("%s + I"):format(mainMod), hl.dsp.exec_cmd("slack"), { description = "Slack" })
+hl.bind(("%s + I"):format(mainMod), hl.dsp.exec_cmd("slack --ozone-platform=wayland --enable-features=WaylandWindowDecorations"), { description = "Slack" })
 
 -- hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd("firefox"), { description = "Firefox" })
 hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl restore]]), { description = "Notifications" })
