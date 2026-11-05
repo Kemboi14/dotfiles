@@ -104,7 +104,7 @@
     },
     "cpu": {
         "interval": 3,
-        "format": "󰍛 {icon0}{icon1}{icon2}{icon3}{icon4}{icon5}{icon6}{icon7} {usage}%",
+        "format": "\uf4bc {usage}%",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "states": { "warning": 70, "critical": 90 },
         "on-click": "kitty --class btop -e btop"
