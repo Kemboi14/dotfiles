@@ -8,7 +8,6 @@ bat
 bluetui
 bluez
 bluez-utils
-brave-origin-bin
 brightnessctl
 btop
 btrfs-progs
@@ -31,6 +30,7 @@ fd
 fetch-git
 ffmpegthumbnailer
 file-roller
+firefox
 firewalld
 fish
 freerdp
@@ -101,7 +101,6 @@ ntfs-3g
 obsidian
 openh264
 openssh
-otf-geist-mono-nerd
 pacman-contrib
 papirus-icon-theme
 pipewire
@@ -113,6 +112,7 @@ plymouth
 polkit-gnome
 poppler-glib
 power-profiles-daemon
+python-pywalfox
 qbittorrent
 qt5-wayland
 qt6-imageformats
@@ -141,10 +141,8 @@ thunar-volman
 ttf-caladea
 ttf-carlito
 ttf-cascadia-code-nerd
-ttf-cascadia-mono-nerd
 ttf-dejavu
 ttf-firacode-nerd
-ttf-iosevkaterm-nerd
 ttf-jetbrains-mono-nerd
 tumbler
 unrar
