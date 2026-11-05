@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Unread notification counter for Waybar (mako): status | open | read
+set -u
+seen_file="${XDG_RUNTIME_DIR:-/tmp}/waybar-notif-seen"
+
+count() {
+  local out
+  out=$(makoctl "$1" 2>/dev/null) || { echo 0; return; }
+  if [[ -z $out ]]; then echo 0
+  elif [[ ${out:0:1} == "{" || ${out:0:1} == "[" ]]; then
+    jq "[.. | objects | select(has(\"app-name\"))] | length" <<< "$out" 2>/dev/null || echo 0
+  else
+    grep -c "^Notification " <<< "$out" || true
+  fi
+}
+
+total=$(( $(count list) + $(count history) ))
+seen=0; [[ -r $seen_file ]] && read -r seen < "$seen_file"
+(( seen > total )) && seen=$total
+
+case "${1:-status}" in
+  open) makoctl restore; echo "$total" > "$seen_file"; pkill -RTMIN+20 -x waybar; exit 0 ;;
+  read) echo "$total" > "$seen_file"; pkill -RTMIN+20 -x waybar; exit 0 ;;
+esac
+
+echo "$seen" > "$seen_file"
+unread=$(( total - seen ))
+if (( unread > 0 )); then
+  printf "{\"text\":\"󰂚 %d\",\"class\":\"unread\",\"tooltip\":\"%d unread · click open · right mark read\"}\n" "$unread" "$unread"
+else
+  printf "{\"text\":\"󰂜\",\"class\":\"empty\",\"tooltip\":\"No new notifications\"}\n"
+fi

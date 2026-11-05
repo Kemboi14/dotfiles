@@ -29,6 +29,7 @@ margin=14
 width=380
 max-icon-size=48
 default-timeout=6000
+max-history=50
 include=/home/nick/.config/mako/extras
 
 [urgency=critical]

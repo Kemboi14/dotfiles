@@ -94,3 +94,27 @@ tooltip label { color: @onSurface; padding: 4px; }
 /* --- nerdy telemetry --- */
 #cpu.warning, #memory.warning { color: @tertiary; }
 #cpu.critical, #memory.critical { color: @error; }
+
+/* --- islands layout --- */
+window#waybar { background: transparent; }
+#apps, #ws, #time, #player, #stats, #system, #alerts, #tray, #custom-pomodoro {
+    background: alpha(@surfaceContainerHigh, 0.88);
+    border: 1px solid alpha(@outline, 0.18);
+    border-radius: 999px;
+    margin: 3px 4px;
+    padding: 0 8px;
+}
+#apps #custom-arch, #apps #custom-app-term, #apps #custom-app-browser, #apps #custom-app-files, #apps #custom-app-chat,
+#time #clock, #time #custom-weather, #player #mpris,
+#stats #cpu, #stats #temperature, #stats #memory,
+#system #network, #system #bluetooth, #system #pulseaudio, #system #backlight, #system #idle_inhibitor, #system #battery,
+#alerts #custom-notifications, #alerts #custom-power {
+    background: transparent;
+    margin: 0;
+    padding: 0 6px;
+}
+#apps #custom-arch { color: @primary; }
+#apps #custom-app-term:hover, #apps #custom-app-browser:hover, #apps #custom-app-files:hover, #apps #custom-app-chat:hover { color: @primary; }
+#custom-pomodoro.running { color: @primary; }
+#custom-pomodoro.paused { color: @tertiary; }
+#alerts #custom-notifications.unread { color: @onPrimary; background: @primary; border-radius: 999px; margin: 5px 0; padding: 0 8px; }

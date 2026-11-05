@@ -6,31 +6,19 @@
     "margin-left": 8,
     "margin-right": 8,
     "modules-left": [
-        "custom/arch",
-        "custom/ws1",
-        "custom/ws2",
-        "custom/ws3",
-        "custom/ws4",
-        "custom/ws5",
-        "hyprland/window"
+        "group/apps",
+        "custom/pomodoro",
+        "group/ws"
     ],
     "modules-center": [
-        "clock",
-        "custom/weather"
+        "group/time",
+        "group/player"
     ],
     "modules-right": [
-        "cpu",
-        "memory",
-        "temperature",
-        "idle_inhibitor",
-        "group/player",
-        "pulseaudio",
-        "backlight",
-        "bluetooth",
-        "network",
-        "battery",
         "tray",
-        "custom/power"
+        "group/stats",
+        "group/system",
+        "group/alerts"
     ],
     "hyprland/workspaces": {
         "format": "{name}",
@@ -267,5 +255,41 @@
         "tooltip-format-enumerate-connected": "{device_alias}  {device_address}",
         "on-click": "kitty --class bluetui -e bluetui",
         "on-click-right": "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
+    },
+    "group/apps": {
+        "orientation": "horizontal",
+        "modules": ["custom/arch", "custom/app-term", "custom/app-browser", "custom/app-files", "custom/app-chat"]
+    },
+    "custom/app-term": { "format": "", "tooltip": false, "on-click": "kitty" },
+    "custom/app-browser": { "format": "󰖟", "tooltip": false, "on-click": "brave-origin" },
+    "custom/app-files": { "format": "󰉋", "tooltip": false, "on-click": "thunar" },
+    "custom/app-chat": { "format": "󰒱", "tooltip": false, "on-click": "slack" },
+    "custom/pomodoro": {
+        "exec": "~/.local/bin/pomodoro status",
+        "return-type": "json",
+        "interval": 1,
+        "signal": 19,
+        "on-click": "~/.local/bin/pomodoro toggle",
+        "on-click-right": "~/.local/bin/pomodoro reset",
+        "on-click-middle": "~/.local/bin/pomodoro skip"
+    },
+    "group/ws": {
+        "orientation": "horizontal",
+        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]
+    },
+    "group/time": { "orientation": "horizontal", "modules": ["clock", "custom/weather"] },
+    "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": ["network", "bluetooth", "pulseaudio", "backlight", "idle_inhibitor", "battery"]
+    },
+    "group/alerts": { "orientation": "horizontal", "modules": ["custom/notifications", "custom/power"] },
+    "custom/notifications": {
+        "exec": "~/.local/bin/notif-count",
+        "return-type": "json",
+        "interval": 3,
+        "signal": 20,
+        "on-click": "~/.local/bin/notif-count open",
+        "on-click-right": "~/.local/bin/notif-count read"
     }
 }
