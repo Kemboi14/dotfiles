@@ -158,6 +158,7 @@ popover modelbutton:hover {
 }
 CSS
 } > "$tmp_css"
+[[ -r $HOME/.config/greeter-sync.css ]] && cat "$HOME/.config/greeter-sync.css" >> "$tmp_css"
 
 # Render the greeter wallpaper at the screen's size: one centred avatar plus nerdy text.
 read -r scr_w scr_h < <(hyprctl monitors -j 2>/dev/null | jq -r '[.[] | select(.focused)][0] // .[0] | "\(.width) \(.height)"' 2>/dev/null || true)
