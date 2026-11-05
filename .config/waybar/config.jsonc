@@ -257,12 +257,8 @@
     },
     "group/apps": {
         "orientation": "horizontal",
-        "modules": ["custom/arch", "custom/app-term", "custom/app-browser", "custom/app-files", "custom/app-chat"]
+        "modules": ["custom/arch"]
     },
-    "custom/app-term": { "format": "", "tooltip": false, "on-click": "kitty" },
-    "custom/app-browser": { "format": "󰖟", "tooltip": false, "on-click": "brave-origin" },
-    "custom/app-files": { "format": "󰉋", "tooltip": false, "on-click": "thunar" },
-    "custom/app-chat": { "format": "󰒱", "tooltip": false, "on-click": "slack" },
     "group/ws": {
         "orientation": "horizontal",
         "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]

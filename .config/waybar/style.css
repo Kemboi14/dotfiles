@@ -1,5 +1,5 @@
 @import "colors.css";
-* { font-family: "CaskaydiaMono Nerd Font"; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
+* { font-family: "Maple Mono NF"; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
 window#waybar { background: transparent; }
 .modules-left, .modules-center, .modules-right {
     background: alpha(@surface, 0.55); border: 1px solid alpha(@outline, 0.35);
@@ -104,7 +104,7 @@ window#waybar { background: transparent; }
     margin: 3px 4px;
     padding: 0 8px;
 }
-#apps #custom-arch, #apps #custom-app-term, #apps #custom-app-browser, #apps #custom-app-files, #apps #custom-app-chat,
+#apps #custom-arch,
 #time #clock, #time #custom-weather, #player #mpris,
 #stats #cpu, #stats #temperature, #stats #memory,
 #system #network, #system #bluetooth, #system #pulseaudio, #system #backlight, #system #idle_inhibitor, #system #battery,
@@ -114,5 +114,4 @@ window#waybar { background: transparent; }
     padding: 0 6px;
 }
 #apps #custom-arch { color: @primary; }
-#apps #custom-app-term:hover, #apps #custom-app-browser:hover, #apps #custom-app-files:hover, #apps #custom-app-chat:hover { color: @primary; }
 #alerts #custom-notifications.unread { color: @onPrimary; background: @primary; border-radius: 999px; margin: 5px 0; padding: 0 8px; }
