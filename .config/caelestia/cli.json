@@ -8,6 +8,6 @@
     "enableFuzzel": false
   },
   "wallpaper": {
-    "postHook": ""
+    "postHook": "[ \"$SCHEME_MODE\" = dark ] || caelestia scheme set -m dark -v \"$SCHEME_VARIANT\""
   }
 }
