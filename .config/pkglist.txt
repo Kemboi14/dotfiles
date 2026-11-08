@@ -105,7 +105,6 @@ ntfs-3g
 obsidian
 openh264
 openssh
-otf-space-grotesk
 pacman-contrib
 papirus-icon-theme
 pipewire
