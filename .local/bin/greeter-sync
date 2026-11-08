@@ -70,7 +70,7 @@ fi
   cat <<'CSS'
 
 * {
-  font-family: "Maple Mono NF", "Inter", "Noto Sans", sans-serif;
+  font-family: "Space Grotesk", "Inter", "Noto Sans", sans-serif;
 }
 
 window {
@@ -169,8 +169,8 @@ fg=$(hexcol onSurface e3e2e6)
 fg_dim=$(hexcol onSurfaceVariant c4c6d0)
 shadow='#000000a0'
 
-font_bold=$(fc-match -f '%{file}' 'Maple Mono NF:style=Bold' 2>/dev/null || true)
-font_reg=$(fc-match -f '%{file}' 'Maple Mono NF:style=Regular' 2>/dev/null || true)
+font_bold=$(fc-match -f '%{file}' 'Space Grotesk:style=Bold' 2>/dev/null || true)
+font_reg=$(fc-match -f '%{file}' 'Space Grotesk:style=Regular' 2>/dev/null || true)
 
 args=("$wp" -resize "${scr_w}x${scr_h}^" -gravity center -extent "${scr_w}x${scr_h}")
 (( bg_blur > 0 )) && args+=( -blur "0x${bg_blur}" )
