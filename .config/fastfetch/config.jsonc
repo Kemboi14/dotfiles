@@ -1,14 +1,16 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
   "logo": {
-    "type": "kitty-direct",
-    "source": "/var/lib/greeter-theme/avatar.png",
-    "width": 30,
-    "height": 15,
+    "type": "builtin",
+    "source": "arch",
+    "color": {
+      "1": "magenta",
+      "2": "blue"
+    },
     "padding": {
       "top": 1,
       "left": 2,
-      "right": 3
+      "right": 4
     }
   },
   "display": {
