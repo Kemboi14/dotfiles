@@ -75,22 +75,59 @@
     },
     "network": {
         "interval": 5,
-        "format-wifi": "\uf1eb {essid}",
-        "format-ethernet": "\uf6ff wired",
-        "format-disconnected": "󰖪 offline",
-        "tooltip-format-wifi": "{essid} · {signalStrength}% · {frequency} GHz\n{ifname}  {ipaddr}/{cidr}\n⇣ {bandwidthDownBits}   ⇡ {bandwidthUpBits}",
-        "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⇣ {bandwidthDownBits}   ⇡ {bandwidthUpBits}",
+        "format-wifi": "{icon} {essid}",
+        "format-icons": [
+            "\udb82\udd2f",
+            "\udb82\udd1f",
+            "\udb82\udd22",
+            "\udb82\udd25",
+            "\udb82\udd28"
+        ],
+        "format-ethernet": "\udb80\ude00 wired",
+        "format-linked": "\udb82\udd29 no ip",
+        "format-disconnected": "\udb82\udd2d offline",
+        "format-disabled": "\udb82\udd2d",
+        "tooltip-format-wifi": "{essid} \u00b7 {signalStrength}% \u00b7 {frequency} GHz\n{ifname}  {ipaddr}/{cidr}\n\u21e3 {bandwidthDownBits}   \u21e1 {bandwidthUpBits}",
+        "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n\u21e3 {bandwidthDownBits}   \u21e1 {bandwidthUpBits}",
         "tooltip-format-disconnected": "No connection",
         "on-click": "~/.local/bin/wifimenu"
     },
     "battery": {
         "interval": 10,
-        "states": { "warning": 20, "critical": 10 },
+        "states": {
+            "warning": 20,
+            "critical": 10
+        },
         "format": "{icon} {capacity}%",
-        "format-discharging": "{icon} {capacity}% 󱐋{power:0.1f}W",
-        "format-charging": "󰂄 {capacity}%",
-        "format-plugged": "󰚥 {capacity}%",
-        "format-icons": ["󰁺", "󰁼", "󰁾", "󰂀", "󰁹"],
+        "format-discharging": "{icon} {capacity}% \udb85\udc0b{power:0.1f}W",
+        "format-charging": "{icon} {capacity}%",
+        "format-plugged": "\udb81\udea5 {capacity}%",
+        "format-icons": {
+            "default": [
+                "\udb80\udc7a",
+                "\udb80\udc7b",
+                "\udb80\udc7c",
+                "\udb80\udc7d",
+                "\udb80\udc7e",
+                "\udb80\udc7f",
+                "\udb80\udc80",
+                "\udb80\udc81",
+                "\udb80\udc82",
+                "\udb80\udc79"
+            ],
+            "charging": [
+                "\udb82\udc9c",
+                "\udb80\udc86",
+                "\udb80\udc87",
+                "\udb80\udc88",
+                "\udb82\udc9d",
+                "\udb80\udc89",
+                "\udb82\udc9e",
+                "\udb80\udc8a",
+                "\udb80\udc8b",
+                "\udb80\udc85"
+            ]
+        },
         "format-time": "{H}h {M}m",
         "tooltip-format": "{timeTo}\nDraw: {power:0.1f} W"
     },
