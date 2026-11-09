@@ -88,7 +88,6 @@ loupe
 lsof
 mako
 mangohud
-maplemono-nf
 mkinitcpio
 mpv
 mythes-en
@@ -146,6 +145,7 @@ ttf-caladea
 ttf-carlito
 ttf-cascadia-code-nerd
 ttf-dejavu
+ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols
 tumbler
 unrar
