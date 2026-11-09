@@ -148,7 +148,6 @@ window#waybar { background: transparent; }
     color: @onSurface;
 }
 #custom-ws1.active, #custom-ws2.active, #custom-ws3.active, #custom-ws4.active, #custom-ws5.active {
-    background-image: linear-gradient(90deg, @primary, @tertiary);
     color: @onPrimary;
 }
 #apps #custom-arch:hover { color: @tertiary; }
