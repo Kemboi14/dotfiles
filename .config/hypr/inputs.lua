@@ -5,7 +5,8 @@ hl.config({
         numlock_by_default = true,
         repeat_delay = 250,
         repeat_rate = 35,
-        accel_profile = "flat",
+        accel_profile = "adaptive",
+        sensitivity = 0.5,
         touchpad = {
             natural_scroll = true,
             disable_while_typing = true,
