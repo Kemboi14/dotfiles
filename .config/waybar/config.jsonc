@@ -267,7 +267,7 @@
     "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },
     "group/system": {
         "orientation": "horizontal",
-        "modules": ["network", "bluetooth", "pulseaudio", "group/brightness", "idle_inhibitor", "battery"]
+        "modules": ["network", "bluetooth", "group/volume", "group/brightness", "idle_inhibitor", "battery"]
     },
     "group/alerts": { "orientation": "horizontal", "modules": ["custom/notifications", "custom/power"] },
     "custom/notifications": {
@@ -288,5 +288,15 @@
         "max": 100,
         "orientation": "horizontal",
         "device": "intel_backlight"
+    },
+    "group/volume": {
+        "orientation": "horizontal",
+        "drawer": { "transition-duration": 300, "transition-left-to-right": true },
+        "modules": ["pulseaudio", "pulseaudio/slider"]
+    },
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
     }
 }
