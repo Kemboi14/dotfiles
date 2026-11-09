@@ -16,8 +16,8 @@
     "modules-right": [
         "group/stats",
         "group/system",
-        "group/alerts",
-        "tray"
+        "tray",
+        "group/alerts"
     ],
     "hyprland/workspaces": {
         "format": "{name}",
