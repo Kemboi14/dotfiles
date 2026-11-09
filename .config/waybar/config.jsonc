@@ -14,10 +14,10 @@
         "group/player"
     ],
     "modules-right": [
-        "tray",
         "group/stats",
         "group/system",
-        "group/alerts"
+        "group/alerts",
+        "tray"
     ],
     "hyprland/workspaces": {
         "format": "{name}",
