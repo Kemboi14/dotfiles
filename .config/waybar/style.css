@@ -128,3 +128,42 @@ window#waybar { background: transparent; }
 #pulseaudio-slider trough { min-height: 6px; min-width: 90px; border-radius: 999px; background-color: alpha(@outline, 0.35); }
 #pulseaudio-slider highlight { min-width: 6px; border-radius: 999px; background-color: @primary; }
 #system #pulseaudio { background: transparent; margin: 0; padding: 0 6px; }
+
+/* containers invisible: only the islands show */
+.modules-left, .modules-center, .modules-right { background: transparent; border: none; box-shadow: none; }
+
+/* --- glass islands: see-through, soft shadow, faint accent rim --- */
+#apps, #ws, #time, #player, #stats, #system, #alerts, #tray {
+    background: alpha(@surfaceContainerHigh, 0.55);
+    box-shadow: 0 2px 8px alpha(black, 0.35), 0 0 0 1px alpha(@primary, 0.12);
+    margin: 5px 5px;
+}
+
+/* --- polish pass --- */
+#custom-ws1, #custom-ws2, #custom-ws3, #custom-ws4, #custom-ws5, #custom-arch {
+    transition: all 200ms ease;
+}
+#custom-ws1:hover, #custom-ws2:hover, #custom-ws3:hover, #custom-ws4:hover, #custom-ws5:hover {
+    background: alpha(@primary, 0.18);
+    color: @onSurface;
+}
+#custom-ws1.active, #custom-ws2.active, #custom-ws3.active, #custom-ws4.active, #custom-ws5.active {
+    background-image: linear-gradient(90deg, @primary, @tertiary);
+    color: @onPrimary;
+}
+#apps #custom-arch:hover { color: @tertiary; }
+#time #clock { font-weight: bold; }
+
+@keyframes battery-pulse {
+    from { color: @error; }
+    to   { color: alpha(@error, 0.35); }
+}
+#system #battery.critical.discharging {
+    color: @error;
+    animation: battery-pulse 0.9s ease-in-out infinite alternate;
+}
+
+tooltip {
+    border-radius: 14px;
+    border: 1px solid alpha(@primary, 0.25);
+}
