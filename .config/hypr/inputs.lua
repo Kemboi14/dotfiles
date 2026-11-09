@@ -6,7 +6,7 @@ hl.config({
         repeat_delay = 250,
         repeat_rate = 35,
         accel_profile = "adaptive",
-        sensitivity = 0.5,
+        sensitivity = 0.1,
         touchpad = {
             natural_scroll = true,
             disable_while_typing = true,
