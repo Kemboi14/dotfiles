@@ -12,7 +12,6 @@ brightnessctl
 btop
 btrfs-progs
 caelestia-cli
-cage
 cava
 chaotic-keyring
 coin-or-mp
@@ -44,9 +43,6 @@ glaze
 gnome-keyring
 gpu-screen-recorder
 gradle
-greetd
-greetd-regreet
-greetd-tuigreet
 grim
 gst-libav
 gst-plugin-pipewire
@@ -119,6 +115,8 @@ python-pywalfox
 qbittorrent
 qt5-wayland
 qt6-imageformats
+qt6-multimedia-ffmpeg
+qt6-virtualkeyboard
 qt6-wayland
 qt6-websockets
 quickshell
@@ -126,6 +124,7 @@ ripgrep
 rofimoji
 rtkit
 satty
+sddm
 slack-desktop
 slurp
 smartmontools
@@ -162,6 +161,7 @@ wlr-randr
 xdg-desktop-portal-hyprland
 xdg-user-dirs
 xdg-utils
+xorg-server
 yay
 zoxide
 zram-generator
