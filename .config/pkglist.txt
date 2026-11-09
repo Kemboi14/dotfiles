@@ -98,6 +98,7 @@ noto-fonts-emoji
 npm
 ntfs-3g
 obsidian
+opencode
 openh264
 openssh
 pacman-contrib
