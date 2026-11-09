@@ -267,7 +267,7 @@
     "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },
     "group/system": {
         "orientation": "horizontal",
-        "modules": ["network", "bluetooth", "pulseaudio", "backlight", "idle_inhibitor", "battery"]
+        "modules": ["network", "bluetooth", "pulseaudio", "group/brightness", "idle_inhibitor", "battery"]
     },
     "group/alerts": { "orientation": "horizontal", "modules": ["custom/notifications", "custom/power"] },
     "custom/notifications": {
@@ -277,5 +277,16 @@
         "signal": 20,
         "on-click": "~/.local/bin/notif-count open",
         "on-click-right": "~/.local/bin/notif-count read"
+    },
+    "group/brightness": {
+        "orientation": "horizontal",
+        "drawer": { "transition-duration": 300, "transition-left-to-right": true },
+        "modules": ["backlight", "backlight/slider"]
+    },
+    "backlight/slider": {
+        "min": 5,
+        "max": 100,
+        "orientation": "horizontal",
+        "device": "intel_backlight"
     }
 }

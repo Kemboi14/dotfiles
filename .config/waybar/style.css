@@ -116,3 +116,9 @@ window#waybar { background: transparent; }
 #apps #custom-arch { color: @primary; }
 #alerts #custom-notifications.unread { color: @onPrimary; background: @primary; border-radius: 999px; margin: 5px 0; padding: 0 8px; }
 
+
+/* --- brightness slider --- */
+#backlight-slider slider { min-height: 0; min-width: 0; opacity: 0; background: none; border: none; box-shadow: none; }
+#backlight-slider trough { min-height: 6px; min-width: 90px; border-radius: 999px; background-color: alpha(@outline, 0.35); }
+#backlight-slider highlight { min-width: 6px; border-radius: 999px; background-color: @primary; }
+#system #backlight { background: transparent; margin: 0; padding: 0 6px; }
