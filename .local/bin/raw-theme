@@ -142,3 +142,39 @@ try:
     subprocess.run(["pywalfox", "update"], capture_output=True, timeout=10)
 except Exception:
     pass
+
+# SDDM login screen follows the scheme and wallpaper
+import re as _re
+_sd = Path("/usr/share/sddm/themes/sddm-astronaut-theme")
+_conf = _sd / "Themes/nick.conf"
+_bg = _sd / "Backgrounds/current.jpg"
+if _conf.exists() and os.access(_conf, os.W_OK) and os.access(_bg, os.W_OK):
+    try:
+        _wp = (state / "wallpaper/path.txt").read_text().strip()
+        subprocess.run(["magick", _wp, "-resize", "1920x1080^", "-gravity", "center", "-extent", "1920x1080", "-quality", "90", "jpg:" + str(_bg)], capture_output=True, timeout=30)
+        H = lambda k: "\"#" + c[k] + "\""
+        _map = {
+            "Background": "\"Backgrounds/current.jpg\"",
+            "DimBackground": "\"0.25\"",
+            "HeaderTextColor": H("onSurface"), "TimeTextColor": H("onSurface"), "DateTextColor": H("onSurfaceVariant"),
+            "FormBackgroundColor": H("surface"), "BackgroundColor": H("surface"), "DimBackgroundColor": H("surface"),
+            "LoginFieldBackgroundColor": H("surfaceContainer"), "PasswordFieldBackgroundColor": H("surfaceContainer"),
+            "LoginFieldTextColor": H("onSurface"), "PasswordFieldTextColor": H("onSurface"),
+            "UserIconColor": H("primary"), "PasswordIconColor": H("primary"),
+            "PlaceholderTextColor": H("onSurfaceVariant"), "WarningColor": H("error"),
+            "LoginButtonTextColor": H("onPrimary"), "LoginButtonBackgroundColor": H("primary"),
+            "SystemButtonsIconsColor": H("onSurfaceVariant"), "SessionButtonTextColor": H("onSurfaceVariant"),
+            "VirtualKeyboardButtonTextColor": H("onSurfaceVariant"),
+            "DropdownTextColor": H("onSurface"), "DropdownBackgroundColor": H("surfaceContainer"),
+            "DropdownSelectedBackgroundColor": H("primaryContainer"),
+            "HighlightTextColor": H("onPrimary"), "HighlightBackgroundColor": H("primary"), "HighlightBorderColor": H("primary"),
+            "HoverUserIconColor": H("tertiary"), "HoverPasswordIconColor": H("tertiary"),
+            "HoverSystemButtonsIconsColor": H("tertiary"), "HoverSessionButtonTextColor": H("tertiary"),
+            "HoverVirtualKeyboardButtonTextColor": H("tertiary"),
+        }
+        _txt = _conf.read_text()
+        for _k, _v in _map.items():
+            _txt = _re.sub(r"^" + _k + r"=.*$", lambda _m, _k=_k, _v=_v: _k + "=" + _v, _txt, flags=_re.M)
+        _conf.write_text(_txt)
+    except Exception:
+        pass
