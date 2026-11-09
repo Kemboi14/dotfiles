@@ -1,0 +1,27 @@
+# git ls-files --others --exclude-from=.git/info/exclude
+# Lines that start with '#' are comments.
+# For a project mostly in C, the following would be a good set of
+# exclude patterns (uncomment them if you want to use them):
+# *.[oa]
+# *~
+.config/fish/fish_variables
+*.bak*
+.config/fastfetch/logo/
+.config/fastfetch/machina.jsonc
+.config/eww/colors.scss
+.claude.json
+.claude/
+.config/hypr/scheme/current.lua
+.config/hypr/hyprlock-colors.conf
+.config/fuzzel/fuzzel.ini
+.config/mako/config
+.config/waybar/colors.css
+.local/bin/__pycache__/
+.local/bin/aurora
+.local/bin/aurora-lockscreen
+.local/bin/kumizo
+.local/bin/claude
+.local/bin/uv
+.local/bin/uvx
+.local/bin/env
+.local/bin/env.fish
