@@ -51,4 +51,3 @@
   :geometry (geometry :anchor "center" :width "720px")
   (dashboard))
 
-(include "./island.yuck")
