@@ -17,6 +17,7 @@ local exec_once = {
     "wl-paste --watch cliphist store",
     "swayosd-server",
     "mako",
+    "eww daemon; sleep 1; eww open island",
     "hypridle",
     "/home/nick/.local/bin/raw-theme",
     "wl-clip-persist --clipboard regular",

@@ -11,8 +11,6 @@
         "group/ws"
     ],
     "modules-center": [
-        "group/time",
-        "group/player"
     ],
     "modules-right": [
         "group/stats",
