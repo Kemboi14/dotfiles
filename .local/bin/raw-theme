@@ -179,3 +179,30 @@ try:
     subprocess.run([str(home / ".local/bin/scheme-icons")], capture_output=True, timeout=30)
 except Exception:
     pass
+
+# Helium theme from the scheme (load once as unpacked extension)
+try:
+    _rgb = lambda k: [int(c[k][i:i + 2], 16) for i in (0, 2, 4)]
+    _ht = home / ".local/share/helium-theme"
+    _ht.mkdir(parents=True, exist_ok=True)
+    json.dump({
+        "manifest_version": 3,
+        "name": "Wallpaper Scheme",
+        "version": "1.0",
+        "theme": {"colors": {
+            "frame": _rgb("surface"),
+            "frame_inactive": _rgb("surfaceContainer"),
+            "toolbar": _rgb("surfaceContainerHigh"),
+            "tab_text": _rgb("onSurface"),
+            "tab_background_text": _rgb("onSurfaceVariant"),
+            "bookmark_text": _rgb("onSurfaceVariant"),
+            "toolbar_button_icon": _rgb("onSurfaceVariant"),
+            "omnibox_background": _rgb("surfaceContainer"),
+            "omnibox_text": _rgb("onSurface"),
+            "ntp_background": _rgb("surface"),
+            "ntp_text": _rgb("onSurface"),
+            "ntp_link": _rgb("primary"),
+        }},
+    }, open(_ht / "manifest.json", "w"), indent=2)
+except Exception:
+    pass
