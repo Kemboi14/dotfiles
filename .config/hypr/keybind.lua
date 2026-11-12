@@ -3,7 +3,7 @@ local mainMod = "SUPER"
 local TERMINAL = "kitty"
 local EDITOR = "kitty --class nvim -e nvim"
 local EXPLORER = "thunar"
-local BROWSER = "firefox"
+local BROWSER = "helium-browser"
 
 local KEY = {
 	TERMINAL = ("%s + RETURN"):format(mainMod),

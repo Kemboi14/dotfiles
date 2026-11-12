@@ -137,11 +137,6 @@ except FileNotFoundError:
 
 
 
-# Firefox colours via Pywalfox
-try:
-    subprocess.run(["pywalfox", "update"], capture_output=True, timeout=10)
-except Exception:
-    pass
 
 # SDDM login screen follows the scheme and wallpaper
 import re as _re

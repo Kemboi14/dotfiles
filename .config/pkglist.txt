@@ -29,7 +29,6 @@ fd
 fetch-git
 ffmpegthumbnailer
 file-roller
-firefox
 firewalld
 fish
 freerdp
@@ -52,6 +51,7 @@ gvfs
 gvfs-afc
 gvfs-mtp
 gvfs-smb
+helium-browser-bin
 hunspell-en_us
 hypridle
 hyprland
@@ -80,6 +80,7 @@ libreoffice-fresh
 libva-utils
 linux
 linux-firmware
+linux-mainline
 loupe
 lsof
 mako
@@ -112,7 +113,6 @@ plymouth
 polkit-gnome
 poppler-glib
 power-profiles-daemon
-python-pywalfox
 qbittorrent
 qt5-wayland
 qt6-imageformats
@@ -164,5 +164,6 @@ xdg-user-dirs
 xdg-utils
 xorg-server
 yay
+zapzap
 zoxide
 zram-generator
