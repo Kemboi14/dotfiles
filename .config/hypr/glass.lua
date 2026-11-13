@@ -25,4 +25,4 @@ hl.config({
 })
 
 -- Blur behind the bar, notifications, menus and OSD
-hl.layer_rule({ match = { namespace = "^(waybar|notifications|launcher|swayosd|aurora-.*)$" }, blur = true, ignore_alpha = 0.3 })
+hl.layer_rule({ match = { namespace = "^(waybar|notifications|launcher|swayosd)$" }, blur = true, ignore_alpha = 0.3 })
