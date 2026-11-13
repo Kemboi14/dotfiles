@@ -16,7 +16,7 @@ local exec_once = {
     "/home/nick/.local/bin/ws-listener",
     "wl-paste --watch cliphist store",
     -- "swayosd-server",
-    "aurora",
+    "systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP HYPRLAND_INSTANCE_SIGNATURE; systemctl --user start aurora.service",
     "hypridle",
     "/home/nick/.local/bin/raw-theme",
     "wl-clip-persist --clipboard regular",

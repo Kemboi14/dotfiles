@@ -137,7 +137,7 @@ hl.bind(KEY.RESIZE_MODE, hl.dsp.window.resize(), { description = "Resize mode" }
 hl.bind(("%s + I"):format(mainMod), hl.dsp.exec_cmd("slack --ozone-platform=wayland --enable-features=WaylandWindowDecorations"), { description = "Slack" })
 
 -- hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd("firefox"), { description = "Firefox" })
-hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl restore]]), { description = "Notifications" })
+hl.bind(("%s + N"):format(mainMod), hl.dsp.exec_cmd([[kumizo toggle aurora-notifs]]), { description = "Notifications" })
 hl.bind(("%s + G"):format(mainMod), hl.dsp.exec_cmd([[eww ping >/dev/null 2>&1 || { eww daemon; sleep 0.6; }; eww open --toggle dashboard]]), { description = "Dashboard" })
 hl.bind(("%s + SHIFT + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl dismiss --all]]), { description = "Clear all notifications" })
 
@@ -145,10 +145,17 @@ hl.bind(("%s + J"):format(mainMod), hl.dsp.exec_cmd("obsidian"), { description =
 hl.bind(("%s + U"):format(mainMod), hl.dsp.exec_cmd("gtk-launch io.github.tobagin.karere"), { description = "Karere" })
 hl.bind(("%s + SHIFT + W"):format(mainMod), hl.dsp.exec_cmd("~/.local/bin/wallpicker"), { description = "Wallpaper picker" })
 
-hl.bind(("%s + SHIFT + V"):format(mainMod), hl.dsp.exec_cmd([[cliphist list | fuzzel --dmenu --prompt "󰅌  " --width 60 | cliphist decode | wl-copy]]), { description = "Clipboard history" })
+hl.bind(("%s + SHIFT + V"):format(mainMod), hl.dsp.exec_cmd([[kumizo toggle aurora-clipboard]]), { description = "Clipboard history" })
 hl.bind(("%s + period"):format(mainMod), hl.dsp.exec_cmd([[rofimoji --selector fuzzel --action copy]]), { description = "Emoji picker" })
 
 hl.bind(("%s + SHIFT + D"):format(mainMod), hl.dsp.exec_cmd([[makoctl mode -t do-not-disturb && notify-send -t 1500 "🔕 Do not disturb toggled"]]), { description = "Do not disturb" })
 
 hl.bind(("%s + SLASH"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/keyhelp"), { description = "Show keybindings" })
+
+-- Aurora panels
+hl.bind(("%s + S"):format(mainMod), hl.dsp.exec_cmd([[kumizo toggle aurora-control]]), { description = "Control center" })
+hl.bind(("%s + O"):format(mainMod), hl.dsp.exec_cmd([[kumizo toggle aurora-tasks]]), { description = "Task overview" })
+hl.bind(("%s + SHIFT + T"):format(mainMod), hl.dsp.exec_cmd([[kumizo toggle aurora-themes]]), { description = "Theme picker" })
+hl.bind(("%s + Escape"):format(mainMod), hl.dsp.exec_cmd([[kumizo toggle aurora-power]]), { description = "Power menu" })
+
 return true
