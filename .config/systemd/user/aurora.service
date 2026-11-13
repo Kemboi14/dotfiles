@@ -1,7 +1,0 @@
-[Unit]
-Description=Aurora desktop shell
-
-[Service]
-ExecStart=%h/.local/bin/aurora
-Restart=on-failure
-RestartSec=2
