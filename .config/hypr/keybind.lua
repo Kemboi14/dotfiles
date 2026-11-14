@@ -3,7 +3,7 @@ local mainMod = "SUPER"
 local TERMINAL = "kitty"
 local EDITOR = "kitty --class nvim -e nvim"
 local EXPLORER = "thunar"
-local BROWSER = "helium-browser"
+local BROWSER = "firefox"
 
 local KEY = {
 	TERMINAL = ("%s + RETURN"):format(mainMod),
@@ -67,7 +67,7 @@ hl.bind(KEY.BROWSER, hl.dsp.exec_cmd(BROWSER), { description = "Browser" })
 hl.bind(KEY.LAUNCHER, hl.dsp.exec_cmd([[fuzzel]]), { description = "Toggle launcher" })
 hl.bind(KEY.LOCK, hl.dsp.exec_cmd([[loginctl lock-session]]), { description =  "Lock screen " })
 hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[kitty --class nvim -e nvim ~/.config/hypr]]), { description = "Toggle settings" })
-hl.bind(KEY.MUSIC, hl.dsp.exec_cmd("geary"), { description = "Mail" })
+-- Super+M free (mail client removed)
 hl.bind(KEY.VIDEO, hl.dsp.exec_cmd("mpv --player-operation-mode=pseudo-gui --force-window=immediate"), { description = "Video player" })
 
 -- 2. Window Management

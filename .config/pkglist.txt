@@ -29,12 +29,12 @@ fd
 fetch-git
 ffmpegthumbnailer
 file-roller
+firefox
 firewalld
 fish
 freerdp
 fwupd
 fzf
-geary
 ghidra
 git
 github-cli
@@ -51,7 +51,6 @@ gvfs
 gvfs-afc
 gvfs-mtp
 gvfs-smb
-helium-browser-bin
 hunspell-en_us
 hypridle
 hyprland
@@ -61,6 +60,7 @@ imagemagick
 intel-media-driver
 intel-ucode
 inter-font
+jack2
 jdk21-openjdk
 jq
 karere-custom-css
@@ -105,13 +105,13 @@ pacman-contrib
 papirus-icon-theme
 pipewire
 pipewire-alsa
-pipewire-jack
 pipewire-pulse
 playerctl
 plymouth
 polkit-gnome
 poppler-glib
 power-profiles-daemon
+python-pywalfox
 qbittorrent
 qt5-wayland
 qt6-imageformats
