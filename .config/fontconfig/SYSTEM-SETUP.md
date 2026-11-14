@@ -11,3 +11,5 @@ sudo systemctl disable greetd; sudo systemctl enable sddm
 # SDDM: restore custom preset (nick.conf)
 sudo install -m644 ~/.config/sddm/nick.conf /usr/share/sddm/themes/sddm-astronaut-theme/Themes/nick.conf
 sudo sed -i "s|^ConfigFile=.*|ConfigFile=Themes/nick.conf|" /usr/share/sddm/themes/sddm-astronaut-theme/metadata.desktop
+
+# kernel: stable only (linux-mainline removed)

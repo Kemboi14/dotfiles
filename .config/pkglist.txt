@@ -79,7 +79,6 @@ libpulse
 libva-utils
 linux
 linux-firmware
-linux-mainline
 loupe
 lsof
 mako
