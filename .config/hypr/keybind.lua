@@ -151,4 +151,6 @@ hl.bind(("%s + period"):format(mainMod), hl.dsp.exec_cmd([[rofimoji --selector f
 hl.bind(("%s + SHIFT + D"):format(mainMod), hl.dsp.exec_cmd([[makoctl mode -t do-not-disturb && notify-send -t 1500 "🔕 Do not disturb toggled"]]), { description = "Do not disturb" })
 
 hl.bind(("%s + SLASH"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/keyhelp"), { description = "Show keybindings" })
+hl.bind(("%s + SHIFT + G"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/sddm-layout"), { description = "Greeter layout" })
+
 return true

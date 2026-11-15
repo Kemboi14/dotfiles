@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Pick an SDDM astronaut layout; keeps your wallpaper, colours, font, date and header.
+set -euo pipefail
+t=/usr/share/sddm/themes/sddm-astronaut-theme
+conf="$t/Themes/nick.conf"
+[[ -w $conf ]] || { notify-send "Greeter" "nick.conf is not writable"; exit 1; }
+p=$(ls "$t/Themes" | sed -n "s/\.conf$//p" | grep -vx nick | fuzzel --dmenu --prompt "Greeter layout: ") || exit 0
+[[ -n $p && -f "$t/Themes/$p.conf" ]] || exit 0
+cat "$t/Themes/$p.conf" > "$conf"
+sed -i -E "s/^Font=.*/Font=\"JetBrainsMono Nerd Font Propo\"/; s/^DateFormat=.*/DateFormat=\"dddd, d MMMM\"/; s/^HeaderText=.*/HeaderText=\"Welcome back, Nick\"/" "$conf"
+rm -f "$HOME/.cache/raw-theme.sig"
+"$HOME/.local/bin/raw-theme" >/dev/null 2>&1 || true
+mkdir -p "$HOME/.config/sddm"
+cp "$conf" "$HOME/.config/sddm/nick.conf"
+notify-send "Greeter" "Layout: $p"
+sddm-greeter-qt6 --test-mode --theme "$t" >/dev/null 2>&1 &
