@@ -68,7 +68,7 @@ hl.bind(KEY.LAUNCHER, hl.dsp.exec_cmd([[fuzzel]]), { description = "Toggle launc
 hl.bind(KEY.LOCK, hl.dsp.exec_cmd([[loginctl lock-session]]), { description =  "Lock screen " })
 hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[kitty --class nvim -e nvim ~/.config/hypr]]), { description = "Toggle settings" })
 -- Super+M free (mail client removed)
-hl.bind(KEY.VIDEO, hl.dsp.exec_cmd("mpv --player-operation-mode=pseudo-gui --force-window=immediate"), { description = "Video player" })
+hl.bind(KEY.VIDEO, hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/video-picker"), { description = "Video player" })
 
 -- 2. Window Management
 hl.bind(KEY.CLOSE, hl.dsp.window.close(), { description = "Close window" })
