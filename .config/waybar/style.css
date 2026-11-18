@@ -1,5 +1,5 @@
 @import "colors.css";
-* { font-family: "JetBrainsMono Nerd Font Propo"; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
+* { font-family: "Inter", "Symbols Nerd Font"; font-size: 13px; border: none; border-radius: 0; min-height: 0; }
 window#waybar { background: transparent; }
 .modules-left, .modules-center, .modules-right {
     background: alpha(@surface, 0.55); border: 1px solid alpha(@outline, 0.35);
@@ -166,3 +166,6 @@ tooltip {
     border-radius: 14px;
     border: 1px solid alpha(@primary, 0.25);
 }
+
+/* tabular digits: numbers keep a fixed width */
+* { font-feature-settings: "tnum"; }

@@ -7,7 +7,7 @@ conf="$t/Themes/nick.conf"
 p=$(ls "$t/Themes" | sed -n "s/\.conf$//p" | grep -vx nick | fuzzel --dmenu --prompt "Greeter layout: ") || exit 0
 [[ -n $p && -f "$t/Themes/$p.conf" ]] || exit 0
 cat "$t/Themes/$p.conf" > "$conf"
-sed -i -E "s/^Font=.*/Font=\"JetBrainsMono Nerd Font Propo\"/; s/^DateFormat=.*/DateFormat=\"dddd, d MMMM\"/; s/^HeaderText=.*/HeaderText=\"Welcome back, Nick\"/" "$conf"
+sed -i -E "s/^Font=.*/Font=\"Inter\"/; s/^DateFormat=.*/DateFormat=\"dddd, d MMMM\"/; s/^HeaderText=.*/HeaderText=\"Welcome back, Nick\"/" "$conf"
 rm -f "$HOME/.cache/raw-theme.sig"
 "$HOME/.local/bin/raw-theme" >/dev/null 2>&1 || true
 mkdir -p "$HOME/.config/sddm"

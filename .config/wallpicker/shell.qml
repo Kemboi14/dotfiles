@@ -11,7 +11,7 @@ ShellRoot {
     readonly property real cardW: 150
     readonly property real activeW: 520
     readonly property real skew: 0.2
-    readonly property string font: "JetBrainsMono Nerd Font Propo"
+    readonly property string font: "Inter"
 
     // ── Scheme colours (overwritten from scheme.json) ────────
     property color accent: "#a8c7fa"
