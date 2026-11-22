@@ -31,7 +31,7 @@ window#waybar { background: transparent; }
 /* --- Pills --- */
 #cpu, #memory, #temperature, #idle_inhibitor, #mpris, #pulseaudio,
 #backlight, #network, #battery, #tray, #custom-power, #custom-weather {
-    background: alpha(@surfaceContainerHigh, 0.55);
+    background: alpha(@surfaceContainerHigh, 0.45);
     border-radius: 10px;
     margin: 4px 2px;
     padding: 0 10px;
@@ -58,7 +58,7 @@ tooltip label { color: @onSurface; padding: 4px; }
 
 /* --- Player (waybar-player) --- */
 #player {
-    background: alpha(@surfaceContainerHigh, 0.55);
+    background: alpha(@surfaceContainerHigh, 0.45);
     border-radius: 10px;
     margin: 4px 2px;
     padding: 0 6px 0 4px;
@@ -86,7 +86,7 @@ tooltip label { color: @onSurface; padding: 4px; }
 #window { font-size: 16px; padding: 0 10px; }
 
 /* --- Bluetooth --- */
-#bluetooth { background: alpha(@surfaceContainerHigh, 0.55); border-radius: 10px; margin: 4px 2px; padding: 0 10px; color: @onSurface; }
+#bluetooth { background: alpha(@surfaceContainerHigh, 0.45); border-radius: 10px; margin: 4px 2px; padding: 0 10px; color: @onSurface; }
 #bluetooth:hover { background: alpha(@primary, 0.25); }
 #bluetooth.connected { color: @primary; }
 #bluetooth.off, #bluetooth.disabled { color: alpha(@onSurfaceVariant, 0.5); }
@@ -134,7 +134,7 @@ window#waybar { background: transparent; }
 
 /* --- glass islands: see-through, soft shadow, faint accent rim --- */
 #apps, #ws, #time, #player, #stats, #system, #alerts, #tray {
-    background: alpha(@surfaceContainerHigh, 0.55);
+    background: alpha(@surfaceContainerHigh, 0.45);
     box-shadow: 0 1px 4px alpha(black, 0.4), 0 0 0 1px alpha(@primary, 0.12);
     margin: 4px 4px;
 }
