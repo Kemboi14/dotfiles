@@ -6,6 +6,7 @@ balena-etcher
 base
 base-devel
 bat
+bibata-cursor-theme-bin
 blueman
 bluez
 bluez-utils
@@ -13,9 +14,11 @@ brightnessctl
 btop
 btrfs-progs
 caelestia-cli
+candy-icons-git
 cava
 chaotic-keyring
 coin-or-mp
+colloid-icon-theme-git
 compsize
 ddcutil
 direnv
@@ -33,6 +36,7 @@ file-roller
 firefox
 firewalld
 fish
+fluent-icon-theme-git
 freerdp
 fwupd
 fzf
@@ -66,6 +70,7 @@ jdk21-openjdk
 jq
 karere-custom-css
 kitty
+kora-icon-theme
 lazygit
 less
 lib32-mangohud
@@ -85,6 +90,7 @@ loupe
 lsof
 mako
 mangohud
+mcmojave-circle-icon-theme-git
 mkinitcpio
 mpv
 mythes-en
@@ -135,6 +141,7 @@ starship
 sudo
 swaybg
 swayosd
+tela-icon-theme
 thermald
 thunar
 thunar-archive-plugin

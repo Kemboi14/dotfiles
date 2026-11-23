@@ -97,7 +97,7 @@ _osd and subprocess.Popen(["swayosd-server"], start_new_session=True,
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
 font=FiraCode Nerd Font Propo:size=10,Symbols Nerd Font:size=10
-icon-theme=Papirus-Dark
+icon-theme=candy-icons
 terminal=kitty
 layer=overlay
 width=34
