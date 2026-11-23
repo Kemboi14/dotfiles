@@ -17,7 +17,7 @@ w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
 
 # mako (notifications)
 m = home / ".config/mako"; m.mkdir(parents=True, exist_ok=True)
-(m / "config").write_text(f"""font=Inter 11
+(m / "config").write_text(f"""font=FiraCode Nerd Font Propo 11
 background-color={h("surfaceContainer")}cc
 text-color={h("onSurface")}
 border-color={h("primary")}
@@ -96,7 +96,7 @@ _osd and subprocess.Popen(["swayosd-server"], start_new_session=True,
 # fuzzel (launcher and menus): frosted glass
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
-font=Inter:size=10,Symbols Nerd Font:size=10
+font=FiraCode Nerd Font Propo:size=10,Symbols Nerd Font:size=10
 icon-theme=Papirus-Dark
 terminal=kitty
 layer=overlay

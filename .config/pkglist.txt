@@ -60,7 +60,6 @@ hyprlock
 imagemagick
 intel-media-driver
 intel-ucode
-inter-font
 jack2
 jdk21-openjdk
 jq
