@@ -5,7 +5,7 @@ awww
 base
 base-devel
 bat
-bluetui
+blueman
 bluez
 bluez-utils
 brightnessctl
@@ -143,6 +143,7 @@ ttf-caladea
 ttf-carlito
 ttf-cascadia-code-nerd
 ttf-dejavu
+ttf-firacode-nerd
 ttf-jetbrains-mono-nerd
 ttf-nerd-fonts-symbols
 tumbler

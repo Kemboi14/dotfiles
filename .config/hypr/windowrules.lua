@@ -80,4 +80,3 @@ hl.window_rule({ match = { class = "^.*jetbrains.*$", title = "^win[0-9]+$" }, n
 -- Ignore maximize requests from apps; tiling decides window size
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.window_rule({ match = { class = "(?i)^(vscodium|codium)$" }, opacity = 1.0 })
-hl.window_rule({ match = { class = "^bluetui$" }, float = true, center = true, size = "50% 55%" })
