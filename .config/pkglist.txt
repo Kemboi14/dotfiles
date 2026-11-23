@@ -2,6 +2,7 @@
 adw-gtk-theme
 adwaita-icon-theme
 awww
+balena-etcher
 base
 base-devel
 bat
