@@ -35,8 +35,8 @@
         "separate-outputs": true
     },
     "clock": {
-        "format": "󰥔 {:%H:%M}",
-        "format-alt": "󰃭 {:%a %d %b}",
+        "format": "<span size=\"large\">\udb82\udd54</span> {:%H:%M}",
+        "format-alt": "<span size=\"large\">\udb80\udced</span> {:%a %d %b}",
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
             "mode": "month",
@@ -59,8 +59,8 @@
         "on-click": "playerctl play-pause"
     },
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": "󰝟 mute",
+        "format": "<span size=\"large\">{icon}</span> {volume}%",
+        "format-muted": "<span size=\"large\">\udb81\udf5f</span> mute",
         "format-icons": {
             "default": [
                 "󰕿",
@@ -72,11 +72,11 @@
         "scroll-step": 5
     },
     "backlight": {
-        "format": "󰃠 {percent}%"
+        "format": "<span size=\"large\">\udb80\udce0</span> {percent}%"
     },
     "network": {
         "interval": 5,
-        "format-wifi": "{icon} {essid}",
+        "format-wifi": "<span size=\"large\">{icon}</span> {essid}",
         "format-icons": [
             "\udb82\udd2f",
             "\udb82\udd1f",
@@ -84,10 +84,10 @@
             "\udb82\udd25",
             "\udb82\udd28"
         ],
-        "format-ethernet": "\udb80\ude00 wired",
-        "format-linked": "\udb82\udd29 no ip",
-        "format-disconnected": "\udb82\udd2d offline",
-        "format-disabled": "\udb82\udd2d",
+        "format-ethernet": "<span size=\"large\">\udb80\ude00</span> wired",
+        "format-linked": "<span size=\"large\">\udb82\udd29</span> no ip",
+        "format-disconnected": "<span size=\"large\">\udb82\udd2d</span> offline",
+        "format-disabled": "<span size=\"large\">\udb82\udd2d</span>",
         "tooltip-format-wifi": "{essid} \u00b7 {signalStrength}% \u00b7 {frequency} GHz\n{ifname}  {ipaddr}/{cidr}\n\u21e3 {bandwidthDownBits}   \u21e1 {bandwidthUpBits}",
         "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n\u21e3 {bandwidthDownBits}   \u21e1 {bandwidthUpBits}",
         "tooltip-format-disconnected": "No connection",
@@ -99,10 +99,10 @@
             "warning": 20,
             "critical": 10
         },
-        "format": "{icon} {capacity}%",
-        "format-discharging": "{icon} {capacity}% \udb85\udc0b{power:0.1f}W",
-        "format-charging": "{icon} {capacity}%",
-        "format-plugged": "\udb81\udea5 {capacity}%",
+        "format": "<span size=\"large\">{icon}</span> {capacity}%",
+        "format-discharging": "<span size=\"large\">{icon}</span> {capacity}% \udb85\udc0b{power:0.1f}W",
+        "format-charging": "<span size=\"large\">{icon}</span> {capacity}%",
+        "format-plugged": "<span size=\"large\">\udb81\udea5</span> {capacity}%",
         "format-icons": {
             "default": [
                 "\udb80\udc7a",
@@ -133,23 +133,24 @@
         "tooltip-format": "{timeTo}\nDraw: {power:0.1f} W"
     },
     "tray": {
+        "icon-size": 16,
         "spacing": 8
     },
     "custom/power": {
-        "format": "⏻",
+        "format": "<span size=\"large\">\udb81\udc25</span>",
         "tooltip": false,
         "on-click": "~/.local/bin/powermenu"
     },
     "cpu": {
         "interval": 3,
-        "format": "\uf4bc {usage}%",
+        "format": "<span size=\"large\">\udb80\udf5b</span> {usage}%",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "states": { "warning": 70, "critical": 90 },
         "on-click": "kitty --class btop -e btop"
     },
     "memory": {
         "interval": 10,
-        "format": "󰘚 {icon} {used:0.1f}G",
+        "format": "<span size=\"large\">\udb81\ude1a</span> {icon} {used:0.1f}G",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "states": { "warning": 75, "critical": 90 },
         "tooltip-format": "RAM  {used:0.1f}G / {total:0.1f}G ({percentage}%)\nSwap {swapUsed:0.1f}G / {swapTotal:0.1f}G"
@@ -159,13 +160,13 @@
         "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
         "input-filename": "temp1_input",
         "critical-threshold": 80,
-        "format": "{icon} {temperatureC}°",
-        "format-critical": "󰸁 {temperatureC}°",
+        "format": "<span size=\"large\">{icon}</span> {temperatureC}\u00b0",
+        "format-critical": "<span size=\"large\">\udb83\ude01</span> {temperatureC}\u00b0",
         "format-icons": ["", "", "", "", ""],
         "tooltip-format": "CPU package: {temperatureC}°C"
     },
     "idle_inhibitor": {
-        "format": "{icon}",
+        "format": "<span size=\"large\">{icon}</span>",
         "format-icons": {
             "activated": "󰅶",
             "deactivated": "󰾪"
@@ -281,11 +282,11 @@
         "on-click": "playerctl next"
     },
     "bluetooth": {
-        "format": "󰂯",
-        "format-off": "󰂲",
-        "format-disabled": "󰂲",
-        "format-connected": "󰂱 {device_alias}",
-        "format-connected-battery": "󰂱 {device_alias} {device_battery_percentage}%",
+        "format": "<span size=\"large\">\udb80\udcaf</span>",
+        "format-off": "<span size=\"large\">\udb80\udcb2</span>",
+        "format-disabled": "<span size=\"large\">\udb80\udcb2</span>",
+        "format-connected": "<span size=\"large\">\udb80\udcb1</span> {device_alias}",
+        "format-connected-battery": "<span size=\"large\">\udb80\udcb1</span> {device_alias} {device_battery_percentage}%",
         "max-length": 24,
         "tooltip-format": "{controller_alias}  {controller_address}\n{num_connections} connected",
         "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
