@@ -153,4 +153,6 @@ hl.bind(("%s + SHIFT + D"):format(mainMod), hl.dsp.exec_cmd([[makoctl mode -t do
 hl.bind(("%s + SLASH"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/keyhelp"), { description = "Show keybindings" })
 hl.bind(("%s + SHIFT + G"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/sddm-layout"), { description = "Greeter layout" })
 
+hl.bind(("%s + SHIFT + I"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/theme-switch"), { description = "Theme switcher" })
+
 return true

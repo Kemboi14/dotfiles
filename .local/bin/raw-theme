@@ -174,11 +174,6 @@ if _conf.exists() and os.access(_conf, os.W_OK) and os.access(_bg, os.W_OK):
     except Exception:
         pass
 
-# scheme-coloured Papirus folder overlay
-try:
-    subprocess.run([str(home / ".local/bin/scheme-icons")], capture_output=True, timeout=30)
-except Exception:
-    pass
 
 
 # Firefox colours via Pywalfox

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Switch the icon or cursor theme everywhere, from a fuzzel menu.
+set -euo pipefail
+pick() { fuzzel --dmenu --prompt "$1" --width 40; }
+list_themes() {
+  for d in /usr/share/icons/* "$HOME/.local/share/icons"/* "$HOME/.icons"/*; do
+    [[ -d $d ]] || continue
+    n=$(basename "$d")
+    case $1 in
+      icons)   [[ -f $d/index.theme && ! -d $d/cursors ]] && grep -q "^Directories=" "$d/index.theme" && echo "$n" ;;
+      cursors) [[ -d $d/cursors ]] && echo "$n" ;;
+    esac
+  done | sort -u | grep -vxE "default|hicolor|locolor" || true
+}
+kind=$(printf "%s\n" "Icon theme" "Cursor theme" | pick "Change: ") || exit 0
+case $kind in
+  "Icon theme")
+    t=$(list_themes icons | pick "Icons: ") || exit 0
+    gsettings set org.gnome.desktop.interface icon-theme "$t"
+    sed -i "s/^gtk-icon-theme-name=.*/gtk-icon-theme-name=$t/" "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"
+    sed -i "s/^icon_theme=.*/icon_theme=$t/" "$HOME/.config/qt6ct/qt6ct.conf" 2>/dev/null || true
+    sed -i "s/^icon-theme=.*/icon-theme=$t/" "$HOME/.config/fuzzel/fuzzel.ini" "$HOME/.local/bin/raw-theme"
+    tmp=$(mktemp)
+    jq --arg t "$t" ".theme.iconThemeDark = \$t | .theme.iconThemeLight = \$t" "$HOME/.config/caelestia/cli.json" > "$tmp" && mv "$tmp" "$HOME/.config/caelestia/cli.json"
+    ;;
+  "Cursor theme")
+    t=$(list_themes cursors | pick "Cursor: ") || exit 0
+    hyprctl setcursor "$t" 24 >/dev/null
+    gsettings set org.gnome.desktop.interface cursor-theme "$t"
+    sed -i "s/^gtk-cursor-theme-name=.*/gtk-cursor-theme-name=$t/" "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"
+    mkdir -p "$HOME/.icons/default"
+    printf "[Icon Theme]\nInherits=%s\n" "$t" > "$HOME/.icons/default/index.theme"
+    ;;
+  *) exit 0 ;;
+esac
+notify-send "Theme" "$kind: $t"

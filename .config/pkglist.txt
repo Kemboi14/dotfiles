@@ -158,6 +158,7 @@ uwsm
 vulkan-intel
 waybar
 wget
+whitesur-icon-theme
 wireplumber
 wlr-randr
 xdg-desktop-portal-hyprland
