@@ -40,6 +40,7 @@ git
 github-cli
 glaze
 gnome-keyring
+google-chrome
 gpu-screen-recorder
 gradle
 grim
