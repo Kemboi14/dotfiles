@@ -6,8 +6,8 @@
     "enableHtop": false,
     "enableNvtop": false,
     "enableFuzzel": false,
-    "iconThemeDark": "candy-icons",
-    "iconThemeLight": "candy-icons"
+    "iconThemeDark": "Colloid-Grey",
+    "iconThemeLight": "Colloid-Grey"
   },
   "wallpaper": {
     "postHook": "[ \"$SCHEME_MODE\" = dark ] || caelestia scheme set -m dark -v \"$SCHEME_VARIANT\""

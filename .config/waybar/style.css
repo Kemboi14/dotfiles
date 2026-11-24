@@ -169,3 +169,17 @@ tooltip {
 
 /* tabular digits: numbers keep a fixed width */
 * { font-feature-settings: "tnum"; }
+
+/* --- aurora look --- */
+#apps, #ws, #time, #player, #stats, #system, #alerts, #tray {
+    background: alpha(@surfaceContainerHigh, 0.82);
+    border: none;
+    box-shadow: 0 1px 4px alpha(black, 0.35);
+    padding: 0 12px;
+}
+#time #clock { font-weight: 600; font-size: 14px; padding: 0 4px; color: @onSurface; }
+#player #mpris { color: @onSurface; }
+#player #custom-player-prev, #player #custom-player-next { color: @onSurfaceVariant; padding: 0 5px; }
+#player #custom-player-play { color: @primary; padding: 0 5px; }
+#system #network, #system #bluetooth, #system #pulseaudio, #system #backlight, #system #battery { color: @onSurfaceVariant; }
+#stats #memory { color: @tertiary; }

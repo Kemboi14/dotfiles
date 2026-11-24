@@ -35,7 +35,7 @@
         "separate-outputs": true
     },
     "clock": {
-        "format": "<span size=\"large\">\udb82\udd54</span> {:%H:%M}",
+        "format": "{:%H:%M}",
         "format-alt": "<span size=\"large\">\udb80\udced</span> {:%a %d %b}",
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
@@ -51,7 +51,8 @@
         }
     },
     "mpris": {
-        "format": "{title}  {position}/{length}",
+        "max-length": 30,
+        "format": "\udb81\udf5a  {title}",
         "format-paused": "{title}  {position}/{length}",
         "title-len": 22,
         "interval": 1,
