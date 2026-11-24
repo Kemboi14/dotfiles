@@ -1,9 +1,53 @@
-#!/usr/bin/env python3
-"""Print one workspace button for Waybar: active, occupied or empty."""
-import json, subprocess, sys
-ws = int(sys.argv[1])
-q = lambda c: json.loads(subprocess.run(["hyprctl", "-j", c], capture_output=True, text=True).stdout or "null")
-active = (q("activeworkspace") or {}).get("id")
-occupied = {w["id"] for w in (q("workspaces") or []) if w.get("windows", 0) > 0}
-cls = "active" if ws == active else "occupied" if ws in occupied else "empty"
-print(json.dumps({"text": str(ws), "class": cls}))
+#!/usr/bin/env bash
+# Waybar workspace button: app icons for the windows on workspace $1, a small dot when empty.
+set -u
+ws=${1:-1}
+active=$(hyprctl activeworkspace -j 2>/dev/null | jq -r ".id")
+
+icon_for() {
+  case $1 in
+    kitty|foot|alacritty|*terminal*) printf "\U000F018D" ;;
+    nvim|*neovim*) printf "\uE62B" ;;
+    firefox*|*librewolf*|*zen*) printf "\U000F0239" ;;
+    *chrome*|*chromium*|*brave*|*helium*) printf "\U000F02AF" ;;
+    thunar|*nautilus*|*files*) printf "\U000F024B" ;;
+    slack) printf "\U000F04B1" ;;
+    *karere*|*whatsapp*|*zapzap*) printf "\U000F05A3" ;;
+    *telegram*) printf "\uF2C6" ;;
+    *discord*|*vesktop*) printf "\U000F066F" ;;
+    *spotify*) printf "\U000F04C7" ;;
+    mpv|*vlc*|*celluloid*) printf "\U000F0567" ;;
+    *libreoffice*|*soffice*) printf "\U000F0219" ;;
+    *obsidian*) printf "\U000F00BD" ;;
+    *ghidra*) printf "\U000F00E4" ;;
+    *steam*) printf "\U000F04D3" ;;
+    *code*|*codium*) printf "\U000F0A1E" ;;
+    *) printf "\U000F08C6" ;;
+  esac
+}
+
+mapfile -t classes < <(hyprctl clients -j 2>/dev/null | jq -r --argjson w "$ws" ".[] | select(.workspace.id == \$w) | .class | ascii_downcase")
+
+icons=""
+seen=" "
+count=0
+for c in "${classes[@]}"; do
+  [[ -z $c ]] && continue
+  i=$(icon_for "$c")
+  [[ $seen == *" $i "* ]] && continue
+  seen+="$i "
+  count=$((count + 1))
+  (( count > 3 )) && continue
+  icons+="${icons:+ }$i"
+done
+(( count > 3 )) && icons+=" +$((count - 3))"
+
+if [[ -z $icons ]]; then
+  text=$(printf "\U000F09DE")
+  cls="\"empty\""
+else
+  text=$icons
+  cls="\"occupied\""
+fi
+[[ $ws == "$active" ]] && cls="$cls,\"active\""
+printf "{\"text\":\"%s\",\"class\":[%s]}\n" "$text" "$cls"
