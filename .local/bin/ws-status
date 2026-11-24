@@ -57,7 +57,7 @@ if [[ -z $icons ]]; then
   text=$(shape empty)
   cls="\"empty\""
 else
-  text="$(shape full)  $icons"
+  text=$icons
   cls="\"occupied\""
 fi
 [[ $ws == "$active" ]] && cls="$cls,\"active\""
