@@ -183,3 +183,10 @@ tooltip {
 #player #custom-player-play { color: @primary; padding: 0 5px; }
 #system #network, #system #bluetooth, #system #pulseaudio, #system #backlight, #system #battery { color: @onSurfaceVariant; }
 #stats #memory { color: @tertiary; }
+
+/* --- music pulse: the title breathes while playing --- */
+@keyframes music-pulse {
+    from { color: @onSurface; text-shadow: 0 0 0 alpha(@primary, 0); }
+    to   { color: @primary;  text-shadow: 0 0 6px alpha(@primary, 0.8); }
+}
+#player #mpris.playing { animation: music-pulse 1.2s ease-in-out infinite alternate; }
