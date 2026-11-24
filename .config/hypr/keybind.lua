@@ -155,4 +155,6 @@ hl.bind(("%s + SHIFT + G"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") ..
 
 hl.bind(("%s + SHIFT + I"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/theme-switch"), { description = "Theme switcher" })
 
+hl.bind(("%s + SHIFT + P"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/power-profile"), { description = "Cycle power profile" })
+
 return true

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Cycle power profiles: power-saver -> balanced -> performance, with a notification.
+set -euo pipefail
+case $(powerprofilesctl get) in
+  power-saver) next=balanced ;;
+  balanced)    next=performance ;;
+  *)           next=power-saver ;;
+esac
+powerprofilesctl set "$next"
+case $next in
+  power-saver) msg="Power saver: cooler, longer battery" ;;
+  balanced)    msg="Balanced" ;;
+  performance) msg="Performance: full speed, more heat" ;;
+esac
+notify-send -h string:x-canonical-private-synchronous:power "Power profile" "$msg"

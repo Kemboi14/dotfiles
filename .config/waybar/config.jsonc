@@ -94,6 +94,16 @@
         "tooltip-format-disconnected": "No connection",
         "on-click": "~/.local/bin/wifimenu"
     },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}",
+        "format-icons": {
+            "default": "\udb83\udf85",
+            "performance": "\udb81\udcc5",
+            "balanced": "\udb83\udf85",
+            "power-saver": "\udb83\udf86"
+        }
+    },
     "battery": {
         "interval": 10,
         "states": {
@@ -307,7 +317,7 @@
     "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },
     "group/system": {
         "orientation": "horizontal",
-        "modules": ["network", "bluetooth", "group/volume", "group/brightness", "idle_inhibitor", "battery"]
+        "modules": ["power-profiles-daemon", "network", "bluetooth", "group/volume", "group/brightness", "idle_inhibitor", "battery"]
     },
     "group/alerts": { "orientation": "horizontal", "modules": ["custom/notifications", "custom/power"] },
     "custom/notifications": {
