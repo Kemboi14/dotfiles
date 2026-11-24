@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
-# Waybar workspace button: app icons for the windows on workspace $1, a small dot when empty.
+# Waybar workspace button: a shape per workspace (hollow when empty, solid when used) plus app icons.
 set -u
 ws=${1:-1}
 active=$(hyprctl activeworkspace -j 2>/dev/null | jq -r ".id")
+
+shape() {
+  case "$ws:$1" in
+    1:full) printf "\U000F0765" ;; 1:empty) printf "\U000F0766" ;;
+    2:full) printf "\U000F0536" ;; 2:empty) printf "\U000F0537" ;;
+    3:full) printf "\U000F0764" ;; 3:empty) printf "\U000F0763" ;;
+    4:full) printf "\U000F08D1" ;; 4:empty) printf "\U000F08D2" ;;
+    5:full) printf "\U000F02D8" ;; 5:empty) printf "\U000F02D9" ;;
+    *:full) printf "\U000F04CE" ;; *) printf "\U000F04D2" ;;
+  esac
+}
 
 icon_for() {
   case $1 in
@@ -43,10 +54,10 @@ done
 (( count > 3 )) && icons+=" +$((count - 3))"
 
 if [[ -z $icons ]]; then
-  text=$(printf "\U000F09DE")
+  text=$(shape empty)
   cls="\"empty\""
 else
-  text=$icons
+  text="$(shape full)  $icons"
   cls="\"occupied\""
 fi
 [[ $ws == "$active" ]] && cls="$cls,\"active\""
