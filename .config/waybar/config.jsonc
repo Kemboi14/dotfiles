@@ -301,7 +301,7 @@
     },
     "group/ws": {
         "orientation": "horizontal",
-        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]
+        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4"]
     },
     "group/time": { "orientation": "horizontal", "modules": ["clock", "custom/weather"] },
     "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },
