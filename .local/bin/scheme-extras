@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""scheme-extras [SCHEME_JSON] [OUTROOT]: write btop and Qt colour files from scheme.json."""
+import configparser, json, sys
+from pathlib import Path
+
+HOME = Path.home()
+src = Path(sys.argv[1]) if len(sys.argv) > 1 else HOME / ".local/state/caelestia/scheme.json"
+root = Path(sys.argv[2]) if len(sys.argv) > 2 else HOME
+c = json.loads(src.read_text())["colours"]
+
+
+def h(k):
+    return "#" + c[k]
+
+
+def t(i):
+    return h("term%d" % i)
+
+
+def btop():
+    g = lambda a, b, d: (t(a), t(b), t(d))
+    m = [("main_bg", h("surface")), ("main_fg", h("onSurface")), ("title", h("onSurface")),
+         ("hi_fg", h("primary")), ("selected_bg", h("surfaceContainer")), ("selected_fg", h("primary")),
+         ("inactive_fg", h("outline")), ("graph_text", h("tertiary")), ("meter_bg", h("outline")),
+         ("proc_misc", h("tertiary")), ("cpu_box", t(9)), ("mem_box", t(11)), ("net_box", t(12)),
+         ("proc_box", t(13)), ("div_line", h("outlineVariant"))]
+    grads = {"temp": g(10, 11, 9), "cpu": g(11, 10, 13), "free": g(13, 14, 12),
+             "cached": g(10, 12, 14), "available": g(11, 9, 1), "used": g(10, 2, 14),
+             "download": g(11, 9, 1), "upload": g(10, 2, 14), "process": g(10, 13, 9)}
+    for name, vals in grads.items():
+        for part, v in zip(("start", "mid", "end"), vals):
+            m.append(("%s_%s" % (name, part), v))
+    out = root / ".config/btop/themes/caelestia.theme"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("".join("theme[%s]=%s\n" % kv for kv in m))
+
+
+def qt():
+    base = HOME / ".config/qtengine/caelestia.colors"
+    if not base.exists():
+        return
+    cp = configparser.RawConfigParser()
+    cp.optionxform = str
+    cp.read(base)
+
+    def put(sec, **kw):
+        if cp.has_section(sec):
+            for k, v in kw.items():
+                cp.set(sec, k, v)
+
+    sem = dict(ForegroundLink=t(4), ForegroundNegative=t(1), ForegroundNeutral=t(3),
+               ForegroundPositive=t(2), ForegroundVisited=t(5), ForegroundInactive=h("outline"),
+               ForegroundActive=h("onSurface"), DecorationFocus=h("primary"), DecorationHover=h("primary"))
+    for s in ("Button", "Complementary", "Header", "Header][Inactive", "Selection", "Tooltip", "View", "Window"):
+        put("Colors:" + s, **sem)
+    put("Colors:Button", BackgroundNormal=h("surfaceContainerHigh"), BackgroundAlternate=h("surfaceVariant"), ForegroundNormal=h("onSurface"))
+    put("Colors:Complementary", BackgroundNormal=h("surfaceContainer"), BackgroundAlternate=h("surface"), ForegroundNormal=h("onSurfaceVariant"))
+    for s in ("Header", "Header][Inactive"):
+        put("Colors:" + s, BackgroundNormal=h("surfaceContainer"), BackgroundAlternate=h("surfaceContainer"), ForegroundNormal=h("onSurfaceVariant"))
+    put("Colors:Selection", BackgroundNormal=h("primary"), BackgroundAlternate=h("primary"), ForegroundNormal=h("onPrimary"),
+        ForegroundActive=h("onPrimary"), ForegroundInactive=h("onPrimary"), DecorationHover=h("secondary"))
+    put("Colors:Tooltip", BackgroundNormal=h("surfaceContainer"), BackgroundAlternate=h("surfaceVariant"), ForegroundNormal=h("onSurface"))
+    put("Colors:View", BackgroundNormal=h("surface"), BackgroundAlternate=h("surfaceContainer"), ForegroundNormal=h("onSurface"), DecorationHover=h("inversePrimary"))
+    put("Colors:Window", BackgroundNormal=h("surfaceContainer"), BackgroundAlternate=h("surfaceVariant"), ForegroundNormal=h("onSurfaceVariant"))
+    put("ColorEffects:Disabled", Color=h("surfaceContainer"))
+    put("ColorEffects:Inactive", Color=h("surfaceContainerLowest"))
+    put("WM", activeBackground=h("surfaceContainerHighest"), activeForeground=h("onSurface"),
+        inactiveBackground=h("secondaryContainer"), inactiveForeground=h("onSecondaryContainer"))
+    out = root / ".config/qtengine/caelestia.colors"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    with open(out, "w") as f:
+        cp.write(f, space_around_delimiters=False)
+
+
+btop()
+qt()

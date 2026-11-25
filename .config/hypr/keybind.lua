@@ -143,7 +143,7 @@ hl.bind(("%s + SHIFT + N"):format(mainMod), hl.dsp.exec_cmd([[makoctl dismiss --
 
 hl.bind(("%s + J"):format(mainMod), hl.dsp.exec_cmd("obsidian"), { description = "Obsidian" })
 hl.bind(("%s + U"):format(mainMod), hl.dsp.exec_cmd("gtk-launch io.github.tobagin.karere"), { description = "Karere" })
-hl.bind(("%s + SHIFT + W"):format(mainMod), hl.dsp.exec_cmd("~/.local/bin/wallpicker"), { description = "Wallpaper picker" })
+hl.bind(("%s + SHIFT + W"):format(mainMod), hl.dsp.exec_cmd("waypaper"), { description = "Wallpaper picker" })
 
 hl.bind(("%s + SHIFT + V"):format(mainMod), hl.dsp.exec_cmd([[cliphist list | fuzzel --dmenu --prompt "󰅌  " --width 60 | cliphist decode | wl-copy]]), { description = "Clipboard history" })
 hl.bind(("%s + period"):format(mainMod), hl.dsp.exec_cmd([[rofimoji --selector fuzzel --action copy]]), { description = "Emoji picker" })

@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+"""scheme-gen IMAGE: matugen based replacement for the caelestia scheme pipeline."""
+import argparse, colorsys, json, os, subprocess, sys
+from pathlib import Path
+
+HOME = Path.home()
+HARD = 0.28
+SURFACES = ["surface", "surface_dim", "surface_bright", "surface_container_lowest",
+            "surface_container_low", "surface_container", "surface_container_high",
+            "surface_container_highest"]
+BASE_HUES = {"red": 5, "green": 125, "yellow": 50, "blue": 215, "magenta": 300, "cyan": 180}
+ORDER = ["red", "green", "yellow", "blue", "magenta", "cyan"]
+ALIASES = {"tonalspot": "tonal-spot", "fruitsalad": "fruit-salad"}
+VALID = {"content", "expressive", "fidelity", "fruit-salad", "monochrome", "neutral",
+         "rainbow", "tonal-spot", "vibrant", "smart"}
+
+
+def camel(s):
+    p = s.split("_")
+    return p[0] + "".join(x.capitalize() for x in p[1:])
+
+
+def hex6(rgb):
+    return "%02x%02x%02x" % tuple(max(0, min(255, round(v * 255))) for v in rgb)
+
+
+def rgb_of(h):
+    return tuple(int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+
+
+def hls(h):
+    hh, l, s = colorsys.rgb_to_hls(*rgb_of(h))
+    return hh * 360, l, s
+
+
+def from_hls(h, l, s):
+    return hex6(colorsys.hls_to_rgb((h % 360) / 360, max(0, min(1, l)), max(0, min(1, s))))
+
+
+def darken(h, k):
+    hh, l, s = hls(h)
+    return from_hls(hh, l * k, s)
+
+
+def run_matugen(img, mode, variant):
+    cmd = ["matugen", "image", str(img), "--source-color-index", "0", "-t", "scheme-" + variant,
+           "-m", mode, "--dry-run", "-j", "hex"]
+    r = subprocess.run(cmd, capture_output=True, text=True, stdin=subprocess.DEVNULL)
+    if r.returncode != 0:
+        sys.exit("matugen failed: " + r.stderr.strip())
+    return json.loads(r.stdout)["colors"]
+
+
+def build(img, mode, variant, pull, cap, sat):
+    raw = run_matugen(img, mode, variant)
+    c = {k: v[mode]["color"].lstrip("#") for k, v in raw.items()}
+    dark = mode == "dark"
+    if dark:
+        orig = c["surface"]
+        for k in SURFACES:
+            if k in c:
+                c[k] = darken(c[k], HARD)
+        c["surface_variant"] = orig
+    out = {camel(k): v for k, v in c.items()}
+    out["background"] = out["surface"]
+    out["onBackground"] = out["onSurface"]
+    out["primaryDim"] = out["primaryFixed"]
+    out["secondaryDim"] = out["secondaryFixed"]
+    out["tertiaryDim"] = out["tertiaryFixed"]
+    out["errorDim"] = out["error"]
+    ph = hls(out["primary"])[0]
+    term = {0: out["surfaceContainerHigh"], 7: out["onSurfaceVariant"],
+            8: out["outline"], 15: out["onSurface"]}
+    for i, name in enumerate(ORDER, start=1):
+        base = BASE_HUES[name]
+        d = (ph - base + 180) % 360 - 180
+        h = base + max(-cap, min(cap, d * pull))
+        term[i] = from_hls(h, 0.62 if dark else 0.38, sat)
+        term[i + 8] = from_hls(h, 0.76 if dark else 0.30, min(1, sat + 0.1))
+    for i in range(16):
+        out["term%d" % i] = term[i]
+    out["success"] = term[2]
+    out["onSuccess"] = out["surface"]
+    out["successContainer"] = darken(term[2], 0.4)
+    out["onSuccessContainer"] = term[10]
+    return out
+
+
+def sequences(c):
+    esc = chr(27)
+    st = esc + chr(92)
+
+    def osc(n, h):
+        return esc + "]" + n + ";rgb:" + "/".join((h[0:2], h[2:4], h[4:6])) + st
+
+    s = osc("10", c["onSurface"]) + osc("11", c["surface"]) + osc("12", c["secondary"]) + osc("17", c["secondary"])
+    for i in range(16):
+        s += osc("4;%d" % i, c["term%d" % i])
+    for i, k in enumerate(("primary", "secondary", "tertiary"), start=16):
+        s += osc("4;%d" % i, c[k])
+    return s
+
+
+def broadcast(seq):
+    for p in Path("/dev/pts").glob("[0-9]*"):
+        try:
+            if p.stat().st_uid != os.getuid():
+                continue
+            fd = os.open(str(p), os.O_WRONLY | os.O_NOCTTY | os.O_NONBLOCK)
+            try:
+                os.write(fd, seq.encode())
+            finally:
+                os.close(fd)
+        except OSError:
+            pass
+
+
+def write(path, text):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text)
+    os.replace(tmp, path)
+
+
+def preview(c):
+    esc = chr(27)
+    row = ""
+    for i in range(16):
+        r, g, b = [int(c["term%d" % i][j:j + 2], 16) for j in (0, 2, 4)]
+        row += "%s[48;2;%d;%d;%dm  " % (esc, r, g, b)
+        if i == 7:
+            row += esc + "[0m" + chr(10)
+    print(row + esc + "[0m")
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("image")
+    ap.add_argument("--mode")
+    ap.add_argument("--variant")
+    ap.add_argument("--pull", type=float, default=0.6)
+    ap.add_argument("--cap", type=float, default=30)
+    ap.add_argument("--sat", type=float, default=0.62)
+    ap.add_argument("--out")
+    ap.add_argument("--preview", action="store_true")
+    a = ap.parse_args()
+    img = Path(a.image).expanduser().resolve()
+    if not img.is_file():
+        sys.exit("no such image: " + str(img))
+    live = a.out is None
+    state = HOME / ".local/state/caelestia" if live else Path(a.out) / "state"
+    hypr = HOME / ".config/hypr/scheme" if live else Path(a.out) / "hypr"
+    prev = {}
+    try:
+        prev = json.loads((HOME / ".local/state/caelestia/scheme.json").read_text())
+    except Exception:
+        pass
+    mode = a.mode or prev.get("mode", "dark")
+    variant = a.variant or prev.get("variant", "content")
+    variant = ALIASES.get(variant, variant).replace("_", "-")
+    if variant not in VALID:
+        variant = "content"
+    c = build(img, mode, variant, a.pull, a.cap, a.sat)
+    seq = sequences(c)
+    write(state / "scheme.json", json.dumps({"name": "dynamic", "flavour": "hard", "mode": mode,
+                                             "variant": variant, "colours": c}, indent=2))
+    write(state / "wallpaper/path.txt", str(img))
+    write(state / "sequences.txt", seq)
+    write(hypr / "current.lua", "return {" + chr(10) + "".join("  %s = %s,%s" % (k, json.dumps(v), chr(10)) for k, v in c.items()) + "}" + chr(10))
+    if a.preview:
+        preview(c)
+    if live:
+        broadcast(seq)
+        subprocess.run([str(HOME / ".local/bin/scheme-extras")])
+        subprocess.run([str(HOME / ".local/bin/raw-theme")])
+        subprocess.run(["hyprctl", "reload"], capture_output=True)
+
+
+if __name__ == "__main__":
+    main()

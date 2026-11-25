@@ -20,8 +20,6 @@ case $kind in
     sed -i "s/^gtk-icon-theme-name=.*/gtk-icon-theme-name=$t/" "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini"
     sed -i "s/^icon_theme=.*/icon_theme=$t/" "$HOME/.config/qt6ct/qt6ct.conf" 2>/dev/null || true
     sed -i "s/^icon-theme=.*/icon-theme=$t/" "$HOME/.config/fuzzel/fuzzel.ini" "$HOME/.local/bin/raw-theme"
-    tmp=$(mktemp)
-    jq --arg t "$t" ".theme.iconThemeDark = \$t | .theme.iconThemeLight = \$t" "$HOME/.config/caelestia/cli.json" > "$tmp" && mv "$tmp" "$HOME/.config/caelestia/cli.json"
     ;;
   "Cursor theme")
     t=$(list_themes cursors | pick "Cursor: ") || exit 0

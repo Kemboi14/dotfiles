@@ -50,7 +50,7 @@
 <name>Set as wallpaper</name>
 <submenu></submenu>
 <unique-id>1762160000000004-1</unique-id>
-<command>caelestia wallpaper -f %f</command>
+<command>/home/nick/.local/bin/scheme-gen %f</command>
 <description>Set as wallpaper and re-theme the desktop</description>
 <range></range>
 <patterns>*.jpg;*.jpeg;*.png;*.webp</patterns>
