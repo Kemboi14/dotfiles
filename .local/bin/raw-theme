@@ -8,8 +8,16 @@ state = home / ".local/state/caelestia"
 raw = os.environ.get("SCHEME_COLOURS")
 c = json.loads(raw) if raw else json.load(open(state / "scheme.json"))["colours"]
 def h(k): return "#" + c[k]
-keys = ["primary", "onPrimary", "secondary", "tertiary", "surface", "surfaceContainer",
-        "surfaceContainerHigh", "onSurface", "onSurfaceVariant", "outline", "error"]
+keys = [
+    "primary", "onPrimary", "primaryContainer",
+    "secondary", "onSecondary", "secondaryContainer",
+    "tertiary", "onTertiary", "tertiaryContainer",
+    "error", "onError", "success", "onSuccess",
+    "surface", "surfaceBright", "surfaceVariant",
+    "surfaceContainerLowest", "surfaceContainerLow",
+    "surfaceContainer", "surfaceContainerHigh", "surfaceContainerHighest",
+    "onSurface", "onSurfaceVariant", "outline", "outlineVariant",
+]
 
 # Waybar colors
 w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
@@ -17,8 +25,8 @@ w = home / ".config/waybar"; w.mkdir(parents=True, exist_ok=True)
 
 # mako (notifications)
 m = home / ".config/mako"; m.mkdir(parents=True, exist_ok=True)
-(m / "config").write_text(f"""font=FiraCode Nerd Font Propo 11
-background-color={h("surfaceContainer")}cc
+(m / "config").write_text(f"""font=JetBrainsMono Nerd Font Propo 11
+background-color={h("surfaceContainer")}c0
 text-color={h("onSurface")}
 border-color={h("primary")}
 progress-color=over {h("primary")}
@@ -96,8 +104,8 @@ _osd and subprocess.Popen(["swayosd-server"], start_new_session=True,
 # fuzzel (launcher and menus): frosted glass
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
-font=FiraCode Nerd Font Propo:size=10,Symbols Nerd Font:size=10
-icon-theme=Colloid-Grey
+font=JetBrainsMono Nerd Font Propo:size=10,Symbols Nerd Font:size=10
+icon-theme=Fluent-dark
 terminal=kitty
 layer=overlay
 width=34
@@ -181,4 +189,227 @@ try:
     subprocess.run(["pywalfox", "update"], capture_output=True, timeout=10)
 except Exception:
     pass
+# Kitty colors.conf and live reload
+_kc = home / ".config/kitty/colors.conf"
+_kc.parent.mkdir(parents=True, exist_ok=True)
+_k_lines = [
+    f"foreground {h('onSurface')}",
+    f"background {h('surface')}",
+    f"cursor {h('primary')}",
+    f"cursor_text_color {h('onPrimary')}",
+    f"selection_foreground {h('onPrimary')}",
+    f"selection_background {h('primary')}",
+    f"active_border_color {h('primary')}",
+    f"inactive_border_color {h('outline')}",
+    f"active_tab_foreground {h('onPrimary')}",
+    f"active_tab_background {h('primary')}",
+    f"inactive_tab_foreground {h('onSurfaceVariant')}",
+    f"inactive_tab_background {h('surfaceContainer')}",
+]
+for _i in range(16):
+    _k_lines.append(f"color{_i} {pal[f'color{_i}']}")
+_kc.write_text(chr(10).join(_k_lines) + chr(10))
+subprocess.run(["pkill", "-SIGUSR1", "-x", "kitty"], capture_output=True)
 
+# GTK3 & GTK4 CSS variables for Thunar and GTK apps
+_gtk_lines = [
+    f"@define-color accent_color {h('primary')};",
+    f"@define-color accent_fg_color {h('onPrimary')};",
+    f"@define-color accent_bg_color {h('primary')};",
+    f"@define-color window_bg_color {h('surface')};",
+    f"@define-color window_fg_color {h('onSurface')};",
+    f"@define-color headerbar_bg_color {h('surfaceContainer')};",
+    f"@define-color headerbar_fg_color {h('onSurface')};",
+    f"@define-color popover_bg_color {h('surfaceContainerHigh')};",
+    f"@define-color popover_fg_color {h('onSurface')};",
+    f"@define-color view_bg_color {h('surface')};",
+    f"@define-color view_fg_color {h('onSurface')};",
+    f"@define-color card_bg_color {h('surfaceContainer')};",
+    f"@define-color card_fg_color {h('onSurface')};",
+    "@define-color sidebar_bg_color @window_bg_color;",
+    "@define-color sidebar_fg_color @window_fg_color;",
+    "@define-color sidebar_border_color @window_bg_color;",
+    "@define-color sidebar_backdrop_color @window_bg_color;",
+    "@define-color theme_selected_bg_color alpha(@accent_color, 0.15);",
+    f"@define-color theme_selected_fg_color {h('primary')};",
+    f"@define-color thunar_bg {h('surfaceContainerLow')};",
+    f"@define-color thunar_accent {h('primary')};",
+    f"@define-color thunar_fg {h('onSurface')};",
+    "",
+    "@import " + chr(34) + "thunar.css" + chr(34) + ";",
+]
+_gtk_css = chr(10).join(_gtk_lines) + chr(10)
+for _gdir in (home / ".config/gtk-3.0", home / ".config/gtk-4.0"):
+    _gdir.mkdir(parents=True, exist_ok=True)
+    (_gdir / "gtk.css").write_text(_gtk_css)
+try:
+    _cur_theme = subprocess.run(["gsettings", "get", "org.gnome.desktop.interface", "gtk-theme"], capture_output=True, text=True).stdout.strip().strip(chr(39) + chr(34))
+    if _cur_theme:
+        subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", ""], capture_output=True)
+        subprocess.run(["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", _cur_theme], capture_output=True)
+except Exception:
+    pass
+
+# btop: wallpaper-following theme (transparent background)
+_btop = home / ".config/btop/themes"
+_btop.mkdir(parents=True, exist_ok=True)
+(_btop / "caelestia.theme").write_text(f"""theme[main_bg]=""
+theme[main_fg]={h('onSurface')}
+theme[title]={h('primary')}
+theme[hi_fg]={h('tertiary')}
+theme[selected_bg]={h('surfaceContainer')}
+theme[selected_fg]={h('primary')}
+theme[inactive_fg]={h('onSurfaceVariant')}
+theme[graph_text]={h('tertiary')}
+theme[meter_bg]={h('outlineVariant')}
+theme[proc_misc]={h('secondary')}
+theme[cpu_box]={h('primary')}
+theme[mem_box]={h('tertiary')}
+theme[net_box]={h('secondary')}
+theme[proc_box]={h('success')}
+theme[div_line]={h('outlineVariant')}
+theme[temp_start]={h('success')}
+theme[temp_mid]={h('secondary')}
+theme[temp_end]={h('error')}
+theme[cpu_start]={h('primary')}
+theme[cpu_mid]={h('secondary')}
+theme[cpu_end]={h('tertiary')}
+theme[free_start]={h('tertiary')}
+theme[free_mid]={h('secondary')}
+theme[free_end]={h('primary')}
+theme[cached_start]={h('secondary')}
+theme[cached_mid]={h('primary')}
+theme[cached_end]={h('tertiary')}
+theme[available_start]={h('success')}
+theme[available_mid]={h('secondary')}
+theme[available_end]={h('primary')}
+theme[used_start]={h('primary')}
+theme[used_mid]={h('tertiary')}
+theme[used_end]={h('error')}
+theme[download_start]={h('secondary')}
+theme[download_mid]={h('primary')}
+theme[download_end]={h('tertiary')}
+theme[upload_start]={h('tertiary')}
+theme[upload_mid]={h('secondary')}
+theme[upload_end]={h('error')}
+theme[process_start]={h('primary')}
+theme[process_mid]={h('secondary')}
+theme[process_end]={h('tertiary')}
+""")
+try:
+    subprocess.run(["pkill", "-SIGUSR2", "-x", "btop"], capture_output=True)
+except Exception:
+    pass
+
+# cava: wallpaper-following gradient
+_cava = home / ".config/cava"
+_cava.mkdir(parents=True, exist_ok=True)
+(_cava / "config").write_text(f"""# Cava config - colors follow wallpaper scheme (updated by raw-theme)
+[general]
+framerate = 60
+
+[input]
+method = pulse
+source = auto
+
+[output]
+method = ncurses
+style = stereo
+
+[color]
+gradient = 1
+gradient_count = 8
+gradient_color_1 = '{h('primary')}'
+gradient_color_2 = '{h('secondary')}'
+gradient_color_3 = '{h('tertiary')}'
+gradient_color_4 = '{h('success')}'
+gradient_color_5 = '{h('primary')}'
+gradient_color_6 = '{h('secondary')}'
+gradient_color_7 = '{h('tertiary')}'
+gradient_color_8 = '{h('error')}'
+
+[smoothing]
+noise_reduction = 85
+monstercat = 1
+waves = 0
+gravity = 120
+
+[eq]
+1 = 0.8
+2 = 0.9
+3 = 1.0
+4 = 1.1
+5 = 1.2
+""")
+try:
+    subprocess.run(["pkill", "-USR1", "-x", "cava"], capture_output=True)
+except Exception:
+    pass
+
+# fastfetch: wallpaper-following colors
+def _ff_ansi(hexcol):
+    hc = hexcol.lstrip('#')
+    r, g, b = int(hc[0:2],16), int(hc[2:4],16), int(hc[4:6],16)
+    return f"\033[38;2;{r};{g};{b}m"
+_ff_rst = "\033[0m"
+_ff = home / ".config/fastfetch"
+_ff.mkdir(parents=True, exist_ok=True)
+_ff_cfg = {
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "type": "builtin",
+    "source": "arch",
+    "color": {"1": h("primary"), "2": h("tertiary")},
+    "padding": {"top": 1, "left": 2, "right": 4}
+  },
+  "display": {
+    "separator": "  ❯  ",
+    "size": {"binaryPrefix": "si"},
+    "color": {"keys": h("primary"), "separator": h("secondary"), "title": h("tertiary")}
+  },
+  "modules": [
+    {"type":"custom","format": f"{_ff_ansi(h('primary'))}╭─── ✨ system ──────────────────────────{_ff_rst}"},
+    {"type":"command","key":"👤 Host      ","text":"echo \"$USER@$(cat /etc/hostname)\""},
+    {"type":"host","key":"💻 Machine   "},
+    {"type":"kernel","key":"🐧 Kernel    "},
+    {"type":"os","key":"🏹 Distro    "},
+    {"type":"wm","key":"🪟 WM        "},
+    {"type":"packages","key":"📦 Packages  "},
+    {"type":"shell","key":"🐚 Shell     "},
+    {"type":"terminal","key":"🐱 Terminal  "},
+    {"type":"custom","format": f"{_ff_ansi(h('secondary'))}├─── 🔩 hardware ────────────────────────{_ff_rst}"},
+    {"type":"brightness","key":"🔆 Brightness"},
+    {"type":"display","key":"📺 Resolution","format":"{width}x{height}"},
+    {"type":"uptime","key":"⏳ Uptime    "},
+    {"type":"cpu","key":"🧠 CPU       "},
+    {"type":"cpuusage","key":"📈 CPU Load  "},
+    {"type":"memory","key":"🐏 Memory    ","format":"{used} / {total}"},
+    {"type":"battery","key":"🔋 Battery   ","format":"{capacity} & {status}"},
+    {"type":"gpu","key":"🎮 GPU       "},
+    {"type":"custom","format": f"{_ff_ansi(h('tertiary'))}╰───────────────────────────────────────{_ff_rst}"},
+    "break",
+    {"type":"colors","symbol":"circle","paddingLeft":2}
+  ]
+}
+(_ff / "config.jsonc").write_text(json.dumps(_ff_cfg, indent=2, ensure_ascii=False) + "\n")
+
+# starship: wallpaper palette
+_starship = home / ".config/starship.toml"
+if _starship.exists():
+    import re as _re2
+    _st = _starship.read_text()
+    _pal = f"""[palettes.wallpaper]
+primary = "{h('primary')}"
+secondary = "{h('secondary')}"
+tertiary = "{h('tertiary')}"
+success = "{h('success')}"
+error = "{h('error')}"
+surface = "{h('surface')}"
+on_surface = "{h('onSurface')}"
+muted = "{h('onSurfaceVariant')}"
+"""
+    if '[palettes.wallpaper]' in _st:
+        _st = _re2.sub(r"\[palettes\.wallpaper\][\s\S]*?(?=\n\[|\Z)", _pal, _st)
+    else:
+        _st = _st.replace('palette = "wallpaper"', 'palette = "wallpaper"\n\n' + _pal, 1) if 'palette = "wallpaper"' in _st else 'palette = "wallpaper"\n\n' + _pal + "\n" + _st
+    _starship.write_text(_st)

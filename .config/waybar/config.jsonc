@@ -6,6 +6,7 @@
     "margin-left": 4,
     "margin-right": 4,
     "spacing": 0,
+    "reload_style_on_change": true,
     "modules-left": [
         "group/apps",
         "group/ws"
@@ -51,12 +52,14 @@
         }
     },
     "mpris": {
-        "max-length": 30,
-        "format": "\udb81\udf5a  {title}",
-        "format-paused": "{title}  {position}/{length}",
-        "title-len": 22,
+        "max-length": 24,
+        "format": "{title}",
+        "format-paused": "{title}",
+        "format-stopped": "",
+        "title-len": 18,
+        "artist-len": 12,
         "interval": 1,
-        "tooltip-format": "{artist} — {title}",
+        "tooltip-format": "{artist} — {title}\n{album}\n{position}/{length}",
         "on-click": "playerctl play-pause"
     },
     "pulseaudio": {
@@ -107,6 +110,8 @@
     "battery": {
         "interval": 10,
         "states": {
+            "medium": 50,
+            "low": 30,
             "warning": 20,
             "critical": 10
         },
@@ -265,30 +270,39 @@
     },
     "image#player-art": {
         "exec": "/home/nick/.local/bin/waybar-player art",
-        "size": 22,
+        "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
+        "size": 20,
         "interval": 2,
         "on-click": "playerctl play-pause"
     },
     "custom/cava": {
         "exec": "/home/nick/.local/bin/waybar-player cava",
+        "exec-if": "playerctl status 2>/dev/null | grep -q Playing",
         "format": "{}",
+        "hide-empty-text": true,
         "tooltip": false
     },
     "custom/player-prev": {
         "exec": "/home/nick/.local/bin/waybar-player icon prev",
+        "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
         "format": "{}",
+        "hide-empty-text": true,
         "tooltip": false,
         "on-click": "playerctl previous"
     },
     "custom/player-play": {
         "exec": "/home/nick/.local/bin/waybar-player icon play",
+        "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
         "format": "{}",
+        "hide-empty-text": true,
         "tooltip": false,
         "on-click": "playerctl play-pause"
     },
     "custom/player-next": {
         "exec": "/home/nick/.local/bin/waybar-player icon next",
+        "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
         "format": "{}",
+        "hide-empty-text": true,
         "tooltip": false,
         "on-click": "playerctl next"
     },
@@ -312,7 +326,7 @@
     },
     "group/ws": {
         "orientation": "horizontal",
-        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4"]
+        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]
     },
     "group/time": { "orientation": "horizontal", "modules": ["clock", "custom/weather"] },
     "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },

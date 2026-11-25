@@ -1,7 +1,18 @@
 add_newline = true
+palette = "wallpaper"
 format = """
 $directory$git_branch$git_status$python$rust$nodejs$golang$php$lua$c$cmd_duration
 $character"""
+
+[palettes.wallpaper]
+primary = "#a9cbe3"
+secondary = "#bbc8d3"
+tertiary = "#dabde2"
+success = "#62daa8"
+error = "#ffb4ab"
+surface = "#050606"
+on_surface = "#e3e2e4"
+muted = "#c2c7cc"
 
 
 [aws]
@@ -37,7 +48,7 @@ symbol = " "
 [directory]
 truncation_length = 3
 truncate_to_repo = true
-style = "bold blue"
+style = "bold primary"
 read_only = " 󰌾"
 
 [docker_context]
@@ -213,15 +224,15 @@ symbol = " "
 
 
 [character]
-success_symbol = "[❯](bold green)"
-error_symbol = "[❯](bold red)"
+success_symbol = "[❯](bold success)"
+error_symbol = "[❯](bold error)"
 
 [git_status]
-style = "bold yellow"
+style = "bold tertiary"
 
 [cmd_duration]
 min_time = 2000
-style = "bright-black"
+style = "muted"
 format = "took [$duration]($style) "
 
 [custom.transient_time]

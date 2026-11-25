@@ -31,8 +31,7 @@ hl.window_rule({ match = { class = "^code-oss$" },                              
 hl.window_rule({ match = { class = "^[Cc]ode$" },                                              opacity = 1.0 })
 hl.window_rule({ match = { class = "^code-url-handler$" },                                     opacity = 1.0 })
 hl.window_rule({ match = { class = "^code-insiders-url-handler$" },                            opacity = 1.0 })
-hl.window_rule({ match = { class = "^kitty$" },                                                opacity = 1.0 })
-hl.window_rule({ match = { class = "^foot$" },                                                 opacity = 1.0 })
+-- Terminals: let app/compositor transparency show through (kitty uses its own background_opacity)
 -- hl.window_rule({ match = { class = "^org\\.kde\\.dolphin$" },                                  opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^org\\.kde\\.ark$" },                                      opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^nwg-look$" },                                             opacity = 1.0 })
@@ -72,10 +71,19 @@ hl.window_rule({ match = { class = "^io\\.gitlab\\.adhami3310\\.Impression$" }, 
 -- hl.window_rule({ match = { class = "^io\\.missioncenter\\.MissionCenter$" },                   opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^io\\.github\\.flattool\\.Warehouse$" },                   opacity = 1.0 })
 
+-- File pickers / portals: float and center
+hl.window_rule({ match = { title = "(?i)^(open file|open files|save file|save as|open folder|select a file|choose files?|file upload).*" }, float = true, center = true, size = "60% 65%" })
+hl.window_rule({ match = { class = "(?i)^(xdg-desktop-portal-gtk|xdg-desktop-portal-gnome)$" }, float = true, center = true })
+
+-- Media / utility windows
+hl.window_rule({ match = { class = "(?i)^mpv$" }, float = true, center = true, size = "60% 60%" })
+hl.window_rule({ match = { class = "(?i)^(nm-connection-editor|blueman-manager|org.gnome.seahorse.application)$" }, float = true, center = true })
+
 -- Misc rules
 hl.window_rule({ match = { class = "^.*jetbrains.*$", title = "^win[0-9]+$" }, no_initial_focus = true })
 
--- Noctalia layer blur
+-- Never dim/lock/sleep while any window is fullscreen
+hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })
 
 -- Ignore maximize requests from apps; tiling decides window size
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
