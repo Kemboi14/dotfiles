@@ -13,7 +13,6 @@ bluez-utils
 brightnessctl
 btop
 btrfs-progs
-caelestia-cli
 candy-icons-git
 cava
 chaotic-keyring
@@ -126,7 +125,6 @@ qt6-multimedia-ffmpeg
 qt6-virtualkeyboard
 qt6-wayland
 qt6-websockets
-quickshell
 ripgrep
 rofimoji
 rtkit
