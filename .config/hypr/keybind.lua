@@ -41,9 +41,6 @@ local KEY = {
 	MOVE_SWAP_UP = ("%s + SHIFT + CTRL + up"):format(mainMod),
 	MOVE_SWAP_DOWN = ("%s + SHIFT + CTRL + down"):format(mainMod),
 
-	SHOT_WINDOW = ("%s + PRINT"):format(mainMod),
-	SHOT_ANNOTATE = ("%s + A"):format(mainMod),
-
 	WORKSPACE_NEXT = ("%s + CTRL + right"):format(mainMod),
 	WORKSPACE_PREV = ("%s + CTRL + left"):format(mainMod),
 	WORKSPACE_EMPTY = ("%s + CTRL + down"):format(mainMod),
@@ -156,5 +153,24 @@ hl.bind(("%s + SHIFT + G"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") ..
 hl.bind(("%s + SHIFT + I"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/theme-switch"), { description = "Theme switcher" })
 
 hl.bind(("%s + SHIFT + P"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/power-profile"), { description = "Cycle power profile" })
+
+-- 10. Scratchpad / special workspace
+hl.bind(("%s + grave"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch togglespecialworkspace scratchpad"), { description = "Toggle scratchpad" })
+hl.bind(("%s + SHIFT + grave"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch movetoworkspacesilent special:scratchpad"), { description = "Move window to scratchpad" })
+
+-- 11. Window/layout helpers
+hl.bind(("%s + O"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch togglesplit"), { description = "Toggle split" })
+hl.bind(("%s + P"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch pin"), { description = "Pin floating window" })
+hl.bind(("%s + SHIFT + C"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch centerwindow"), { description = "Center floating window" })
+
+-- 12. Monitor focus/move
+hl.bind(("%s + ALT + right"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch focusmonitor +1"), { description = "Focus next monitor" })
+hl.bind(("%s + ALT + left"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch focusmonitor -1"), { description = "Focus previous monitor" })
+hl.bind(("%s + ALT + SHIFT + right"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch movewindow mon:+1"), { description = "Move window to next monitor" })
+hl.bind(("%s + ALT + SHIFT + left"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch movewindow mon:-1"), { description = "Move window to previous monitor" })
+
+-- 13. Quick toggles
+hl.bind(("%s + SHIFT + B"):format(mainMod), hl.dsp.exec_cmd("pkill -SIGUSR1 waybar || waybar &"), { description = "Toggle/reload Waybar" })
+hl.bind(("%s + F11"):format(mainMod), hl.dsp.exec_cmd([[bash -c 'hyprctl keyword animations:enabled $(hyprctl getoption animations:enabled -j | jq -r "if .int==1 then \"false\" else \"true\" end"); hyprctl keyword decoration:blur:enabled $(hyprctl getoption decoration:blur:enabled -j | jq -r "if .int==1 then \"false\" else \"true\" end")']]), { description = "Toggle game/perf mode" })
 
 return true

@@ -105,7 +105,7 @@ _osd and subprocess.Popen(["swayosd-server"], start_new_session=True,
 f = home / ".config/fuzzel"; f.mkdir(parents=True, exist_ok=True)
 (f / "fuzzel.ini").write_text(f"""[main]
 font=JetBrainsMono Nerd Font Propo:size=10,Symbols Nerd Font:size=10
-icon-theme=Fluent-dark
+icon-theme=Colloid-Dark
 terminal=kitty
 layer=overlay
 width=34
@@ -413,3 +413,41 @@ muted = "{h('onSurfaceVariant')}"
     else:
         _st = _st.replace('palette = "wallpaper"', 'palette = "wallpaper"\n\n' + _pal, 1) if 'palette = "wallpaper"' in _st else 'palette = "wallpaper"\n\n' + _pal + "\n" + _st
     _starship.write_text(_st)
+
+# waypaper: follow wallpaper scheme
+_wp_style = home / ".config/waypaper/style.css"
+_wp_style.parent.mkdir(parents=True, exist_ok=True)
+_wp_style.write_text(f"""/* Waypaper theme - follows wallpaper scheme (generated/updated by raw-theme) */
+window, .background {{
+    background-color: {h('surface')};
+    color: {h('onSurface')};
+}}
+
+flowboxchild:selected {{
+    background-color: {h('primary')};
+    color: {h('onPrimary')};
+    border-radius: 10px;
+}}
+
+flowboxchild:hover {{
+    background-color: {h('surfaceContainer')};
+    border-radius: 10px;
+}}
+
+button {{
+    background-color: {h('surfaceContainer')};
+    color: {h('onSurface')};
+    border-radius: 8px;
+    border: 1px solid {h('outlineVariant')};
+}}
+
+button:hover {{
+    background-color: {h('surfaceContainerHigh')};
+    border-color: {h('primary')};
+}}
+
+highlight, .accent {{
+    background-color: {h('primary')};
+    color: {h('onPrimary')};
+}}
+""")

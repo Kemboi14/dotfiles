@@ -1,0 +1,33 @@
+/* Waypaper theme - follows wallpaper scheme (generated/updated by raw-theme) */
+window, .background {
+    background-color: #050606;
+    color: #e3e2e4;
+}
+
+flowboxchild:selected {
+    background-color: #a9cbe3;
+    color: #0f3447;
+    border-radius: 10px;
+}
+
+flowboxchild:hover {
+    background-color: #080909;
+    border-radius: 10px;
+}
+
+button {
+    background-color: #080909;
+    color: #e3e2e4;
+    border-radius: 8px;
+    border: 1px solid #42474c;
+}
+
+button:hover {
+    background-color: #0b0c0c;
+    border-color: #a9cbe3;
+}
+
+highlight, .accent {
+    background-color: #a9cbe3;
+    color: #0f3447;
+}
