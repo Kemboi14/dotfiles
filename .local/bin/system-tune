@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# One-time root tuning for heavy dev work (kernel/Rust builds, ML, VMs) on this laptop.
+# Review, then run:  system-tune          revert with:  system-tune --revert
+set -euo pipefail
+SYSCTL=/etc/sysctl.d/99-dev-tuning.conf
+ZRAM=/etc/systemd/zram-generator.conf
+
+if [[ ${1:-} == --revert ]]; then
+  sudo rm -f "$SYSCTL"
+  printf '[zram0]\ncompression-algorithm = zstd\n' | sudo tee "$ZRAM" >/dev/null
+  sudo rm -f /etc/systemd/system/user@.service.d/10-oomd.conf; sudo systemctl daemon-reload
+  sudo systemctl disable --now systemd-oomd.service || true
+  sudo sysctl --system >/dev/null
+  echo "Reverted (zram size applies after reboot)."; exit 0
+fi
+
+# 1. zram: half of RAM (~12 GB of compressed swap) instead of the 4 GB cap.
+#    Big link/LTO steps and ML notebooks swap into fast compressed RAM instead of stalling.
+printf '[zram0]\nzram-size = ram / 2\ncompression-algorithm = zstd\nswap-priority = 100\n' | sudo tee "$ZRAM" >/dev/null
+
+# 2. VM settings tuned for zram (same values Fedora/Pop!_OS use with zram swap),
+#    plus perf access for profiling your own processes without root.
+sudo tee "$SYSCTL" >/dev/null <<'EOF'
+vm.swappiness = 180
+vm.page-cluster = 0
+vm.watermark_boost_factor = 0
+vm.watermark_scale_factor = 125
+kernel.perf_event_paranoid = 1
+EOF
+sudo sysctl --system >/dev/null
+
+# 3. OOM protection: no OOM daemon is running, so a runaway build can freeze the desktop.
+#    systemd-oomd (built into systemd) kills the offending cgroup under memory pressure.
+#    Scoped to user@.service (terminals get their own scopes there); never the
+#    session scope that holds Hyprland itself.
+sudo mkdir -p /etc/systemd/system/user@.service.d
+printf '[Service]\nManagedOOMMemoryPressure=kill\nManagedOOMMemoryPressureLimit=50%%\n' | sudo tee /etc/systemd/system/user@.service.d/10-oomd.conf >/dev/null
+sudo systemctl daemon-reload
+sudo systemctl enable --now systemd-oomd.service
+
+# 4. Re-create zram with the new size (it is unused right now, so this is safe).
+if [[ $(swapon --noheadings --show=USED /dev/zram0 2>/dev/null | tr -d ' ') =~ ^0B?$ ]]; then
+  sudo systemctl restart systemd-zram-setup@zram0.service
+else
+  echo "zram in use; new size applies after reboot."
+fi
+
+swapon --show; sysctl vm.swappiness kernel.perf_event_paranoid
+systemctl is-active systemd-oomd

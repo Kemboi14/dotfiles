@@ -45,7 +45,8 @@
             "custom/ws2",
             "custom/ws3",
             "custom/ws4",
-            "custom/ws5"
+            "custom/ws5",
+            "custom/scratch"
         ]
     },
     "custom/ws1": {
@@ -102,6 +103,16 @@
         "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
         "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
         "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/scratch": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-ws/scratch.json\" 2>/dev/null || ~/.local/bin/ws-status scratch",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "hide-empty-text": true,
+        "tooltip": true,
+        "on-click": "hyprctl dispatch 'hl.dsp.workspace.toggle_special(\"scratchpad\")'"
     },
     "group/center": {
         "orientation": "horizontal",
@@ -190,14 +201,6 @@
         "hide-empty-text": true,
         "tooltip": false,
         "on-click": "playerctl next"
-    },
-    "group/stats": {
-        "orientation": "horizontal",
-        "modules": [
-            "cpu",
-            "temperature",
-            "memory"
-        ]
     },
     "cpu": {
         "interval": 3,

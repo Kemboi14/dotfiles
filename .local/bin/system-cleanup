@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Remove packages verified unused on 2026-11-26. Review, then run:  system-cleanup
+#   grub, update-grub        boot is systemd-boot (EFI entry "Linux Boot Manager"); GRUB has no boot entry
+#   swappy                   the screenshot script uses satty
+#   mangohud (+lib32)        no Steam/Lutris/gamescope; pulls 58 lib32 libs and python-matplotlib (dep-only)
+#   6 icon themes            Colloid-Dark is active, Papirus is used by mako, Adwaita is the fallback
+#   qt6-virtualkeyboard      only used by SDDM's InputMethod line, which this script removes first
+#   python-six, xfsprogs     orphans (no XFS filesystems)
+set -euo pipefail
+
+# The greeter must stop asking for the virtual keyboard before its module goes away.
+sudo sed -i '/^InputMethod=qtvirtualkeyboard$/d' /etc/sddm.conf.d/*.conf /etc/sddm.conf 2>/dev/null || true
+if grep -qs '^InputMethod=qtvirtualkeyboard' /etc/sddm.conf.d/*.conf /etc/sddm.conf; then
+  echo "SDDM still references qtvirtualkeyboard; not removing it." >&2; exit 1
+fi
+
+pkgs=(grub update-grub swappy mangohud lib32-mangohud
+      candy-icons-git fluent-icon-theme-git kora-icon-theme mcmojave-circle-icon-theme-git
+      tela-icon-theme whitesur-icon-theme qt6-virtualkeyboard python-six xfsprogs)
+installed=(); for p in "${pkgs[@]}"; do pacman -Qq "$p" &>/dev/null && installed+=("$p"); done
+((${#installed[@]})) && sudo pacman -Rns "${installed[@]}"
+
+# Anything that became an orphan as a result
+while orphans=$(pacman -Qdtq) && [[ -n $orphans ]]; do
+  echo "Orphans: $orphans"; sudo pacman -Rns $orphans || break
+done
+
+sudo gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor 2>/dev/null || true
+echo "Done. $(pacman -Qq | wc -l) packages installed."

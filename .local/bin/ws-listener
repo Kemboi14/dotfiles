@@ -2,17 +2,35 @@
 """Waybar workspace buttons, rendered in one pass per Hyprland event.
 
 Talks to Hyprland's IPC sockets directly (no hyprctl/jq processes), writes
-$XDG_RUNTIME_DIR/waybar-ws/<n>.json for workspaces 1-5, then signals Waybar
-(RTMIN+8). Each custom/wsN module just `cat`s its file.
+$XDG_RUNTIME_DIR/waybar-ws/<n>.json for workspaces 1-5 (plus scratch.json for
+the special:scratchpad workspace), then signals Waybar (RTMIN+8). Each
+custom/wsN module just `cat`s its file.
+
+  ws-listener            run the event loop (systemd: ws-listener.service)
+  ws-listener --print N  print one button's JSON and exit (fallback for Waybar)
 """
-import json, os, socket, subprocess, time
+import glob, json, os, socket, subprocess, sys, time
 
 WS = range(1, 6)
 RUN = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
-HYPR = os.path.join(RUN, "hypr", os.environ["HYPRLAND_INSTANCE_SIGNATURE"])
+SCRATCH = "special:scratchpad"
+
+
+def hypr_dir() -> str:
+    """Current Hyprland instance dir; re-resolved so a Hyprland restart is picked up."""
+    sig = os.environ.get("HYPRLAND_INSTANCE_SIGNATURE", "")
+    d = os.path.join(RUN, "hypr", sig)
+    if sig and os.path.exists(os.path.join(d, ".socket.sock")):
+        return d
+    dirs = sorted(glob.glob(os.path.join(RUN, "hypr", "*", ".socket.sock")), key=os.path.getmtime)
+    if not dirs:
+        raise OSError("no Hyprland instance")
+    return os.path.dirname(dirs[-1])
+
 OUT = os.path.join(RUN, "waybar-ws")
 EVENTS = (b"workspace>>", b"workspacev2>>", b"openwindow>>", b"closewindow>>",
-          b"movewindow>>", b"movewindowv2>>", b"focusedmon>>", b"windowtitlev2>>")
+          b"movewindow>>", b"movewindowv2>>", b"focusedmon>>", b"windowtitlev2>>",
+          b"activespecial>>", b"activespecialv2>>")
 
 # Hollow/solid shape per workspace (Material Design Icons)
 SHAPES = {1: (0xF0765, 0xF0766), 2: (0xF0536, 0xF0537), 3: (0xF0764, 0xF0763),
@@ -50,7 +68,7 @@ def icon_for(cls: str) -> str:
 def request(cmd: str):
     with socket.socket(socket.AF_UNIX) as s:
         s.settimeout(2)
-        s.connect(os.path.join(HYPR, ".socket.sock"))
+        s.connect(os.path.join(hypr_dir(), ".socket.sock"))
         s.sendall(cmd.encode())
         data = b""
         while chunk := s.recv(65536):
@@ -58,33 +76,57 @@ def request(cmd: str):
     return json.loads(data)
 
 
+def apps_on(clients, match):
+    apps = []
+    for c in clients:
+        cls = c.get("class") or ""
+        if match(c.get("workspace", {})) and cls and cls not in apps:
+            apps.append(cls)
+    return apps
+
+
+def icons_for(apps):
+    icons = []
+    for a in apps:
+        ic = icon_for(a.lower())
+        if ic not in icons:
+            icons.append(ic)
+    return " ".join(icons)
+
+
+def button(ws, clients, active):
+    apps = apps_on(clients, lambda w: w.get("id") == ws)
+    classes = ["occupied"] if apps else ["empty"]
+    if ws == active:
+        classes.append("active")
+    return {"text": icons_for(apps) if apps else chr(SHAPES[ws][1]), "class": classes,
+            "tooltip": f"{ws}  " + (" · ".join(apps) if apps else "empty")}
+
+
+def scratch_button(clients, monitors):
+    apps = apps_on(clients, lambda w: w.get("name") == SCRATCH)
+    if not apps:
+        return {"text": "", "class": ["empty"]}  # hidden when nothing is parked there
+    shown = any((m.get("specialWorkspace") or {}).get("name") == SCRATCH for m in monitors)
+    return {"text": "\U000F0AAB " + icons_for(apps), "class": ["occupied"] + (["active"] if shown else []),
+            "tooltip": "Scratchpad  " + " · ".join(apps)}
+
+
+def write(name, data):
+    path = os.path.join(OUT, f"{name}.json")
+    with open(path + ".tmp", "w") as f:
+        json.dump(data, f, ensure_ascii=False)
+    os.replace(path + ".tmp", path)
+
+
 def render():
     clients = request("j/clients")
     active = request("j/activeworkspace").get("id")
+    monitors = request("j/monitors")
     os.makedirs(OUT, exist_ok=True)
     for ws in WS:
-        apps = []
-        for c in clients:
-            if c.get("workspace", {}).get("id") != ws:
-                continue
-            cls = c.get("class") or ""
-            if cls and cls not in apps:
-                apps.append(cls)
-        full, empty = SHAPES[ws]
-        icons = []
-        for a in apps:
-            ic = icon_for(a.lower())
-            if ic not in icons:
-                icons.append(ic)
-        text = " ".join(icons) if icons else chr(empty)
-        classes = ["occupied"] if apps else ["empty"]
-        tooltip = f"{ws}  " + (" · ".join(apps) if apps else "empty")
-        if ws == active:
-            classes.append("active")
-        path = os.path.join(OUT, f"{ws}.json")
-        with open(path + ".tmp", "w") as f:
-            json.dump({"text": text, "class": classes, "tooltip": tooltip}, f, ensure_ascii=False)
-        os.replace(path + ".tmp", path)
+        write(ws, button(ws, clients, active))
+    write("scratch", scratch_button(clients, monitors))
     subprocess.run(["pkill", "-RTMIN+8", "-x", "waybar"])
 
 
@@ -93,7 +135,7 @@ def main():
         try:
             render()
             with socket.socket(socket.AF_UNIX) as s:
-                s.connect(os.path.join(HYPR, ".socket2.sock"))
+                s.connect(os.path.join(hypr_dir(), ".socket2.sock"))
                 buf = b""
                 while chunk := s.recv(4096):
                     buf += chunk
@@ -114,4 +156,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) == 3 and sys.argv[1] == "--print":
+        try:
+            if sys.argv[2] == "scratch":
+                out = scratch_button(request("j/clients"), request("j/monitors"))
+            else:
+                out = button(int(sys.argv[2]), request("j/clients"), request("j/activeworkspace").get("id"))
+        except (OSError, ValueError):
+            out = {"text": "\u25cf", "class": ["empty"]}
+        print(json.dumps(out, ensure_ascii=False))
+    else:
+        main()

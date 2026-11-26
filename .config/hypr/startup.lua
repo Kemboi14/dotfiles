@@ -13,7 +13,7 @@ local exec_once = {
     "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 || /usr/libexec/polkit-gnome-authentication-agent-1",
     "gnome-keyring-daemon --start --components=secrets",
     "systemctl --user start --ignore-dependencies xdg-desktop-portal-hyprland.service xdg-desktop-portal.service",
-    "/home/nick/.local/bin/ws-listener",
+    "systemctl --user restart ws-listener.service",
     "wl-paste --watch cliphist store",
     "swayosd-server",
     "mako",

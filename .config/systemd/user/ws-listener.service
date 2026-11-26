@@ -1,0 +1,12 @@
+[Unit]
+Description=Waybar workspace buttons (Hyprland IPC listener)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/ws-listener
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Second round of root tuning: Nix builds, package cache, pre-update snapshots.
+# Run:  system-tune-2        revert:  system-tune-2 --revert
+set -euo pipefail
+NIXCONF=/etc/nix/nix.conf
+MARK="# --- dev tuning (system-tune-2) ---"
+
+if [[ ${1:-} == --revert ]]; then
+  sudo sed -i "/^$MARK\$/,\$d" "$NIXCONF"
+  sudo systemctl restart nix-daemon.service
+  sudo systemctl disable --now paccache.timer nix-gc.timer || true
+  sudo rm -f /etc/systemd/system/nix-gc.{service,timer}; sudo systemctl daemon-reload
+  echo "Reverted. (snap-pac stays installed; remove with: sudo pacman -R snap-pac)"; exit 0
+fi
+
+# 1. Nix: build independent derivations in parallel, hard-link identical store files,
+#    and keep dev-shell inputs alive so nix-direnv shells survive garbage collection.
+if ! grep -qxF "$MARK" "$NIXCONF"; then
+  sudo tee -a "$NIXCONF" >/dev/null <<EOF
+$MARK
+max-jobs = auto
+cores = 0
+auto-optimise-store = true
+keep-outputs = true
+keep-derivations = true
+EOF
+fi
+sudo systemctl restart nix-daemon.service
+
+# 2. Weekly Nix garbage collection (drops generations older than 14 days;
+#    nix-direnv GC roots keep your project shells).
+sudo tee /etc/systemd/system/nix-gc.service >/dev/null <<'EOF'
+[Unit]
+Description=Nix garbage collection
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/nix-collect-garbage --delete-older-than 14d
+Nice=19
+IOSchedulingClass=idle
+EOF
+sudo tee /etc/systemd/system/nix-gc.timer >/dev/null <<'EOF'
+[Unit]
+Description=Weekly Nix garbage collection
+[Timer]
+OnCalendar=weekly
+Persistent=true
+RandomizedDelaySec=1h
+[Install]
+WantedBy=timers.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable --now nix-gc.timer
+
+# 3. Pacman cache: keep the last 3 versions of each package (weekly).
+sudo systemctl enable --now paccache.timer
+sudo paccache -rk3
+
+# 4. Snapshot before and after every pacman transaction (rollback after a bad update).
+sudo pacman -S --needed --noconfirm snap-pac
+
+# 5. Greeter: drop the Qt virtual-keyboard input method (no touchscreen; it only slows SDDM's start).
+sudo sed -i '/^InputMethod=qtvirtualkeyboard$/d' /etc/sddm.conf.d/*.conf /etc/sddm.conf 2>/dev/null || true
+
+echo; nix config show 2>/dev/null | grep -E '^(max-jobs|auto-optimise-store|keep-outputs) '
+systemctl is-enabled nix-gc.timer paccache.timer
+du -sh /var/cache/pacman/pkg

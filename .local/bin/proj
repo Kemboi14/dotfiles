@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Project launcher: pick a git repo (most-used first) and open a terminal there.
+#   proj            fuzzel picker -> kitty in the repo
+#   proj --list     print the candidate list
+# Repos with .envrc load their dev shell through direnv; a flake.nix without
+# .envrc opens straight into `nix develop`.
+set -uo pipefail
+
+list() {
+  {
+    # Frecent directories first (zoxide), then everything else found on disk.
+    zoxide query -l 2>/dev/null
+    fd -H -t d -d 4 '^\.git$' "$HOME" \
+      -E .cache -E .local -E .cargo -E .rustup -E node_modules -E snapd -E .nix-defexpr \
+      -x dirname {} 2>/dev/null | sort
+  } | awk '!seen[$0]++' | while IFS= read -r d; do
+    [[ -d $d/.git ]] || continue
+    tag=""
+    [[ -e $d/flake.nix ]] && tag+=" ❄"
+    [[ -e $d/Cargo.toml ]] && tag+=" 🦀"
+    [[ -e $d/__manifest__.py || -e $d/odoo-bin ]] && tag+=" 🅾"
+    [[ -e $d/pyproject.toml || -e $d/requirements.txt ]] && tag+=" 🐍"
+    printf '%s%s\n' "${d/#$HOME/\~}" "$tag"
+  done
+}
+
+[[ ${1:-} == --list ]] && { list; exit 0; }
+
+choice=$(list | fuzzel --dmenu --prompt "  " --width 60) || exit 0
+dir=${choice%% [❄🦀🅾🐍]*}
+dir=${dir/#\~/$HOME}
+[[ -d $dir ]] || exit 1
+zoxide add "$dir" 2>/dev/null
+
+if [[ ! -e $dir/.envrc && -e $dir/flake.nix ]]; then
+  exec kitty --directory "$dir" nix develop --command fish
+fi
+exec kitty --directory "$dir"

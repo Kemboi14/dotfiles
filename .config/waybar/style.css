@@ -39,7 +39,6 @@ window#waybar.hidden {
 #apps,
 #ws,
 #center,
-#stats,
 #system,
 #alerts,
 #traydrawer {
@@ -55,7 +54,6 @@ window#waybar.hidden {
 #apps:hover,
 #ws:hover,
 #center:hover,
-#stats:hover,
 #system:hover,
 #alerts:hover,
 #traydrawer:hover {
@@ -436,4 +434,16 @@ tooltip label {
 #custom-ws1.active, #custom-ws2.active, #custom-ws3.active,
 #custom-ws4.active, #custom-ws5.active {
   padding: 0 12px;
+}
+
+/* Scratchpad button: only shown while something is parked there */
+#custom-scratch {
+  color: @tertiary;
+  padding: 0 10px;
+  margin: 5px 1px;
+  border-radius: 999px;
+}
+#custom-scratch.active {
+  color: @onPrimary;
+  background: linear-gradient(135deg, @tertiary, @primary);
 }

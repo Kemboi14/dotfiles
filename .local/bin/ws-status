@@ -1,44 +1,4 @@
 #!/usr/bin/env bash
-# Waybar workspace button: a shape per workspace (hollow when empty, solid when used) plus app icons.
-set -u
-ws=${1:-1}
-active=$(hyprctl activeworkspace -j 2>/dev/null | jq -r ".id")
-
-shape() {
-  case "$ws:$1" in
-    1:full) printf "\U000F0765" ;; 1:empty) printf "\U000F0766" ;;
-    2:full) printf "\U000F0536" ;; 2:empty) printf "\U000F0537" ;;
-    3:full) printf "\U000F0764" ;; 3:empty) printf "\U000F0763" ;;
-    4:full) printf "\U000F08D1" ;; 4:empty) printf "\U000F08D2" ;;
-    5:full) printf "\U000F02D8" ;; 5:empty) printf "\U000F02D9" ;;
-    *:full) printf "\U000F04CE" ;; *) printf "\U000F04D2" ;;
-  esac
-}
-
-icon_for() {
-  case $1 in
-    kitty|foot|alacritty|*terminal*) printf "\U000F018D" ;;
-    nvim|*neovim*) printf "\uE62B" ;;
-    firefox*|*librewolf*|*zen*) printf "\U000F0239" ;;
-    *chrome*|*chromium*|*brave*|*helium*) printf "\U000F02AF" ;;
-    thunar|*nautilus*|*files*) printf "\U000F024B" ;;
-    slack) printf "\U000F04B1" ;;
-    *karere*|*whatsapp*|*zapzap*) printf "\U000F05A3" ;;
-    *telegram*) printf "\uF2C6" ;;
-    *discord*|*vesktop*) printf "\U000F066F" ;;
-    *spotify*) printf "\U000F04C7" ;;
-    mpv|*vlc*|*celluloid*) printf "\U000F0567" ;;
-    *libreoffice*|*soffice*) printf "\U000F0219" ;;
-    *obsidian*) printf "\U000F00BD" ;;
-    *ghidra*) printf "\U000F00E4" ;;
-    *steam*) printf "\U000F04D3" ;;
-    *code*|*codium*) printf "\U000F0A1E" ;;
-    *) printf "\U000F08C6" ;;
-  esac
-}
-
-count=$(hyprctl clients -j 2>/dev/null | jq --argjson w "$ws" '[.[] | select(.workspace.id == $w)] | length')
-# Same minimal dots as ws-listener (CSS shapes them); used only if the listener isn't running.
-if (( ${count:-0} > 0 )); then cls="\"occupied\""; else cls="\"empty\""; fi
-[[ $ws == "$active" ]] && cls="$cls,\"active\""
-printf '{"text":"\u25cf","class":[%s]}\n' "$cls"
+# Fallback for Waybar's workspace buttons when ws-listener's cache is missing.
+# Same rendering as the listener: ws-status <1-5|scratch>
+exec "$HOME/.local/bin/ws-listener" --print "${1:-1}"
