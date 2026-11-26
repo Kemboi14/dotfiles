@@ -51,8 +51,6 @@ hl.window_rule({ match = { tag = "picture-in-picture" }, float = true, pin = tru
 hl.window_rule({ match = { class = "^com\\.github\\.rafostar\\.Clapper$" },                    opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^com\\.github\\.tchx84\\.Flatseal$" },                     opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^hu\\.kramo\\.Cartridges$" },                              opacity = 1.0 })
-hl.window_rule({ match = { class = "^com\\.obsproject\\.Studio$" },                            opacity = 1.0 })
-hl.window_rule({ match = { class = "^gnome-boxes$" },                                          opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^vesktop$" },                                              opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^discord$" },                                              opacity = 1.0 })
 -- hl.window_rule({ match = { class = "^WebCord$" },                                              opacity = 1.0 })
