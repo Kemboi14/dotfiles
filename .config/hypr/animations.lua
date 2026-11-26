@@ -1,1 +1,1 @@
-require("animations.springy")
+require("animations.calm")

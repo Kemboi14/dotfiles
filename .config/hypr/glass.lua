@@ -7,7 +7,7 @@ hl.config({
         blur = {
             enabled = true,
             size = 8,
-            passes = 4,
+            passes = 3,
             new_optimizations = true,
             xray = false,
             noise = 0.02,
@@ -16,6 +16,8 @@ hl.config({
             contrast = 0.95,
             brightness = 0.9,
             popups = true,
+            ignore_opacity = true,
+            special = true,
         },
         shadow = {
             enabled = true,
@@ -28,3 +30,6 @@ hl.config({
 
 -- Blur behind the bar, notifications, menus and OSD
 hl.layer_rule({ match = { namespace = "^(waybar|notifications|launcher|swayosd)$" }, blur = true, ignore_alpha = 0.3 })
+
+-- Fullscreen games/video bypass the compositor (less GPU work, lower latency).
+hl.config({ render = { direct_scanout = 2 } })

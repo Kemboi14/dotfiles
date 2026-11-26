@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Screen recording with gpu-screen-recorder.
+#   screenrec [toggle]   start (screen + desktop audio) or stop the recording
+#   screenrec region     start recording a slurp-selected region
+#   screenrec status     Waybar JSON (hidden when idle)
+set -uo pipefail
+dir="$HOME/Videos/Recordings"
+state="${XDG_RUNTIME_DIR:-/tmp}/screenrec.file"
+running() { pgrep -x gpu-screen-reco >/dev/null; }
+
+case ${1:-toggle} in
+  status)
+    if running; then
+      start=$(stat -c %Y "$state" 2>/dev/null || date +%s)
+      el=$(( $(date +%s) - start ))
+      printf '{"text":"󰑋 %02d:%02d","class":"recording","tooltip":"Recording — click to stop\\n%s"}\n' \
+        $((el / 60)) $((el % 60)) "$(cat "$state" 2>/dev/null)"
+    else
+      echo '{"text":"","class":"idle"}'
+    fi
+    exit 0 ;;
+  toggle|region)
+    if running; then
+      pkill -SIGINT -x gpu-screen-reco
+      for _ in $(seq 20); do running || break; sleep 0.2; done
+      notify-send -a screenrec "Recording saved" "$(cat "$state" 2>/dev/null)"
+      rm -f "$state"
+      pkill -RTMIN+9 -x waybar
+      exit 0
+    fi
+    mkdir -p "$dir"
+    file="$dir/$(date +%Y-%m-%d_%H-%M-%S).mp4"
+    args=(-w eDP-1)
+    if [[ ${1:-} == region ]]; then
+      geom=$(slurp -f '%wx%h+%x+%y') || exit 0
+      args=(-w region -region "$geom")
+    fi
+    echo "$file" > "$state"
+    setsid gpu-screen-recorder "${args[@]}" -f 60 -a default_output -o "$file" >/dev/null 2>&1 &
+    # Update the bar timer once a second, only while the recorder is alive.
+    setsid bash -c 'sleep 0.5; while pgrep -x gpu-screen-reco >/dev/null; do pkill -RTMIN+9 -x waybar; sleep 1; done; pkill -RTMIN+9 -x waybar' >/dev/null 2>&1 &
+    pkill -RTMIN+9 -x waybar ;;
+  *) echo "usage: screenrec [toggle|region|status]" >&2; exit 2 ;;
+esac

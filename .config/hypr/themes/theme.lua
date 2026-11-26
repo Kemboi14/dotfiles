@@ -65,32 +65,15 @@ for _, kv in ipairs(env) do
     hl.env(kv[1], kv[2])
 end
 
+-- Decoration (rounding, opacity, blur, shadow) lives in glass.lua.
 hl.config({
     general = {
         gaps_in = 4,
         gaps_out = { top = 4, right = 8, bottom = 8, left = 8 },
-        border_size = 2,
+        border_size = 1,
         resize_on_border = true,
         allow_tearing = false,
         layout = "dwindle",
     },
 
-    decoration = {
-        rounding = 8,
-        shadow = {
-            enabled = true,
-        },
-        active_opacity = 0.95,
-        inactive_opacity = 0.88,
-        fullscreen_opacity = 1.0,
-        blur = {
-            enabled = true,
-            size = 6,
-            passes = 2,
-            new_optimizations = true,
-            ignore_opacity = true,
-            xray = false,
-            special = true,
-        },
-    },
 })

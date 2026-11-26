@@ -27,7 +27,7 @@ local function apply_theme()
     hl.config({
         general = {
             col = {
-                active_border = { colors = { col("primary"), col("tertiary") }, angle = 45 },
+                active_border = col("primary"),
                 inactive_border = col("surface"),
             },
         },

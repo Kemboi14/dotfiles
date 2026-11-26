@@ -5,7 +5,7 @@ layer=overlay
 markup=1
 group-by=app-name
 format=<span alpha="70%%"><small>%a</small></span>\n<b>%s</b>\n%b
-on-notify=exec pw-play /usr/share/sounds/freedesktop/stereo/message.oga
+on-notify=exec /home/nick/.local/bin/notif-count bump
 
 [grouped]
 format=<span alpha="70%%"><small>%a · %g</small></span>\n<b>%s</b>\n%b

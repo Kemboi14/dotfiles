@@ -13,13 +13,13 @@ style = stereo
 [color]
 gradient = 1
 gradient_count = 8
-gradient_color_1 = '#b2cbce'
-gradient_color_2 = '#bfc8c9'
-gradient_color_3 = '#cec2d9'
+gradient_color_1 = '#b5c8df'
+gradient_color_2 = '#c1c7d1'
+gradient_color_3 = '#d9bed9'
 gradient_color_4 = '#62daa8'
-gradient_color_5 = '#b2cbce'
-gradient_color_6 = '#bfc8c9'
-gradient_color_7 = '#cec2d9'
+gradient_color_5 = '#b5c8df'
+gradient_color_6 = '#c1c7d1'
+gradient_color_7 = '#d9bed9'
 gradient_color_8 = '#ffb4ab'
 
 [smoothing]

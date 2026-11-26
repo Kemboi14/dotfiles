@@ -5,14 +5,14 @@ $directory$git_branch$git_status$python$rust$nodejs$golang$php$lua$c$cmd_duratio
 $character"""
 
 [palettes.wallpaper]
-primary = "#b2cbce"
-secondary = "#bfc8c9"
-tertiary = "#cec2d9"
+primary = "#b5c8df"
+secondary = "#c1c7d1"
+tertiary = "#d9bed9"
 success = "#62daa8"
 error = "#ffb4ab"
-surface = "#050606"
-on_surface = "#e3e2e2"
-muted = "#c2c8c8"
+surface = "#050506"
+on_surface = "#e4e2e3"
+muted = "#c4c6cd"
 
 [aws]
 symbol = " "

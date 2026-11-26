@@ -4,8 +4,8 @@
     "type": "builtin",
     "source": "arch",
     "color": {
-      "1": "#b2cbce",
-      "2": "#cec2d9"
+      "1": "#b5c8df",
+      "2": "#d9bed9"
     },
     "padding": {
       "top": 1,
@@ -19,15 +19,15 @@
       "binaryPrefix": "si"
     },
     "color": {
-      "keys": "#b2cbce",
-      "separator": "#bfc8c9",
-      "title": "#cec2d9"
+      "keys": "#b5c8df",
+      "separator": "#c1c7d1",
+      "title": "#d9bed9"
     }
   },
   "modules": [
     {
       "type": "custom",
-      "format": "\u001b[38;2;178;203;206m╭─── ✨ system ──────────────────────────\u001b[0m"
+      "format": "\u001b[38;2;181;200;223m╭─── ✨ system ──────────────────────────\u001b[0m"
     },
     {
       "type": "command",
@@ -64,7 +64,7 @@
     },
     {
       "type": "custom",
-      "format": "\u001b[38;2;191;200;201m├─── 🔩 hardware ────────────────────────\u001b[0m"
+      "format": "\u001b[38;2;193;199;209m├─── 🔩 hardware ────────────────────────\u001b[0m"
     },
     {
       "type": "brightness",
@@ -103,7 +103,7 @@
     },
     {
       "type": "custom",
-      "format": "\u001b[38;2;206;194;217m╰───────────────────────────────────────\u001b[0m"
+      "format": "\u001b[38;2;217;190;217m╰───────────────────────────────────────\u001b[0m"
     },
     "break",
     {

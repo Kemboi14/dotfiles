@@ -116,7 +116,7 @@ inner-pad=10
 line-height=20
 
 [colors]
-background={c["surface"]}b3
+background={c["surfaceContainerHigh"]}cc
 text={c["onSurface"]}ff
 prompt={c["primary"]}ff
 placeholder={c["onSurfaceVariant"]}aa
@@ -125,11 +125,11 @@ match={c["tertiary"]}ff
 selection={c["primary"]}55
 selection-text={c["onSurface"]}ff
 selection-match={c["tertiary"]}ff
-border={c["primary"]}ff
+border={c["outlineVariant"]}ff
 
 [border]
-width=2
-radius=18
+width=1
+radius=16
 """)
 
 # Plain pywal colour list for tools that read ~/.cache/wal/colors (VSCodium Wal Theme)

@@ -14,8 +14,6 @@ local KEY = {
 	LOCK = ("%s + L"):format(mainMod),
 	SETTINGS = ("%s + T"):format(mainMod),
 	CHEATSHEET_TOGGLE = ("%s + H"):format(mainMod),
-	CHEATSHEET_REFRESH = ("%s + SHIFT + H"):format(mainMod),
-	HYPR_KEYS_PANEL = ("%s + K"):format(mainMod),
 	MUSIC = ("%s + M"):format(mainMod),
 	VIDEO = ("%s + V"):format(mainMod),
 
@@ -65,6 +63,9 @@ hl.bind(KEY.LAUNCHER, hl.dsp.exec_cmd([[fuzzel]]), { description = "Toggle launc
 hl.bind(KEY.LOCK, hl.dsp.exec_cmd([[loginctl lock-session]]), { description =  "Lock screen " })
 hl.bind(KEY.SETTINGS, hl.dsp.exec_cmd([[kitty --class nvim -e nvim ~/.config/hypr]]), { description = "Toggle settings" })
 -- Super+M free (mail client removed)
+hl.bind(("%s + SHIFT + RETURN"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/proj"), { description = "Open project (git repo picker)" })
+hl.bind(KEY.CHEATSHEET_TOGGLE, hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/keyhelp"), { description = "Show keybindings" })
+hl.bind(KEY.MUSIC, hl.dsp.exec_cmd("playerctl play-pause"), { description = "Media play/pause" })
 hl.bind(KEY.VIDEO, hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/video-picker"), { description = "Video player" })
 
 -- 2. Window Management
@@ -83,15 +84,26 @@ hl.bind(KEY.FOCUS_DOWN, hl.dsp.focus({ direction = "down" }), { description = "F
 
 hl.bind("ALT + tab", hl.dsp.window.cycle_next(), { description = "Cycle windows" })
 
-hl.bind(KEY.RESIZE_RIGHT, function() hl.exec_cmd("hyprctl dispatch resizeactive 30 0") end, { description = "Resize window right" })
-hl.bind(KEY.RESIZE_LEFT, function() hl.exec_cmd("hyprctl dispatch resizeactive -30 0") end, { description = "Resize window left" })
-hl.bind(KEY.RESIZE_UP, function() hl.exec_cmd("hyprctl dispatch resizeactive 0 -30") end, { description = "Resize window up" })
-hl.bind(KEY.RESIZE_DOWN, function() hl.exec_cmd("hyprctl dispatch resizeactive 0 30") end, { description = "Resize window down" })
+hl.bind(KEY.RESIZE_RIGHT, hl.dsp.window.resize({ x = 30, y = 0, relative = true }), { description = "Resize window right" })
+hl.bind(KEY.RESIZE_LEFT, hl.dsp.window.resize({ x = -30, y = 0, relative = true }), { description = "Resize window left" })
+hl.bind(KEY.RESIZE_UP, hl.dsp.window.resize({ x = 0, y = -30, relative = true }), { description = "Resize window up" })
+hl.bind(KEY.RESIZE_DOWN, hl.dsp.window.resize({ x = 0, y = 30, relative = true }), { description = "Resize window down" })
 
-hl.bind(KEY.MOVE_SWAP_LEFT, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hyprctl activewindow -j | jq -r .floating) && hyprctl dispatch moveactive -30 0 || hyprctl dispatch movewindow l'") end, { description = "Move or swap window left" })
-hl.bind(KEY.MOVE_SWAP_RIGHT, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hyprctl activewindow -j | jq -r .floating) && hyprctl dispatch moveactive 30 0 || hyprctl dispatch movewindow r'") end, { description = "Move or swap window right" })
-hl.bind(KEY.MOVE_SWAP_UP, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hyprctl activewindow -j | jq -r .floating) && hyprctl dispatch moveactive 0 -30 || hyprctl dispatch movewindow u'") end, { description = "Move or swap window up" })
-hl.bind(KEY.MOVE_SWAP_DOWN, function() hl.exec_cmd("bash -c 'grep -q true <<< $(hyprctl activewindow -j | jq -r .floating) && hyprctl dispatch moveactive 0 30 || hyprctl dispatch movewindow d'") end, { description = "Move or swap window down" })
+-- Floating: nudge by 30px. Tiled: swap with the neighbour in that direction.
+local function move_or_swap(dir, dx, dy)
+	return function()
+		local w = hl.get_active_window()
+		if w and w.floating then
+			hl.dispatch(hl.dsp.window.move({ x = dx, y = dy, relative = true }))
+		else
+			hl.dispatch(hl.dsp.window.move({ direction = dir }))
+		end
+	end
+end
+hl.bind(KEY.MOVE_SWAP_LEFT, move_or_swap("left", -30, 0), { description = "Move or swap window left" })
+hl.bind(KEY.MOVE_SWAP_RIGHT, move_or_swap("right", 30, 0), { description = "Move or swap window right" })
+hl.bind(KEY.MOVE_SWAP_UP, move_or_swap("up", 0, -30), { description = "Move or swap window up" })
+hl.bind(KEY.MOVE_SWAP_DOWN, move_or_swap("down", 0, 30), { description = "Move or swap window down" })
 
 -- 4. Screenshots
 hl.bind(("%s + SHIFT + S"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot region"), { description = "Screenshot: region, save and copy" })
@@ -99,7 +111,9 @@ hl.bind(("%s + SHIFT + E"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") ..
 hl.bind(("%s + SHIFT + A"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot screen"), { description = "Screenshot: monitor, save and copy" })
 hl.bind("Print", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot region"), { description = "Screenshot: region" })
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot screen"), { description = "Screenshot: monitor" })
-hl.bind("CTRL + Print", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot window"), { description = "Screenshot: active window" })
+hl.bind(("%s + SHIFT + R"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenrec toggle"), { description = "Screen record: start/stop (full screen)" })
+hl.bind(("%s + ALT + R"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenrec region"), { description = "Screen record: region (same key again to stop)" })
+hl.bind("CTRL + Print",hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/screenshot window"), { description = "Screenshot: active window" })
 
 -- 5. Workspace Switching
 for i = 1, 9 do
@@ -145,7 +159,7 @@ hl.bind(("%s + SHIFT + W"):format(mainMod), hl.dsp.exec_cmd("waypaper"), { descr
 hl.bind(("%s + SHIFT + V"):format(mainMod), hl.dsp.exec_cmd([[cliphist list | fuzzel --dmenu --prompt "󰅌  " --width 60 | cliphist decode | wl-copy]]), { description = "Clipboard history" })
 hl.bind(("%s + period"):format(mainMod), hl.dsp.exec_cmd([[rofimoji --selector fuzzel --action copy]]), { description = "Emoji picker" })
 
-hl.bind(("%s + SHIFT + D"):format(mainMod), hl.dsp.exec_cmd([[makoctl mode -t do-not-disturb && notify-send -t 1500 "🔕 Do not disturb toggled"]]), { description = "Do not disturb" })
+hl.bind(("%s + SHIFT + D"):format(mainMod), hl.dsp.exec_cmd([[/home/nick/.local/bin/notif-count dnd]]), { description = "Do not disturb" })
 
 hl.bind(("%s + SLASH"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/keyhelp"), { description = "Show keybindings" })
 hl.bind(("%s + SHIFT + G"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/sddm-layout"), { description = "Greeter layout" })
@@ -155,22 +169,26 @@ hl.bind(("%s + SHIFT + I"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") ..
 hl.bind(("%s + SHIFT + P"):format(mainMod), hl.dsp.exec_cmd(os.getenv("HOME") .. "/.local/bin/power-profile"), { description = "Cycle power profile" })
 
 -- 10. Scratchpad / special workspace
-hl.bind(("%s + grave"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch togglespecialworkspace scratchpad"), { description = "Toggle scratchpad" })
-hl.bind(("%s + SHIFT + grave"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch movetoworkspacesilent special:scratchpad"), { description = "Move window to scratchpad" })
+hl.bind(("%s + grave"):format(mainMod), hl.dsp.workspace.toggle_special("scratchpad"), { description = "Toggle scratchpad" })
+hl.bind(("%s + SHIFT + grave"):format(mainMod), hl.dsp.window.move({ workspace = "special:scratchpad", follow = false }), { description = "Move window to scratchpad" })
 
 -- 11. Window/layout helpers
-hl.bind(("%s + O"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch togglesplit"), { description = "Toggle split" })
-hl.bind(("%s + P"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch pin"), { description = "Pin floating window" })
-hl.bind(("%s + SHIFT + C"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch centerwindow"), { description = "Center floating window" })
+hl.bind(("%s + O"):format(mainMod), hl.dsp.layout("togglesplit"), { description = "Toggle split" })
+hl.bind(("%s + P"):format(mainMod), hl.dsp.window.pin(), { description = "Pin floating window" })
+hl.bind(("%s + SHIFT + C"):format(mainMod), hl.dsp.window.center(), { description = "Center floating window" })
 
 -- 12. Monitor focus/move
-hl.bind(("%s + ALT + right"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch focusmonitor +1"), { description = "Focus next monitor" })
-hl.bind(("%s + ALT + left"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch focusmonitor -1"), { description = "Focus previous monitor" })
-hl.bind(("%s + ALT + SHIFT + right"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch movewindow mon:+1"), { description = "Move window to next monitor" })
-hl.bind(("%s + ALT + SHIFT + left"):format(mainMod), hl.dsp.exec_cmd("hyprctl dispatch movewindow mon:-1"), { description = "Move window to previous monitor" })
+hl.bind(("%s + ALT + right"):format(mainMod), hl.dsp.focus({ monitor = "+1" }), { description = "Focus next monitor" })
+hl.bind(("%s + ALT + left"):format(mainMod), hl.dsp.focus({ monitor = "-1" }), { description = "Focus previous monitor" })
+hl.bind(("%s + ALT + SHIFT + right"):format(mainMod), hl.dsp.window.move({ monitor = "+1" }), { description = "Move window to next monitor" })
+hl.bind(("%s + ALT + SHIFT + left"):format(mainMod), hl.dsp.window.move({ monitor = "-1" }), { description = "Move window to previous monitor" })
 
 -- 13. Quick toggles
-hl.bind(("%s + SHIFT + B"):format(mainMod), hl.dsp.exec_cmd("pkill -SIGUSR1 waybar || waybar &"), { description = "Toggle/reload Waybar" })
-hl.bind(("%s + F11"):format(mainMod), hl.dsp.exec_cmd([[bash -c 'hyprctl keyword animations:enabled $(hyprctl getoption animations:enabled -j | jq -r "if .int==1 then \"false\" else \"true\" end"); hyprctl keyword decoration:blur:enabled $(hyprctl getoption decoration:blur:enabled -j | jq -r "if .int==1 then \"false\" else \"true\" end")']]), { description = "Toggle game/perf mode" })
+hl.bind(("%s + SHIFT + B"):format(mainMod), hl.dsp.exec_cmd("pkill -SIGUSR1 -x waybar || systemctl --user restart waybar"), { description = "Toggle/reload Waybar" })
+hl.bind(("%s + F11"):format(mainMod), function()
+	local on = not hl.get_config("animations.enabled")
+	hl.config({ animations = { enabled = on }, decoration = { blur = { enabled = on } } })
+	hl.exec_cmd(("notify-send -t 1500 'Performance mode' '%s'"):format(on and "off — animations and blur on" or "on — animations and blur off"))
+end, { description = "Toggle game/perf mode" })
 
 return true

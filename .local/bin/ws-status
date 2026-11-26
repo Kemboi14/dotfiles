@@ -37,28 +37,8 @@ icon_for() {
   esac
 }
 
-mapfile -t classes < <(hyprctl clients -j 2>/dev/null | jq -r --argjson w "$ws" ".[] | select(.workspace.id == \$w) | .class | ascii_downcase")
-
-icons=""
-seen=" "
-count=0
-for c in "${classes[@]}"; do
-  [[ -z $c ]] && continue
-  i=$(icon_for "$c")
-  [[ $seen == *" $i "* ]] && continue
-  seen+="$i "
-  count=$((count + 1))
-  (( count > 3 )) && continue
-  icons+="${icons:+ }$i"
-done
-(( count > 3 )) && icons+=" +$((count - 3))"
-
-if [[ -z $icons ]]; then
-  text=$(shape empty)
-  cls="\"empty\""
-else
-  text=$icons
-  cls="\"occupied\""
-fi
+count=$(hyprctl clients -j 2>/dev/null | jq --argjson w "$ws" '[.[] | select(.workspace.id == $w)] | length')
+# Same minimal dots as ws-listener (CSS shapes them); used only if the listener isn't running.
+if (( ${count:-0} > 0 )); then cls="\"occupied\""; else cls="\"empty\""; fi
 [[ $ws == "$active" ]] && cls="$cls,\"active\""
-printf "{\"text\":\"%s\",\"class\":[%s]}\n" "$text" "$cls"
+printf '{"text":"\u25cf","class":[%s]}\n' "$cls"

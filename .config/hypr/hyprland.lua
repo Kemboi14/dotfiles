@@ -6,7 +6,11 @@ package.path = table.concat({
 }, ";")
 
 -- Clear cached modules so they re-execute on reload (ensures binds/rules re-register)
-for _, mod in ipairs({"monitors", "inputs", "keybind", "media", "windowrules", "animations", "themes.theme"}) do
+for _, mod in ipairs({
+    "monitors", "startup", "inputs", "keybind", "media", "windowrules",
+    "animations", "animations.springy", "animations.calm", "themes.theme",
+    "caelestia_theme", "scheme.current", "hyprland-gui", "glass",
+}) do
     package.loaded[mod] = nil
 end
 
@@ -52,5 +56,4 @@ require("caelestia_theme").apply_theme()
 -- HyprMod managed settings
 require("hyprland-gui")
 
-require("rules")
 require("glass")

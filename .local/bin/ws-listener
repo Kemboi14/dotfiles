@@ -1,16 +1,117 @@
 #!/usr/bin/env python3
-"""Refresh Waybar workspace buttons whenever Hyprland changes workspace or windows."""
-import os, socket, subprocess, time
-sock = os.path.join(os.environ["XDG_RUNTIME_DIR"], "hypr", os.environ["HYPRLAND_INSTANCE_SIGNATURE"], ".socket2.sock")
-events = ("workspace>>", "workspacev2>>", "openwindow>>", "closewindow>>", "movewindow>>", "focusedmon>>")
-while True:
-    try:
-        s = socket.socket(socket.AF_UNIX); s.connect(sock)
-        buf = b""
-        while chunk := s.recv(4096):
-            buf += chunk
-            *lines, buf = buf.split(b"\n")
-            if any(l.decode(errors="ignore").startswith(events) for l in lines):
-                subprocess.run(["pkill", "-RTMIN+8", "-x", "waybar"])
-    except OSError:
-        time.sleep(2)
+"""Waybar workspace buttons, rendered in one pass per Hyprland event.
+
+Talks to Hyprland's IPC sockets directly (no hyprctl/jq processes), writes
+$XDG_RUNTIME_DIR/waybar-ws/<n>.json for workspaces 1-5, then signals Waybar
+(RTMIN+8). Each custom/wsN module just `cat`s its file.
+"""
+import json, os, socket, subprocess, time
+
+WS = range(1, 6)
+RUN = os.environ.get("XDG_RUNTIME_DIR", "/tmp")
+HYPR = os.path.join(RUN, "hypr", os.environ["HYPRLAND_INSTANCE_SIGNATURE"])
+OUT = os.path.join(RUN, "waybar-ws")
+EVENTS = (b"workspace>>", b"workspacev2>>", b"openwindow>>", b"closewindow>>",
+          b"movewindow>>", b"movewindowv2>>", b"focusedmon>>", b"windowtitlev2>>")
+
+# Hollow/solid shape per workspace (Material Design Icons)
+SHAPES = {1: (0xF0765, 0xF0766), 2: (0xF0536, 0xF0537), 3: (0xF0764, 0xF0763),
+          4: (0xF08D1, 0xF08D2), 5: (0xF02D8, 0xF02D9)}
+
+# (substring patterns, icon) checked in order; first match wins
+ICONS = [
+    (("kitty", "foot", "alacritty", "terminal"), 0xF018D),
+    (("nvim", "neovim"), 0xE62B),
+    (("firefox", "librewolf", "zen"), 0xF0239),
+    (("chrome", "chromium", "brave", "helium"), 0xF02AF),
+    (("thunar", "nautilus", "files"), 0xF024B),
+    (("slack",), 0xF04B1),
+    (("karere", "whatsapp", "zapzap"), 0xF05A3),
+    (("telegram",), 0xF2C6),
+    (("discord", "vesktop"), 0xF066F),
+    (("spotify",), 0xF04C7),
+    (("mpv", "vlc", "celluloid"), 0xF0567),
+    (("libreoffice", "soffice"), 0xF0219),
+    (("obsidian",), 0xF00BD),
+    (("ghidra",), 0xF00E4),
+    (("steam",), 0xF04D3),
+    (("code", "codium"), 0xF0A1E),
+]
+DEFAULT_ICON = 0xF08C6
+
+
+def icon_for(cls: str) -> str:
+    for pats, cp in ICONS:
+        if any(p in cls for p in pats):
+            return chr(cp)
+    return chr(DEFAULT_ICON)
+
+
+def request(cmd: str):
+    with socket.socket(socket.AF_UNIX) as s:
+        s.settimeout(2)
+        s.connect(os.path.join(HYPR, ".socket.sock"))
+        s.sendall(cmd.encode())
+        data = b""
+        while chunk := s.recv(65536):
+            data += chunk
+    return json.loads(data)
+
+
+def render():
+    clients = request("j/clients")
+    active = request("j/activeworkspace").get("id")
+    os.makedirs(OUT, exist_ok=True)
+    for ws in WS:
+        apps = []
+        for c in clients:
+            if c.get("workspace", {}).get("id") != ws:
+                continue
+            cls = c.get("class") or ""
+            if cls and cls not in apps:
+                apps.append(cls)
+        full, empty = SHAPES[ws]
+        icons = []
+        for a in apps:
+            ic = icon_for(a.lower())
+            if ic not in icons:
+                icons.append(ic)
+        text = " ".join(icons) if icons else chr(empty)
+        classes = ["occupied"] if apps else ["empty"]
+        tooltip = f"{ws}  " + (" · ".join(apps) if apps else "empty")
+        if ws == active:
+            classes.append("active")
+        path = os.path.join(OUT, f"{ws}.json")
+        with open(path + ".tmp", "w") as f:
+            json.dump({"text": text, "class": classes, "tooltip": tooltip}, f, ensure_ascii=False)
+        os.replace(path + ".tmp", path)
+    subprocess.run(["pkill", "-RTMIN+8", "-x", "waybar"])
+
+
+def main():
+    while True:
+        try:
+            render()
+            with socket.socket(socket.AF_UNIX) as s:
+                s.connect(os.path.join(HYPR, ".socket2.sock"))
+                buf = b""
+                while chunk := s.recv(4096):
+                    buf += chunk
+                    *lines, buf = buf.split(b"\n")
+                    if any(l.startswith(EVENTS) for l in lines):
+                        # Coalesce bursts (e.g. openwindow + workspace) into one redraw.
+                        s.settimeout(0.03)
+                        try:
+                            while extra := s.recv(4096):
+                                buf += extra
+                                buf = buf.rsplit(b"\n", 1)[-1]
+                        except (socket.timeout, BlockingIOError):
+                            pass
+                        s.settimeout(None)
+                        render()
+        except (OSError, ValueError):
+            time.sleep(2)
+
+
+if __name__ == "__main__":
+    main()

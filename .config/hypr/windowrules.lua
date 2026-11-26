@@ -16,17 +16,14 @@ hl.window_rule({ match = { title = "^File Operation Progress$" },               
 hl.window_rule({ match = { class = "^xfce-polkit$" },                                     float = true, size = "600 50", })
 hl.window_rule({ match = { class = "^[Ss]team$", title = "^.*$" }, float = true })
 
--- Idle inhibit rules
-hl.window_rule({ match = { class = "^(.*celluloid.*|.*mpv.*|.*vlc.*)$" },                                                                                            idle_inhibit = "fullscreen" })
-hl.window_rule({ match = { class = "^.*[Ss]potify.*$" },                                                                                                             idle_inhibit = "fullscreen" })
-hl.window_rule({ match = { class = ".*brave.*" }, idle_inhibit = "fullscreen" })
+-- Idle inhibit: see the catch-all fullscreen rule under "Misc rules"
 
 -- Picture-in-picture
 hl.window_rule({ match = { title = "^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture).*$" }, tag = "picture-in-picture" })
 hl.window_rule({ match = { tag = "picture-in-picture" }, float = true, pin = true, keep_aspect_ratio = true, move = "73% 72%", size = "25% 25%" })
 
 -- Opacity rules
-hl.window_rule({ match = { class = "^brave-origin$" },                                        opacity = 1.0 })
+hl.window_rule({ match = { class = "^firefox$" },                                             opacity = 1.0 })
 hl.window_rule({ match = { class = "^code-oss$" },                                             opacity = 1.0 })
 hl.window_rule({ match = { class = "^[Cc]ode$" },                                              opacity = 1.0 })
 hl.window_rule({ match = { class = "^code-url-handler$" },                                     opacity = 1.0 })
@@ -81,6 +78,8 @@ hl.window_rule({ match = { class = "(?i)^(nm-connection-editor|blueman-manager|o
 
 -- Misc rules
 hl.window_rule({ match = { class = "^.*jetbrains.*$", title = "^win[0-9]+$" }, no_initial_focus = true })
+-- Ghidra (Java/Swing): menus and tooltips are untitled "winN" windows; don't let them steal focus.
+hl.window_rule({ match = { class = "^ghidra-.*$", title = "^win[0-9]+$" }, no_initial_focus = true })
 
 -- Never dim/lock/sleep while any window is fullscreen
 hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })
@@ -88,3 +87,7 @@ hl.window_rule({ match = { class = ".*" }, idle_inhibit = "fullscreen" })
 -- Ignore maximize requests from apps; tiling decides window size
 hl.window_rule({ match = { class = ".*" }, suppress_event = "maximize" })
 hl.window_rule({ match = { class = "(?i)^(vscodium|codium)$" }, opacity = 1.0 })
+
+-- Waybar popups (weather, system update, btop)
+hl.window_rule({ match = { class = "^floating-(weather|update)$" }, float = true, center = true, size = "60% 70%" })
+hl.window_rule({ match = { class = "^btop$" }, float = true, center = true, size = "70% 75%" })

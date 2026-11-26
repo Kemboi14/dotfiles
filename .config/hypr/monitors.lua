@@ -5,6 +5,7 @@ hl.monitor({
     mode = "1920x1080@120.02",
     position = "0x0",
     scale = 1.0,
-    vrr = 0
+    vrr = 0,
+    cm = "srgb",
 })
 

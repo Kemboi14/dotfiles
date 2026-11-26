@@ -3,6 +3,25 @@ bat=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -1)
 [ -z "$bat" ] && exit 0
 declare -A fired
 full_notified=0
+saver_state="${XDG_RUNTIME_DIR:-/tmp}/battery-saver.prev"   # holds the profile to restore
+
+hypr_fx() {  # hypr_fx true|false : animations + blur
+    hyprctl dispatch "function() hl.config({ animations = { enabled = $1 }, decoration = { blur = { enabled = $1 } } }) end" >/dev/null 2>&1
+}
+saver_on() {
+    [ -e "$saver_state" ] && return
+    powerprofilesctl get > "$saver_state" 2>/dev/null || echo balanced > "$saver_state"
+    powerprofilesctl set power-saver 2>/dev/null
+    hypr_fx false
+    notify-send -i battery-low "Battery saver on 🌙" "Power-saver profile, no blur or animations until you plug in."
+}
+saver_off() {
+    [ -e "$saver_state" ] || return
+    powerprofilesctl set "$(cat "$saver_state")" 2>/dev/null
+    hypr_fx true
+    rm -f "$saver_state"
+    notify-send -i battery-good "Battery saver off ⚡" "Plugged in — profile and effects restored."
+}
 
 warn() {
     case $1 in
@@ -17,6 +36,7 @@ while true; do
     cap=$(cat "$bat/capacity"); st=$(cat "$bat/status")
     if [ "$st" = "Discharging" ]; then
         full_notified=0
+        [ "$cap" -le 20 ] && saver_on
         for lvl in 2 5 10 20; do
             if [ "$cap" -le "$lvl" ] && [ -z "${fired[$lvl]}" ]; then
                 warn "$lvl"
@@ -26,6 +46,7 @@ while true; do
         done
     else
         fired=()
+        saver_off
         if [ "$st" = "Full" ] || [ "$st" = "Not charging" ] || [ "$cap" -ge 100 ]; then
             if [ "$full_notified" -eq 0 ]; then
                 notify-send -i battery-full "All charged up! 🔋💖" "100% and feeling fabulous ✨ You can unplug me now, cutie 🥰"

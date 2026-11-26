@@ -1,6 +1,7 @@
 /* Waybar — wallpaper-following glass islands
- * Colors are generated from the current Caelestia/wallpaper scheme by raw-theme.
- * Edit colors through the theme pipeline, not by hand, unless debugging.
+ * Colors are generated from the current Caelestia/wallpaper scheme by raw-theme
+ * (writes colors.css). Edit colors through the theme pipeline, not by hand.
+ * Previous version: style.css.pre-redesign
  */
 @import "colors.css";
 
@@ -28,50 +29,45 @@ window#waybar.hidden {
   opacity: 0.2;
 }
 
-/* ── Islands (groups) ─────────────────────────────────────────── */
-#apps,
-#ws,
-#time,
-#player,
-#stats,
-#system,
-#alerts,
-#tray {
-  background: alpha(@surfaceContainerHigh, 0.86);
-  border: 1px solid alpha(@outlineVariant, 0.85);
-  border-radius: 999px;
-  margin: 4px 3px;
-  padding: 0 10px;
-  background-clip: padding-box;
-}
-
-#apps:hover,
-#ws:hover,
-#time:hover,
-#player:hover,
-#stats:hover,
-#system:hover,
-#alerts:hover,
-#tray:hover {
-  border-color: alpha(@primary, 0.75);
-}
-
-/* Keep outer module containers invisible; islands provide the chrome */
 .modules-left,
 .modules-center,
 .modules-right {
   background: transparent;
-  border: none;
-  margin: 0;
-  padding: 0;
 }
 
-/* ── Shared module spacing ────────────────────────────────────── */
+/* ── Islands ──────────────────────────────────────────────────── */
+#apps,
+#ws,
+#center,
+#stats,
+#system,
+#alerts,
+#traydrawer {
+  background: alpha(@surfaceContainerHigh, 0.80);
+  border: 1px solid alpha(@outlineVariant, 0.70);
+  border-radius: 999px;
+  margin: 2px 3px;
+  padding: 0 6px;
+  box-shadow: inset 0 1px alpha(@onSurface, 0.06);
+  transition: border-color 200ms ease;
+}
+
+#apps:hover,
+#ws:hover,
+#center:hover,
+#stats:hover,
+#system:hover,
+#alerts:hover,
+#traydrawer:hover {
+  border-color: alpha(@primary, 0.60);
+}
+
+/* ── Shared module look ───────────────────────────────────────── */
 #custom-arch,
+#custom-clipboard,
 #clock,
 #custom-weather,
 #mpris,
-#image,
 #custom-cava,
 #custom-player-prev,
 #custom-player-play,
@@ -86,22 +82,23 @@ window#waybar.hidden {
 #backlight,
 #idle_inhibitor,
 #battery,
+#custom-recorder,
+#custom-updates,
 #custom-notifications,
-#custom-power,
-#window {
+#custom-power {
   padding: 0 8px;
   margin: 4px 1px;
   border-radius: 999px;
   background: transparent;
   color: @onSurface;
-  text-shadow: 0 1px 1px alpha(@surface, 0.25);
-  transition: all 180ms ease;
+  transition: background 180ms ease, color 180ms ease;
 }
 
-/* Hover affordance for interactive modules */
 #custom-arch:hover,
+#custom-clipboard:hover,
 #clock:hover,
 #custom-weather:hover,
+#mpris:hover,
 #cpu:hover,
 #temperature:hover,
 #memory:hover,
@@ -112,265 +109,197 @@ window#waybar.hidden {
 #backlight:hover,
 #idle_inhibitor:hover,
 #battery:hover,
-#custom-notifications:hover,
-#custom-power:hover,
-#custom-player-prev:hover,
-#custom-player-play:hover,
-#custom-player-next:hover,
-#mpris:hover {
-  background: alpha(@primary, 0.18);
-  color: @onSurface;
+#custom-updates:hover,
+#custom-notifications:hover {
+  background: alpha(@primary, 0.16);
 }
 
-/* ── Launcher / branding ──────────────────────────────────────── */
+/* ── Apps island ──────────────────────────────────────────────── */
 #apps {
-  padding-left: 8px;
-  padding-right: 10px;
+  padding: 0 4px;
 }
 #custom-arch {
-  font-size: 16px;
+  font-size: 17px;
   color: @primary;
-  padding: 0 10px 0 6px;
-  margin: 4px 0;
+  padding: 0 11px 0 9px;
 }
 #custom-arch:hover {
   color: @tertiary;
-  background: alpha(@tertiary, 0.12);
+  background: alpha(@tertiary, 0.14);
+}
+#custom-clipboard {
+  color: @onSurfaceVariant;
+}
+#custom-clipboard:hover {
+  color: @primary;
 }
 
 /* ── Workspaces ───────────────────────────────────────────────── */
 #ws {
-  padding: 0 6px;
+  padding: 0 4px;
 }
-
-#workspaces button,
 #custom-ws1,
 #custom-ws2,
 #custom-ws3,
 #custom-ws4,
 #custom-ws5 {
-  color: @onSurfaceVariant;
+  color: alpha(@onSurfaceVariant, 0.75);
   background: transparent;
+  border: 1px solid transparent;
   border-radius: 999px;
   padding: 0 10px;
-  margin: 5px 2px;
-  min-width: 20px;
-  transition: all 180ms ease;
-}
-
-#workspaces button label,
-#custom-ws1,
-#custom-ws2,
-#custom-ws3,
-#custom-ws4,
-#custom-ws5 {
+  margin: 5px 1px;
+  min-width: 18px;
   font-weight: 600;
+  transition: all 200ms ease;
 }
-
-#workspaces button.occupied,
 #custom-ws1.occupied,
 #custom-ws2.occupied,
 #custom-ws3.occupied,
 #custom-ws4.occupied,
 #custom-ws5.occupied {
   color: @onSurface;
-  background: alpha(@surfaceContainerHighest, 0.82);
-  border: 1px solid alpha(@outlineVariant, 0.35);
+  background: alpha(@surfaceContainerHighest, 0.85);
+  border-color: alpha(@outlineVariant, 0.45);
 }
-
-#workspaces button.active,
 #custom-ws1.active,
 #custom-ws2.active,
 #custom-ws3.active,
 #custom-ws4.active,
 #custom-ws5.active {
   color: @onPrimary;
-  background: linear-gradient(135deg, @primary, alpha(@tertiary, 0.85));
-  box-shadow: 0 2px 8px alpha(@primary, 0.35);
+  background: linear-gradient(135deg, @primary, alpha(@tertiary, 0.90));
+  border-color: transparent;
+  padding: 0 16px;
 }
-
-#workspaces button:hover,
 #custom-ws1:hover,
 #custom-ws2:hover,
 #custom-ws3:hover,
 #custom-ws4:hover,
 #custom-ws5:hover {
   color: @primary;
-  background: alpha(@primary, 0.20);
-  border: 1px solid alpha(@primary, 0.25);
+  background: alpha(@primary, 0.18);
+  border-color: alpha(@primary, 0.30);
+}
+#custom-ws1.active:hover,
+#custom-ws2.active:hover,
+#custom-ws3.active:hover,
+#custom-ws4.active:hover,
+#custom-ws5.active:hover {
+  color: @onPrimary;
+  background: linear-gradient(135deg, @tertiary, @primary);
 }
 
-#workspaces button.urgent {
-  color: @onError;
-  background: @error;
+/* ── Center island: clock · weather · player ──────────────────── */
+#center {
+  padding: 0 4px;
 }
-
-/* ── Time / weather ───────────────────────────────────────────── */
-#time #clock {
+#clock {
   color: @primary;
   font-weight: 700;
   font-size: 14px;
   padding: 0 10px;
 }
-#time #custom-weather {
+#custom-weather {
   color: @secondary;
-  padding-right: 10px;
 }
 
-/* ── Player island ────────────────────────────────────────────── */
-#player {
-  padding-left: 4px;
-  padding-right: 4px;
+/* Divider between time and player; the art only exists while media is loaded */
+#center #image {
+  margin: 4px 2px 4px 6px;
 }
-#image.player-art {
-  margin: 4px 2px 4px 0;
-  border-radius: 999px;
-}
-#player #mpris {
-  color: @onSurface;
+#mpris {
   padding: 0 6px;
 }
-#player #mpris.playing { color: @primary; }
-#player #mpris.paused { color: @onSurfaceVariant; }
-#player #mpris.stopped { padding: 0; margin: 0; }
+#mpris.playing { color: @onSurface; }
+#mpris.paused  { color: @onSurfaceVariant; font-style: italic; }
+#mpris.stopped { padding: 0; margin: 0; }
+
 #custom-cava {
-  color: @secondary;
+  color: alpha(@primary, 0.85);
   font-size: 10px;
   padding: 0 2px;
-  margin: 4px 0;
 }
 #custom-player-prev,
 #custom-player-next {
   color: @onSurfaceVariant;
-  padding: 0 4px;
+  padding: 0 5px;
 }
 #custom-player-play {
   color: @primary;
-  padding: 0 4px;
-  font-weight: 700;
+  padding: 0 6px;
 }
 #custom-player-prev:hover,
 #custom-player-next:hover {
-  color: @tertiary;
+  color: @primary;
+  background: alpha(@primary, 0.14);
 }
 #custom-player-play:hover {
   color: @onPrimary;
   background: @primary;
 }
 
-/* Hide player island when nothing is active */
-#player.empty,
-#waybar.empty #player {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-}
-
 /* ── Stats ────────────────────────────────────────────────────── */
-#stats #cpu {
-  color: @secondary;
-}
-#stats #memory {
-  color: @tertiary;
-}
-#stats #temperature {
-  color: @primary;
-}
+#cpu         { color: @secondary; }
+#temperature { color: @primary; }
+#memory      { color: @tertiary; }
+
 #cpu.warning,
 #memory.warning {
-  color: @tertiary;
+  color: @onTertiary;
+  background: alpha(@tertiary, 0.75);
 }
 #cpu.critical,
 #memory.critical,
 #temperature.critical {
-  color: @error;
-}
-
-/* ── System island ────────────────────────────────────────────── */
-#system #power-profiles-daemon { color: @tertiary; }
-#system #power-profiles-daemon.performance { color: @error; }
-#system #power-profiles-daemon.power-saver { color: @success; }
-
-#system #network { color: @secondary; }
-#system #network.disconnected,
-#system #network.disabled { color: @onSurfaceVariant; }
-
-#system #bluetooth { color: @primary; }
-#system #bluetooth.off,
-#system #bluetooth.disabled { color: @onSurfaceVariant; }
-
-#system #pulseaudio { color: @tertiary; }
-#system #pulseaudio.muted { color: @onSurfaceVariant; }
-
-#system #backlight { color: @secondary; }
-
-#system #idle_inhibitor { color: @onSurfaceVariant; }
-#system #idle_inhibitor.activated {
-  color: @onPrimary;
-  background: alpha(@primary, 0.85);
-}
-
-/* Battery: color by percentage/state, using wallpaper palette */
-#system #battery { color: @success; }
-#system #battery.medium { color: @primary; }
-#system #battery.low { color: @tertiary; }
-#system #battery.warning { color: @error; }
-#system #battery.charging,
-#system #battery.plugged { color: @success; }
-
-@keyframes battery-pulse {
-  from { color: @error; background: transparent; }
-  to   { color: @onError; background: alpha(@error, 0.75); }
-}
-#system #battery.critical,
-#system #battery.critical.discharging {
-  color: @error;
-  animation: battery-pulse 0.9s ease-in-out infinite alternate;
-  border-radius: 999px;
-}
-
-/* ── Alerts ───────────────────────────────────────────────────── */
-#alerts #custom-notifications { color: @tertiary; }
-#alerts #custom-notifications.unread {
-  color: @onPrimary;
-  background: @primary;
-  padding: 0 10px;
-  margin: 5px 1px;
-}
-#alerts #custom-power {
-  color: @error;
-  padding-right: 10px;
-}
-#alerts #custom-power:hover {
   color: @onError;
   background: alpha(@error, 0.85);
 }
 
-/* ── Tray ─────────────────────────────────────────────────────── */
-#tray {
-  padding: 0 10px;
-}
-#tray > .passive {
-  -gtk-icon-effect: dim;
-}
-#tray > .needs-attention {
-  -gtk-icon-effect: highlight;
-}
-#tray menu {
-  background: alpha(@surfaceContainerHigh, 0.96);
-  color: @onSurface;
-  border: 1px solid alpha(@outlineVariant, 0.5);
-  border-radius: 12px;
-  padding: 6px;
-}
-#tray menu menuitem {
-  padding: 4px 8px;
-  border-radius: 8px;
-}
-#tray menu menuitem:hover {
-  background: alpha(@primary, 0.18);
+/* ── System island ────────────────────────────────────────────── */
+#power-profiles-daemon             { color: @tertiary; padding: 0 9px; }
+#power-profiles-daemon.performance { color: @error; }
+#power-profiles-daemon.power-saver { color: @success; }
+
+#network { color: @secondary; }
+#network.disconnected,
+#network.disabled,
+#network.linked { color: @onSurfaceVariant; }
+
+#bluetooth { color: @onSurfaceVariant; }
+#bluetooth.on { color: @primary; }
+#bluetooth.connected {
   color: @primary;
+  background: alpha(@primary, 0.12);
+}
+#bluetooth.off,
+#bluetooth.disabled { color: alpha(@onSurfaceVariant, 0.6); }
+
+#pulseaudio       { color: @tertiary; }
+#pulseaudio.muted { color: alpha(@onSurfaceVariant, 0.7); }
+
+#backlight { color: @secondary; }
+
+#idle_inhibitor { color: @onSurfaceVariant; }
+#idle_inhibitor.activated {
+  color: @onPrimary;
+  background: alpha(@primary, 0.85);
+}
+
+/* Battery: green while charging/full; level colours only when discharging */
+#battery { color: @success; }
+#battery.discharging          { color: @onSurface; }
+#battery.discharging.medium   { color: @primary; }
+#battery.discharging.low      { color: @tertiary; }
+#battery.discharging.warning  { color: @error; }
+
+@keyframes battery-pulse {
+  from { color: @error;   background: transparent; }
+  to   { color: @onError; background: alpha(@error, 0.80); }
+}
+#battery.discharging.critical {
+  color: @error;
+  animation: battery-pulse 0.9s ease-in-out infinite alternate;
 }
 
 /* ── Sliders (volume / brightness drawers) ────────────────────── */
@@ -402,10 +331,83 @@ window#waybar.hidden {
   background: linear-gradient(90deg, @primary, @tertiary);
 }
 
+/* ── Tray ─────────────────────────────────────────────────────── */
+#tray {
+  padding: 0 12px;
+}
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+}
+#tray menu {
+  background: alpha(@surfaceContainerHigh, 0.97);
+  color: @onSurface;
+  border: 1px solid alpha(@outlineVariant, 0.6);
+  border-radius: 12px;
+  padding: 6px;
+}
+#tray menu menuitem {
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+#tray menu menuitem:hover {
+  background: alpha(@primary, 0.18);
+  color: @primary;
+}
+
+/* ── Alerts island ────────────────────────────────────────────── */
+#alerts {
+  padding: 0 4px;
+}
+
+@keyframes rec-pulse {
+  from { background: alpha(@error, 0.85); }
+  to   { background: alpha(@error, 0.45); }
+}
+#custom-recorder.recording {
+  color: @onError;
+  font-weight: 700;
+  animation: rec-pulse 1s ease-in-out infinite alternate;
+}
+
+#custom-updates { color: @secondary; }
+#custom-updates.many {
+  color: @onTertiary;
+  background: alpha(@tertiary, 0.80);
+}
+
+#custom-notifications { color: @onSurfaceVariant; }
+#custom-notifications.dnd { color: @tertiary; }
+
+#privacy { padding: 0 8px; }
+#privacy-item.audio-in,
+#privacy-item.screenshare {
+  color: @onError;
+  background: alpha(@error, 0.80);
+  border-radius: 10px;
+  padding: 0 6px;
+}
+#custom-notifications.unread {
+  color: @onPrimary;
+  background: @primary;
+  font-weight: 700;
+}
+
+#custom-power {
+  color: @error;
+  padding: 0 10px 0 9px;
+}
+#custom-power:hover {
+  color: @onError;
+  background: alpha(@error, 0.85);
+}
+
 /* ── Tooltips ─────────────────────────────────────────────────── */
 tooltip {
-  background: alpha(@surfaceContainerHigh, 0.98);
-  border: 1px solid alpha(@outline, 0.45);
+  background: alpha(@surfaceContainerHigh, 0.97);
+  border: 1px solid alpha(@primary, 0.35);
   border-radius: 14px;
 }
 tooltip label {
@@ -413,4 +415,25 @@ tooltip label {
   padding: 6px 8px;
   font-size: 12px;
   font-weight: 500;
+}
+
+/* ── Minimal pass (2026-11-26) ────────────────────────────────── */
+/* Tray always visible (open communication apps) */
+#tray {
+  background: alpha(@surfaceContainerHigh, 0.80);
+  border: 1px solid alpha(@outlineVariant, 0.70);
+  border-radius: 999px;
+  margin: 2px 3px;
+  padding: 0 10px;
+}
+#tray:hover { border-color: alpha(@primary, 0.60); }
+
+/* Workspaces: shape + icons of the apps open on it */
+#custom-ws1, #custom-ws2, #custom-ws3, #custom-ws4, #custom-ws5 {
+  font-size: 13px;
+  padding: 0 8px;
+}
+#custom-ws1.active, #custom-ws2.active, #custom-ws3.active,
+#custom-ws4.active, #custom-ws5.active {
+  padding: 0 12px;
 }

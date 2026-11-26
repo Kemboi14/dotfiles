@@ -1,33 +1,33 @@
 /* Waypaper theme - follows wallpaper scheme (generated/updated by raw-theme) */
 window, .background {
-    background-color: #050606;
-    color: #e3e2e4;
+    background-color: #050506;
+    color: #e4e2e3;
 }
 
 flowboxchild:selected {
-    background-color: #a9cbe3;
-    color: #0f3447;
+    background-color: #b5c8df;
+    color: #203243;
     border-radius: 10px;
 }
 
 flowboxchild:hover {
-    background-color: #080909;
+    background-color: #090909;
     border-radius: 10px;
 }
 
 button {
-    background-color: #080909;
-    color: #e3e2e4;
+    background-color: #090909;
+    color: #e4e2e3;
     border-radius: 8px;
-    border: 1px solid #42474c;
+    border: 1px solid #43474c;
 }
 
 button:hover {
     background-color: #0b0c0c;
-    border-color: #a9cbe3;
+    border-color: #b5c8df;
 }
 
 highlight, .accent {
-    background-color: #a9cbe3;
-    color: #0f3447;
+    background-color: #b5c8df;
+    color: #203243;
 }

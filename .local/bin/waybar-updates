@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Waybar: pending Arch (repo + AUR) updates as JSON. Hidden when up to date.
+#   waybar-updates          print status
+#   waybar-updates upgrade  run yay -Syu in kitty, then refresh the module
+set -uo pipefail
+if [[ ${1:-} == upgrade ]]; then
+  kitty --class floating-update -e sh -c 'yay -Syu; echo; read -rp "Done — press Enter to close" _'
+  pkill -RTMIN+10 -x waybar
+  exit 0
+fi
+repo=$(timeout 60 checkupdates 2>/dev/null)
+aur=$(timeout 60 yay -Qua 2>/dev/null)
+n_repo=$(grep -c . <<<"$repo"); n_aur=$(grep -c . <<<"$aur")
+total=$(( n_repo + n_aur ))
+if (( total == 0 )); then echo '{"text":"","class":"none"}'; exit 0; fi
+cls=pending; (( total >= 50 )) && cls=many
+list=$(printf '%s\n%s\n' "$repo" "$aur" | grep . | head -25 | awk '{print $1"  "$2" → "$4}')
+(( total > 25 )) && list+=$'\n'"… and $((total - 25)) more"
+jq -cn --arg t "󰚰 $total" --arg c "$cls" \
+  --arg tip "$n_repo repo · $n_aur AUR — click to upgrade"$'\n\n'"$list" \
+  '{text:$t, class:$c, tooltip:$tip}'

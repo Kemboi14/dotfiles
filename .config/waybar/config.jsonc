@@ -1,10 +1,10 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 44,
-    "margin-top": 4,
-    "margin-left": 4,
-    "margin-right": 4,
+    "height": 40,
+    "margin-top": 6,
+    "margin-left": 8,
+    "margin-right": 8,
     "spacing": 0,
     "reload_style_on_change": true,
     "modules-left": [
@@ -12,32 +12,113 @@
         "group/ws"
     ],
     "modules-center": [
-        "group/time",
-        "group/player"
+        "group/center"
     ],
     "modules-right": [
-        "group/stats",
         "group/system",
         "tray",
         "group/alerts"
     ],
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "persistent-workspaces": {
-            "*": 5
-        },
+    "group/apps": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/arch",
+            "custom/clipboard"
+        ]
+    },
+    "custom/arch": {
+        "format": "",
+        "tooltip-format": "Launcher · right-click: power menu",
+        "on-click": "fuzzel",
+        "on-click-right": "~/.local/bin/powermenu"
+    },
+    "custom/clipboard": {
+        "format": "<span size=\"12pt\">󰅌</span>",
+        "tooltip-format": "Clipboard history · right-click: clear",
+        "on-click": "cliphist list | fuzzel --dmenu --prompt \"󰅌  \" --width 60 | cliphist decode | wl-copy",
+        "on-click-right": "cliphist wipe && notify-send -a clipboard 'Clipboard history cleared'"
+    },
+    "group/ws": {
+        "orientation": "horizontal",
+        "modules": [
+            "custom/ws1",
+            "custom/ws2",
+            "custom/ws3",
+            "custom/ws4",
+            "custom/ws5"
+        ]
+    },
+    "custom/ws1": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-ws/1.json\" 2>/dev/null || ~/.local/bin/ws-status 1",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"1\" })'",
         "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
         "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
     },
-    "hyprland/window": {
-        "format": " ",
-        "icon": true,
-        "icon-size": 20,
-        "separate-outputs": true
+    "custom/ws2": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-ws/2.json\" 2>/dev/null || ~/.local/bin/ws-status 2",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"2\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws3": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-ws/3.json\" 2>/dev/null || ~/.local/bin/ws-status 3",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"3\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws4": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-ws/4.json\" 2>/dev/null || ~/.local/bin/ws-status 4",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"4\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "custom/ws5": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-ws/5.json\" 2>/dev/null || ~/.local/bin/ws-status 5",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "format": "{}",
+        "tooltip": true,
+        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+    },
+    "group/center": {
+        "orientation": "horizontal",
+        "modules": [
+            "clock",
+            "custom/weather",
+            "image#player-art",
+            "mpris",
+            "custom/cava",
+            "custom/player-prev",
+            "custom/player-play",
+            "custom/player-next"
+        ]
     },
     "clock": {
         "format": "{:%H:%M}",
-        "format-alt": "<span size=\"large\">\udb80\udced</span> {:%a %d %b}",
+        "format-alt": "<span size=\"12pt\">󰃭</span> {:%a %d %b}",
         "tooltip-format": "<tt>{calendar}</tt>",
         "calendar": {
             "mode": "month",
@@ -51,6 +132,21 @@
             "on-scroll-down": "shift_down"
         }
     },
+    "custom/weather": {
+        "exec": "curl -sf --max-time 8 'wttr.in/?format=%c%t' | sed 's/+//; s/  */ /g'",
+        "interval": 900,
+        "format": "{}",
+        "hide-empty-text": true,
+        "tooltip": false,
+        "on-click": "kitty --class floating-weather -e sh -c 'curl -s wttr.in?F; read -r _'"
+    },
+    "image#player-art": {
+        "exec": "/home/nick/.local/bin/waybar-player art",
+        "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
+        "size": 20,
+        "interval": 2,
+        "on-click": "playerctl play-pause"
+    },
     "mpris": {
         "max-length": 24,
         "format": "{title}",
@@ -60,220 +156,9 @@
         "artist-len": 12,
         "interval": 1,
         "tooltip-format": "{artist} — {title}\n{album}\n{position}/{length}",
-        "on-click": "playerctl play-pause"
-    },
-    "pulseaudio": {
-        "format": "<span size=\"large\">{icon}</span> {volume}%",
-        "format-muted": "<span size=\"large\">\udb81\udf5f</span> mute",
-        "format-icons": {
-            "default": [
-                "󰕿",
-                "󰖀",
-                "󰕾"
-            ]
-        },
-        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "scroll-step": 5
-    },
-    "backlight": {
-        "format": "<span size=\"large\">\udb80\udce0</span> {percent}%"
-    },
-    "network": {
-        "interval": 5,
-        "format-wifi": "<span size=\"large\">{icon}</span> {essid}",
-        "format-icons": [
-            "\udb82\udd2f",
-            "\udb82\udd1f",
-            "\udb82\udd22",
-            "\udb82\udd25",
-            "\udb82\udd28"
-        ],
-        "format-ethernet": "<span size=\"large\">\udb80\ude00</span> wired",
-        "format-linked": "<span size=\"large\">\udb82\udd29</span> no ip",
-        "format-disconnected": "<span size=\"large\">\udb82\udd2d</span> offline",
-        "format-disabled": "<span size=\"large\">\udb82\udd2d</span>",
-        "tooltip-format-wifi": "{essid} \u00b7 {signalStrength}% \u00b7 {frequency} GHz\n{ifname}  {ipaddr}/{cidr}\n\u21e3 {bandwidthDownBits}   \u21e1 {bandwidthUpBits}",
-        "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n\u21e3 {bandwidthDownBits}   \u21e1 {bandwidthUpBits}",
-        "tooltip-format-disconnected": "No connection",
-        "on-click": "~/.local/bin/wifimenu"
-    },
-    "power-profiles-daemon": {
-        "format": "{icon}",
-        "tooltip-format": "Power profile: {profile}",
-        "format-icons": {
-            "default": "\udb83\udf85",
-            "performance": "\udb81\udcc5",
-            "balanced": "\udb83\udf85",
-            "power-saver": "\udb83\udf86"
-        }
-    },
-    "battery": {
-        "interval": 10,
-        "states": {
-            "medium": 50,
-            "low": 30,
-            "warning": 20,
-            "critical": 10
-        },
-        "format": "<span size=\"large\">{icon}</span> {capacity}%",
-        "format-discharging": "<span size=\"large\">{icon}</span> {capacity}% \udb85\udc0b{power:0.1f}W",
-        "format-charging": "<span size=\"large\">{icon}</span> {capacity}%",
-        "format-plugged": "<span size=\"large\">\udb81\udea5</span> {capacity}%",
-        "format-icons": {
-            "default": [
-                "\udb80\udc7a",
-                "\udb80\udc7b",
-                "\udb80\udc7c",
-                "\udb80\udc7d",
-                "\udb80\udc7e",
-                "\udb80\udc7f",
-                "\udb80\udc80",
-                "\udb80\udc81",
-                "\udb80\udc82",
-                "\udb80\udc79"
-            ],
-            "charging": [
-                "\udb82\udc9c",
-                "\udb80\udc86",
-                "\udb80\udc87",
-                "\udb80\udc88",
-                "\udb82\udc9d",
-                "\udb80\udc89",
-                "\udb82\udc9e",
-                "\udb80\udc8a",
-                "\udb80\udc8b",
-                "\udb80\udc85"
-            ]
-        },
-        "format-time": "{H}h {M}m",
-        "tooltip-format": "{timeTo}\nDraw: {power:0.1f} W"
-    },
-    "tray": {
-        "icon-size": 16,
-        "spacing": 8
-    },
-    "custom/power": {
-        "format": "<span size=\"large\">\udb81\udc25</span>",
-        "tooltip": false,
-        "on-click": "~/.local/bin/powermenu"
-    },
-    "cpu": {
-        "interval": 3,
-        "format": "<span size=\"large\">\udb80\udf5b</span> {usage}%",
-        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-        "states": { "warning": 70, "critical": 90 },
-        "on-click": "kitty --class btop -e btop"
-    },
-    "memory": {
-        "interval": 10,
-        "format": "<span size=\"large\">\udb81\ude1a</span> {icon} {used:0.1f}G",
-        "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-        "states": { "warning": 75, "critical": 90 },
-        "tooltip-format": "RAM  {used:0.1f}G / {total:0.1f}G ({percentage}%)\nSwap {swapUsed:0.1f}G / {swapTotal:0.1f}G"
-    },
-    "temperature": {
-        "interval": 5,
-        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
-        "input-filename": "temp1_input",
-        "critical-threshold": 80,
-        "format": "<span size=\"large\">{icon}</span> {temperatureC}\u00b0",
-        "format-critical": "<span size=\"large\">\udb83\ude01</span> {temperatureC}\u00b0",
-        "format-icons": ["", "", "", "", ""],
-        "tooltip-format": "CPU package: {temperatureC}°C"
-    },
-    "idle_inhibitor": {
-        "format": "<span size=\"large\">{icon}</span>",
-        "format-icons": {
-            "activated": "󰅶",
-            "deactivated": "󰾪"
-        },
-        "tooltip-format-activated": "Staying awake",
-        "tooltip-format-deactivated": "Normal sleep"
-    },
-    "custom/weather": {
-        "exec": "curl -sf \"wttr.in/?format=%c%t\"",
-        "interval": 1800,
-        "format": "{}",
-        "tooltip": false
-    },
-    "custom/ws1": {
-        "exec": "~/.local/bin/ws-status 1",
-        "return-type": "json",
-        "interval": "once",
-        "signal": 8,
-        "format": "{}",
-        "tooltip": false,
-        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"1\" })'",
-        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-    },
-    "custom/ws2": {
-        "exec": "~/.local/bin/ws-status 2",
-        "return-type": "json",
-        "interval": "once",
-        "signal": 8,
-        "format": "{}",
-        "tooltip": false,
-        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"2\" })'",
-        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-    },
-    "custom/ws3": {
-        "exec": "~/.local/bin/ws-status 3",
-        "return-type": "json",
-        "interval": "once",
-        "signal": 8,
-        "format": "{}",
-        "tooltip": false,
-        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"3\" })'",
-        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-    },
-    "custom/ws4": {
-        "exec": "~/.local/bin/ws-status 4",
-        "return-type": "json",
-        "interval": "once",
-        "signal": 8,
-        "format": "{}",
-        "tooltip": false,
-        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"4\" })'",
-        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-    },
-    "custom/ws5": {
-        "exec": "~/.local/bin/ws-status 5",
-        "return-type": "json",
-        "interval": "once",
-        "signal": 8,
-        "format": "{}",
-        "tooltip": false,
-        "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"5\" })'",
-        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
-        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
-    },
-    "custom/arch": {
-        "format": "\uf303",
-        "tooltip": false,
-        "on-click": "fuzzel",
-        "on-click-right": "~/.local/bin/powermenu"
-    },
-    "group/player": {
-        "orientation": "horizontal",
-        "modules": [
-            "image#player-art",
-            "mpris",
-            "custom/cava",
-            "custom/player-prev",
-            "custom/player-play",
-            "custom/player-next"
-        ]
-    },
-    "image#player-art": {
-        "exec": "/home/nick/.local/bin/waybar-player art",
-        "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
-        "size": 20,
-        "interval": 2,
-        "on-click": "playerctl play-pause"
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
     },
     "custom/cava": {
         "exec": "/home/nick/.local/bin/waybar-player cava",
@@ -306,47 +191,155 @@
         "tooltip": false,
         "on-click": "playerctl next"
     },
+    "group/stats": {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "temperature",
+            "memory"
+        ]
+    },
+    "cpu": {
+        "interval": 3,
+        "format": "",
+        "format-warning": "<span size=\"12pt\">󰍛</span> {usage}%",
+        "format-critical": "<span size=\"12pt\">󰍛</span> {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        },
+        "tooltip-format": "CPU {usage}% · {avg_frequency} GHz avg\nLoad {load}",
+        "on-click": "kitty --class btop -e btop"
+    },
+    "temperature": {
+        "interval": 5,
+        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+        "input-filename": "temp1_input",
+        "critical-threshold": 90,
+        "format": "",
+        "format-critical": "<span size=\"12pt\">󰸁</span> {temperatureC}°",
+        "format-icons": [
+            "󱃃",
+            "󰔏",
+            "󱃂"
+        ],
+        "tooltip-format": "CPU package: {temperatureC}°C",
+        "on-click": "kitty --class btop -e btop"
+    },
+    "memory": {
+        "interval": 10,
+        "format": "",
+        "format-warning": "<span size=\"12pt\">󰘚</span> {used:0.1f}G",
+        "format-critical": "<span size=\"12pt\">󰘚</span> {used:0.1f}G",
+        "states": {
+            "warning": 75,
+            "critical": 90
+        },
+        "tooltip-format": "RAM  {used:0.1f}G / {total:0.1f}G ({percentage}%)\nSwap {swapUsed:0.1f}G / {swapTotal:0.1f}G",
+        "on-click": "kitty --class btop -e btop"
+    },
+    "group/system": {
+        "orientation": "horizontal",
+        "modules": [
+            "cpu",
+            "memory",
+            "temperature",
+            "power-profiles-daemon",
+            "network",
+            "bluetooth",
+            "group/volume",
+            "group/brightness",
+            "idle_inhibitor",
+            "battery"
+        ]
+    },
+    "power-profiles-daemon": {
+        "format": "{icon}",
+        "tooltip-format": "Power profile: {profile}",
+        "format-icons": {
+            "default": "󰾅",
+            "performance": "󰓅",
+            "balanced": "󰾅",
+            "power-saver": "󰾆"
+        }
+    },
+    "network": {
+        "interval": 5,
+        "format-wifi": "<span size=\"12pt\">{icon}</span>",
+        "format-icons": [
+            "󰤯",
+            "󰤟",
+            "󰤢",
+            "󰤥",
+            "󰤨"
+        ],
+        "format-ethernet": "<span size=\"12pt\">󰈀</span>",
+        "format-linked": "<span size=\"12pt\">󰤩</span> no ip",
+        "format-disconnected": "<span size=\"12pt\">󰤭</span> offline",
+        "format-disabled": "<span size=\"12pt\">󰤭</span>",
+        "tooltip-format-wifi": "{essid} · {signalStrength}% · {frequency} GHz\n{ifname}  {ipaddr}/{cidr}\n⇣ {bandwidthDownBits}   ⇡ {bandwidthUpBits}",
+        "tooltip-format-ethernet": "{ifname}  {ipaddr}/{cidr}\n⇣ {bandwidthDownBits}   ⇡ {bandwidthUpBits}",
+        "tooltip-format-disconnected": "No connection",
+        "on-click": "~/.local/bin/wifimenu"
+    },
     "bluetooth": {
-        "tooltip-format-enumerate-connected-battery": "{device_alias}  {device_battery_percentage}%",
-        "format": "<span size=\"large\">\udb80\udcaf</span>",
-        "format-off": "<span size=\"large\">\udb80\udcb2</span>",
-        "format-disabled": "<span size=\"large\">\udb80\udcb2</span>",
-        "format-connected": "\udb80\udcb1",
-        "format-connected-battery": "\udb80\udcb1",
-        "max-length": 24,
+        "format": "<span size=\"12pt\">󰂯</span>",
+        "format-off": "<span size=\"12pt\">󰂲</span>",
+        "format-disabled": "<span size=\"12pt\">󰂲</span>",
+        "format-connected": "<span size=\"12pt\">󰂱</span>",
+        "format-connected-battery": "<span size=\"12pt\">󰂱</span> {device_battery_percentage}%",
         "tooltip-format": "{controller_alias}  {controller_address}\n{num_connections} connected",
         "tooltip-format-connected": "{device_enumerate}",
         "tooltip-format-enumerate-connected": "{device_alias}",
+        "tooltip-format-enumerate-connected-battery": "{device_alias}  {device_battery_percentage}%",
         "on-click": "blueman-manager",
         "on-click-right": "bluetoothctl show | grep -q 'Powered: yes' && bluetoothctl power off || bluetoothctl power on"
     },
-    "group/apps": {
+    "group/volume": {
         "orientation": "horizontal",
-        "modules": ["custom/arch"]
+        "drawer": {
+            "transition-duration": 300,
+            "transition-left-to-right": true
+        },
+        "modules": [
+            "pulseaudio",
+            "pulseaudio/slider"
+        ]
     },
-    "group/ws": {
-        "orientation": "horizontal",
-        "modules": ["custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5"]
+    "pulseaudio": {
+        "format": "<span size=\"12pt\">{icon}</span>",
+        "format-muted": "<span size=\"12pt\">󰝟</span>",
+        "format-icons": {
+            "headphone": "󰋋",
+            "default": [
+                "󰕿",
+                "󰖀",
+                "󰕾"
+            ]
+        },
+        "tooltip-format": "{desc} · {volume}%",
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5
     },
-    "group/time": { "orientation": "horizontal", "modules": ["clock", "custom/weather"] },
-    "group/stats": { "orientation": "horizontal", "modules": ["cpu", "temperature", "memory"] },
-    "group/system": {
-        "orientation": "horizontal",
-        "modules": ["power-profiles-daemon", "network", "bluetooth", "group/volume", "group/brightness", "idle_inhibitor", "battery"]
-    },
-    "group/alerts": { "orientation": "horizontal", "modules": ["custom/notifications", "custom/power"] },
-    "custom/notifications": {
-        "exec": "~/.local/bin/notif-count",
-        "return-type": "json",
-        "interval": 3,
-        "signal": 20,
-        "on-click": "~/.local/bin/notif-count open",
-        "on-click-right": "~/.local/bin/notif-count read"
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal"
     },
     "group/brightness": {
         "orientation": "horizontal",
-        "drawer": { "transition-duration": 300, "transition-left-to-right": true },
-        "modules": ["backlight", "backlight/slider"]
+        "drawer": {
+            "transition-duration": 300,
+            "transition-left-to-right": true
+        },
+        "modules": [
+            "backlight",
+            "backlight/slider"
+        ]
+    },
+    "backlight": {
+        "format": "<span size=\"12pt\">󰃠</span>",
+        "tooltip-format": "Brightness {percent}%"
     },
     "backlight/slider": {
         "min": 5,
@@ -354,14 +347,115 @@
         "orientation": "horizontal",
         "device": "intel_backlight"
     },
-    "group/volume": {
-        "orientation": "horizontal",
-        "drawer": { "transition-duration": 300, "transition-left-to-right": true },
-        "modules": ["pulseaudio", "pulseaudio/slider"]
+    "idle_inhibitor": {
+        "format": "<span size=\"12pt\">{icon}</span>",
+        "format-icons": {
+            "activated": "󰅶",
+            "deactivated": "󰾪"
+        },
+        "tooltip-format-activated": "Staying awake",
+        "tooltip-format-deactivated": "Normal sleep"
     },
-    "pulseaudio/slider": {
-        "min": 0,
-        "max": 100,
-        "orientation": "horizontal"
+    "battery": {
+        "interval": 10,
+        "states": {
+            "medium": 50,
+            "low": 30,
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "<span size=\"12pt\">{icon}</span> {capacity}%",
+        "format-discharging": "<span size=\"12pt\">{icon}</span> {capacity}%",
+        "format-charging": "<span size=\"12pt\">{icon}</span> {capacity}%",
+        "format-plugged": "<span size=\"12pt\">󰚥</span> {capacity}%",
+        "format-full": "<span size=\"12pt\">󰚥</span> full",
+        "format-time": "{H}h{M:02}",
+        "format-icons": {
+            "default": [
+                "󰁺",
+                "󰁻",
+                "󰁼",
+                "󰁽",
+                "󰁾",
+                "󰁿",
+                "󰂀",
+                "󰂁",
+                "󰂂",
+                "󰁹"
+            ],
+            "charging": [
+                "󰢜",
+                "󰂆",
+                "󰂇",
+                "󰂈",
+                "󰢝",
+                "󰂉",
+                "󰢞",
+                "󰂊",
+                "󰂋",
+                "󰂅"
+            ]
+        },
+        "tooltip-format": "{timeTo}\nDraw: {power:0.1f} W · health {health}%"
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    },
+    "group/alerts": {
+        "orientation": "horizontal",
+        "modules": [
+            "privacy",
+            "custom/recorder",
+            "custom/updates",
+            "custom/notifications",
+            "custom/power"
+        ]
+    },
+    "privacy": {
+        "icon-size": 14,
+        "icon-spacing": 4,
+        "transition-duration": 250,
+        "ignore-monitor": true,
+        "ignore": [
+            { "type": "audio-in", "name": "cava" }
+        ],
+        "modules": [
+            { "type": "audio-in", "tooltip": true, "tooltip-icon-size": 20 },
+            { "type": "screenshare", "tooltip": true, "tooltip-icon-size": 20 }
+        ]
+    },
+    "custom/recorder": {
+        "exec": "~/.local/bin/screenrec status",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 9,
+        "hide-empty-text": true,
+        "format": "{}",
+        "on-click": "~/.local/bin/screenrec toggle"
+    },
+    "custom/updates": {
+        "exec": "~/.local/bin/waybar-updates",
+        "return-type": "json",
+        "interval": 3600,
+        "signal": 10,
+        "hide-empty-text": true,
+        "format": "{}",
+        "on-click": "~/.local/bin/waybar-updates upgrade",
+        "on-click-right": "pkill -RTMIN+10 -x waybar"
+    },
+    "custom/notifications": {
+        "exec": "~/.local/bin/notif-count",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 20,
+        "on-click": "~/.local/bin/notif-count open",
+        "on-click-middle": "~/.local/bin/notif-count dnd",
+        "on-click-right": "~/.local/bin/notif-count read"
+    },
+    "custom/power": {
+        "format": "<span size=\"12pt\">󰐥</span>",
+        "tooltip": false,
+        "on-click": "~/.local/bin/powermenu"
     }
 }
